@@ -12,7 +12,7 @@ export const inngest = new Inngest({ id: "kansan-next" });
 export const syncUserCreation = inngest.createFunction(
     {
         id:'sync-user-from-clerk',
-        event:'clerk/user.created'
+        triggers:{event:'clerk/user.created'}
     },
     async ({event}) => {
         const { id, first_name, last_name, email_addresses, image_url} = event.data
@@ -30,10 +30,35 @@ export const syncUserCreation = inngest.createFunction(
 export const syncUserUpdate = inngest.createFunction(
     {
         id:'update-user-from-clerk',
-        event: 'clerk/user.updated'
+        triggers:{event: 'clerk/user.updated'},
+        
+    onFailure: async ({ error, event, step }) => {
+  // 1. Log the error to your monitoring system
+  await step.run("capture-sentry-error", async () => {
+    Sentry.captureException(error, { extra: { event } });
+  });
+
+  // 2. Send an alert via Slack
+  await step.run("send-slack-alert", async () => {
+    await slack.chat.postMessage({
+      channel: "#alerts",
+      text: `🚨 Task *${event.name}* failed after maximum retries.\nError: \`${error.message}\``
+    });
+  });
+
+  // 3. Notify the user/admin via Email
+  await step.run("send-email-notification", async () => {
+    await resend.emails.send({
+      from: "kanishga.b@gmail.com",
+      to: "kanishga.b@gmail.com",
+      subject: `Task Failed: ${event.name}`,
+      text: `The function execution failed for event ${event.id}. Reason: ${error.message}`
+    });
+  });
+},
+
     },
     async ({event}) => {
-
         const { id, first_name, last_name, email_addresses, image_url} = event.data
         const userData = {
             _id:id,
@@ -49,7 +74,7 @@ export const syncUserUpdate = inngest.createFunction(
 export const syncUserDeletion = inngest.createFunction(
     {
         id:'delete-user-from-clerk',
-        event: 'clerk/user.deleted'
+        triggers:{event: 'clerk/user.deleted'}
     },
     async ({event}) => {
 
