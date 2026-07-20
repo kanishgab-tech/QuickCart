@@ -1,10 +1,12 @@
 // inngest/client.ts
 import { Inngest } from "inngest";
-import { connect } from "mongoose";
-import connectDB from "./db";
-import User from "@/models/User";
-
 export const inngest = new Inngest({ id: "kansan-next" });
+
+import { connect } from "mongoose";
+//import connectDB from "./db";
+//import User from "@/models/User";
+
+
 
 //Inngest function to save user data to a database
 
@@ -16,6 +18,11 @@ export const syncUserCreation = inngest.createFunction(
         event: 'clerk/user.created'
     },
     async ({event}) => {
+
+         // Dynamically import database modules inside the execution runtime
+        const { default: connectDB } = await import("./db");
+        const { default: User } = await import("@/models/User");
+
         const { id, first_name, last_name, email_addresses, image_url} = event.data
         const userData = {
             _id:id,
@@ -36,6 +43,11 @@ export const syncUserUpdate = inngest.createFunction(
         event: 'clerk/user.updated'
     },
     async ({event}) => {
+
+          // Dynamically import database modules inside the execution runtime
+        const { default: connectDB } = await import("./db");
+        const { default: User } = await import("@/models/User");
+
         const { id, first_name, last_name, email_addresses, image_url} = event.data
         const userData = {
             _id:id,
@@ -56,6 +68,11 @@ export const syncUserDeletion = inngest.createFunction(
         event: 'clerk/user.deleted'
     },
     async ({event}) => {
+
+          // Dynamically import database modules inside the execution runtime
+        const { default: connectDB } = await import("./db");
+        const { default: User } = await import("@/models/User");
+
         const { id } = event.data
                 
         await connectDB()
