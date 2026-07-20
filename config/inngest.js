@@ -1,4 +1,4 @@
-// src/inngest/client.ts
+// inngest/client.ts
 import { Inngest } from "inngest";
 import { connect } from "mongoose";
 import connectDB from "./db";
@@ -19,9 +19,9 @@ export const syncUserCreation = inngest.createFunction(
         const { id, first_name, last_name, email_addresses, image_url} = event.data
         const userData = {
             _id:id,
-            email:email_addresses[0].email_addresses,
+            email:email_addresses[0].email_address,
             name: first_name + ' ' + last_name,
-            image_Url: image_url
+            image_url: image_url
         }
         await connectDB()
         await User.create(userData)
@@ -41,7 +41,7 @@ export const syncUserUpdate = inngest.createFunction(
             _id:id,
             email:email_addresses[0].email_addresses,
             name: first_name + ' ' + last_name,
-            image_Url: image_url
+            image_url: image_url
         }
         await connectDB()
         await User.findByIdAndUpdate(id,userData)
