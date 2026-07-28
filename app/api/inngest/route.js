@@ -1,6 +1,6 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/config/inngest";
-import {syncUserCreation, syncUserDeletion, syncUserUpdate,createUserOrder } from "@/config/inngest";
+import {syncUserCreation, syncUserDeletion, syncUserUpdate, createUserOrder } from "@/config/inngest";
 
 // Force Next.js to treat this route as completely dynamic
 //export const dynamic = "force-dynamic";
@@ -11,6 +11,6 @@ export const { GET, POST, PUT } = serve({
     syncUserCreation,
     syncUserUpdate,
     syncUserDeletion,
-    createUserOrder
+    createUserOrder,
   ],
 });
