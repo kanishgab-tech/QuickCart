@@ -52,7 +52,7 @@ const Navbar = () => {
             </UserButton.MenuItems>
           </UserButton>
           </>
-        : <button onClick={openSignIn} className="flex items-center gap-2 hover:text-gray-900 transition">
+        : <button onClick={openSignIn} className="flex items-center gap-2 hover:text-gray-900 transition" suppressHydrationWarning={true}>
           <Image src={assets.user_icon} alt="user icon" />
           Account
           </button>
@@ -60,7 +60,7 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center md:hidden gap-3">
-        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}   
+        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full" suppressHydrationWarning={true}>Seller Dashboard</button>}   
         {
          user 
          ? <>
@@ -82,7 +82,7 @@ const Navbar = () => {
             </UserButton.MenuItems>
           </UserButton>
           </>
-        : <button onClick={openSignIn} className="flex items-center gap-2 hover:text-gray-900 transition">
+        : <button onClick={openSignIn} className="flex items-center gap-2 hover:text-gray-900 transition" suppressHydrationWarning={true}> 
           <Image src={assets.user_icon} alt="user icon" />
           Account
           </button>

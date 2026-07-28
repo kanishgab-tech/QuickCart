@@ -5,22 +5,50 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import Footer from "@/components/seller/Footer";
 import Loading from "@/components/Loading";
+import toast from "react-hot-toast";
+import axios from "axios";
+
 
 const ProductList = () => {
 
-  const { router } = useAppContext()
+  const { router, getToken, user } = useAppContext()
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
   const fetchSellerProduct = async () => {
-    setProducts(productsDummyData)
-    setLoading(false)
-  }
+    //setProducts(productsDummyData)
+      try {
+      const token = await getToken();
 
+      if (!token) {
+        console.error('Unable to get auth token. Please sign in again.');
+        setLoading(false);
+        return;
+      }
+
+      const { data } = await axios.get('/api/product/seller-list', {headers: { Authorization: `Bearer ${token}` }});
+
+      if (data.success) {
+        setProducts(data.products); 
+        setLoading(false);
+      }else
+      {
+        toast.error(data.message)
+      }
+  }
+  catch (error) {
+    console.error('Error fetching seller products hi:', error);
+    toast.error('Error fetching seller products:', error.message); 
+  }
+}
+  
   useEffect(() => {
-    fetchSellerProduct();
-  }, [])
+    if (user)
+    {
+       fetchSellerProduct();
+    }   
+  }, [user])
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
