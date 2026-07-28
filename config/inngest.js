@@ -98,17 +98,32 @@ export const createUserOrder = inngest.createFunction(
         }
     },
     async ({events}) => {
-        //const eventList = events || [];
-        const orders = events.map((singleEvent) => {
+        const eventList = events || [];
+        const orders = eventList.map((singleEvent) => {
+            const payload = singleEvent.data|| singleEvent;
+
             return {
-                userId: singleEvent.userId,
-                items: singleEvent.items,
-                amount: singleEvent.amount,
-                address: singleEvent.address,
-                date: singleEvent.date
+                userId: payload.userId,
+                items:  payload.items,
+                amount: payload.amount,
+                address: payload.address,
+                date: payload.date || Date.now() 
             }
 
         })
+        
+        // Optional: Log this to your console to see exactly what Mongoose is about to insert
+        //  console.log("Processed orders array for DB insertion:", JSON.stringify(orders, null, 2));
+
+        // 2. Safe debugging log to check your array before saving to MongoDB
+    
+        console.log("Processed orders array for DB insertion:", JSON.stringify(orders, null, 2));
+
+        // 3. Proper array length check
+        if (orders.length === 0) {
+        return { success: false, message: "No valid orders found in this batch slice" };
+        }
+    
         await connectDB()
         await Order.insertMany(orders)  
         return { success: true, processed: orders.length };

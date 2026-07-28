@@ -21,19 +21,21 @@ export async function POST(request) {
         }
 
         //calculate amount using items
-        const amount = items.reduce(async (acc, item) => {      
+        const amount = await items.reduce(async (acc, item) => {      
             const product = await Product.findById(item.product);
             return acc + (product.price * item.quantity);
         }, 0);
+        
+        //console.log("Calculated amount:", amount);
 
         await inngest.send({
             name: "order/created",
             data: {
-            userId,            
+            userId,   
+            items,       
+            amount: amount + Math.floor(amount * 0.02), // Add 2% tax to the total amount
             address,
-            items,
-            amount: amount+ Math.floor(amount * 0.02), // Add 2% tax to the total amount
-            date: Date.now()
+            date: Date.now(),
             }
         })
 
