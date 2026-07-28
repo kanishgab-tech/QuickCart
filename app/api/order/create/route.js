@@ -6,12 +6,13 @@ import connectDB from "@/config/db";
 import { inngest } from "@/config/inngest";
 
 
-
 export async function POST(request) {
     try {
         const auth = getAuth(request);
         const userId = auth?.userId;
+
         const { address, items } = await request.json();
+        await connectDB();
         if (!userId) {
             return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
         }
@@ -20,7 +21,7 @@ export async function POST(request) {
         }
 
         //calculate amount using items
-        const amount = items.reduce(async (acc, item) => {
+        const amount = items.reduce(async (acc, item) => {      
             const product = await Product.findById(item.product);
             return acc + (product.price * item.quantity);
         }, 0);
@@ -37,7 +38,8 @@ export async function POST(request) {
         })
 
         //clear cart after order is placed
-        const user= await User.findById(userId);
+        //const user= await User.findById(userId);
+        const user = await User.findOne({ _id: userId });
         user.cartItems = [];
         await user.save();
 
