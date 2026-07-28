@@ -46,7 +46,7 @@ const OrderSummary = () => {
     try {
       if (!selectedAddress) {
         //alert("Please select an address before placing the order.");
-        return toast.error("Please select an address before placing the order.");
+        return console.log("Please select an address before placing the order.");
       }
 
       let cartItemsArray = Object.keys(cartItems).map((key) => ({
@@ -57,7 +57,7 @@ const OrderSummary = () => {
       cartItemsArray = cartItemsArray.filter(item => item.quantity > 0);
 
       if (cartItemsArray.length === 0) {
-        return toast.error("Your cart is empty. Please add items to your cart before placing the order.");
+        return console.log("Your cart is empty. Please add items to your cart before placing the order.");
       }
 
       const token = await getToken();
