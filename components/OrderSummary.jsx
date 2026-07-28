@@ -28,12 +28,12 @@ const OrderSummary = () => {
           setSelectedAddress(data.addresses[0]);  }
       } 
       else {
-        console.error('Error fetching user addresses:', data.message);
+        console.log(data.message);
         }
       
     
     } catch (error) {
-      console.error('Error fetching user addresses:', error);
+      console.log('Error fetching user addresses:', error);
     }
   }
 
@@ -43,6 +43,45 @@ const OrderSummary = () => {
   };
 
   const createOrder = async () => {
+    try {
+      if (!selectedAddress) {
+        //alert("Please select an address before placing the order.");
+        return toast.error("Please select an address before placing the order.");
+      }
+
+      let cartItemsArray = Object.keys(cartItems).map((key) => ({
+        product: key,
+        quantity: cartItems[key]
+      }));
+
+      cartItemsArray = cartItemsArray.filter(item => item.quantity > 0);
+
+      if (cartItemsArray.length === 0) {
+        return toast.error("Your cart is empty. Please add items to your cart before placing the order.");
+      }
+
+      const token = await getToken();
+      const { data } = await axios.post('/api/order/create', {
+        address: selectedAddress._id,
+        items: cartItemsArray
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        toast.success(data.message);
+        setCartItems({});
+        router.push('/order-placed');
+      }
+      else {
+        console.log(data.message);
+      }
+
+    } catch (error) {
+      console.log("Error creating order:", error.message);
+    }
 
   }
 

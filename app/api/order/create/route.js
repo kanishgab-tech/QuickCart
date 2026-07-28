@@ -26,14 +26,14 @@ export async function POST(request) {
             return acc + (product.price * item.quantity);
         }, 0);
 
-        await inngest.createUserOrder.send({
+        await inngest.send({
             name: "order/created",
             data: {
-            userId,
+            userId,            
             address,
             items,
             amount: amount+ Math.floor(amount * 0.02), // Add 2% tax to the total amount
-            date: date.now()
+            date: Date.now()
             }
         })
 
