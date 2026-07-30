@@ -23,7 +23,7 @@ export async function POST(request) {
         //calculate amount using items
         const amount = await items.reduce(async (acc, item) => {      
             const product = await Product.findById(item.product);
-            return acc + (product.price * item.quantity);
+            return await acc + (product.price * item.quantity);
         }, 0);
         
         //console.log("Calculated amount:", amount);
@@ -33,7 +33,7 @@ export async function POST(request) {
             data: {
             userId,   
             items,       
-            amount: amount + Math.floor(amount * 0.02), // Add 2% tax to the total amount
+            amount: amount + (amount * 0.02), // Add 2% tax to the total amount
             address,
             date: Date.now(),
             }

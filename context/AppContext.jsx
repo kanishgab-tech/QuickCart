@@ -19,7 +19,7 @@ export const AppContextProvider = (props) => {
     const router = useRouter()
    
     const {user}=useUser()
-    const {getToken} = useAuth()
+    const { getToken } = useAuth()
 
     const [products, setProducts] = useState([])
     const [userData, setUserData] = useState(false)
@@ -141,13 +141,25 @@ export const AppContextProvider = (props) => {
 
     const getCartAmount = () => {
         let totalAmount = 0;
-        for (const items in cartItems) {
-            let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
-                totalAmount += itemInfo.offerPrice * cartItems[items];
-            }
+        for (const itemId in cartItems) {
+            const quantity = cartItems[itemId];
+            if (quantity <= 0) continue;
+
+            const itemInfo = products.find((product) => product._id === itemId);
+            if (!itemInfo) continue;
+
+            const price = Number(itemInfo.offerPrice);
+            if (!Number.isFinite(price)) continue;
+
+            totalAmount += price * quantity;
         }
-        return Math.floor(totalAmount * 100) / 100;
+        return (totalAmount * 100) / 100;
+    }
+
+    const getTaxAmount = () => {
+
+          return (getCartAmount() * 0.03);
+
     }
 
     useEffect(() => {
@@ -170,7 +182,7 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount
+        getCartCount, getCartAmount, getTaxAmount,
     }
 
     return (
