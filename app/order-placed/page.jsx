@@ -53,13 +53,13 @@ const OrderPlaced = () => {
                         >
                             Continue Shopping
                         </button>
-                        <button
+                       {/* <button
                             type="button"
                             onClick={() => router.push('/track-order')}
                             className="flex-1 py-3 bg-orange-600 text-white font-semibold text-xs rounded-xl hover:bg-orange-700 transition shadow-sm hover:shadow cursor-pointer text-center"
                         >
                             Track Package
-                        </button>
+                        </button>*/}
                     </div>
                 </div>
             </main>
