@@ -3,7 +3,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/connectDB";
 import Product from "@/models/Product";
 import User from "@/models/User";
-import { inngest } from "@/lib/inngest/client";
+import { inngest } from "@/lib/inngest";
 
 export async function POST(request) {
     try {
