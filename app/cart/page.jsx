@@ -1,13 +1,112 @@
 'use client'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useAppContext } from "@/context/AppContext";
 
-const Cart = () => {
+// --- NEW COMPONENT FOR ISOLATED ROW INPUT CONTROL ---
+const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart }) => {
+  // Store the local string value so the user can wipe the text box completely blank without breaking
+  const [localQty, setLocalQty] = useState(initialQty.toString());
 
+  // Keep local view synced if global context changes via +/- click controls
+  useEffect(() => {
+    setLocalQty(initialQty.toString());
+  }, [initialQty]);
+
+   const handleKeyDown = (e) => {
+    // Block minus (-), plus (+), decimal point (.), and exponential scientific notation (e)
+    if (['-', '+', '.', 'e', 'E'].includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleChange = (e) => {
+    const val = e.target.value;
+
+    setLocalQty(val);
+
+    // Sync down to context immediately ONLY if it's a valid integer greater than 0
+    const numericVal = parseInt(val, 10);
+    if (!isNaN(numericVal) && numericVal > 0) {
+      updateCartQuantity(product._id, numericVal);
+    }
+  };
+
+  const handleBlur = () => {
+    const numericVal = parseInt(localQty, 10);
+    
+    // If blank, 0, or invalid when user clicks away, finalize deletion
+    if (isNaN(numericVal) || numericVal <= 0) {
+      updateCartQuantity(product._id, 0);
+    } else {
+      updateCartQuantity(product._id, numericVal);
+    }
+  };
+
+  return (
+    <tr>
+      <td className="flex items-center gap-4 py-4 md:px-4 px-1">
+        <div>
+          <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
+            <Image
+              src={product.image[0]}
+              alt={product.name}
+              className="w-16 h-auto object-cover mix-blend-multiply"
+              width={1280}
+              height={720}
+            />
+          </div>
+          <button
+            type="button"
+            className="md:hidden text-xs text-orange-600 mt-1"
+            onClick={() => updateCartQuantity(product._id, 0)}
+          >
+            Remove
+          </button>
+        </div>
+        <div className="text-sm hidden md:block">
+          <p className="text-gray-800">{product.name}</p>
+          <button
+            type="button"
+            className="text-xs text-orange-600 mt-1"
+            onClick={() => updateCartQuantity(product._id, 0)}
+          >
+            Remove
+          </button>
+        </div>
+      </td>
+      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
+      <td className="py-4 md:px-4 px-1">
+        <div className="flex items-center md:gap-2 gap-1">
+          <button type="button" onClick={() => updateCartQuantity(product._id, initialQty - 1)}>
+            &minus;
+          </button>
+          <input 
+            type="number" 
+            min="0"
+            value={localQty} 
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            className="w-8 border text-center appearance-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+          <button type="button" onClick={() => addToCart(product._id)}>
+            +
+          </button>
+        </div>
+      </td>
+      <td className="py-4 md:px-4 px-1 text-gray-600">
+        ${(product.offerPrice * initialQty).toFixed(2)}
+      </td>
+    </tr>
+  );
+};
+
+// --- MAIN MASTER VIEW ---
+const Cart = () => {
   const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
 
   return (
@@ -26,7 +125,7 @@ const Cart = () => {
               <thead className="text-left">
                 <tr>
                   <th className="text-nowrap pb-6 md:px-4 px-1 text-gray-600 font-medium">
-                    Product Details
+                    Product Details 
                   </th>
                   <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
                     Price
@@ -42,67 +141,26 @@ const Cart = () => {
               <tbody>
                 {Object.keys(cartItems).map((itemId) => {
                   const product = products.find(product => product._id === itemId);
+                  const globalQty = cartItems[itemId];
 
-                  if (!product || cartItems[itemId] <= 0) return null;
+                  // ONLY reject items completely missing or ALREADY finalized at 0 on mount
+                  if (!product || globalQty <= 0) return null;
 
                   return (
-                    <tr key={itemId}>
-                      <td className="flex items-center gap-4 py-4 md:px-4 px-1">
-                        <div>
-                          <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
-                            <Image
-                              src={product.image[0]}
-                              alt={product.name}
-                              className="w-16 h-auto object-cover mix-blend-multiply"
-                              width={1280}
-                              height={720}
-                            />
-                          </div>
-                          <button
-                            className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                        <div className="text-sm hidden md:block">
-                          <p className="text-gray-800">{product.name}</p>
-                          <button
-                            className="text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
-                      <td className="py-4 md:px-4 px-1">
-                        <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
-                            <Image
-                              src={assets.decrease_arrow}
-                              alt="decrease_arrow"
-                              className="w-4 h-4"
-                            />
-                          </button>
-                          <input onChange={e => updateCartQuantity(product._id, Number(e.target.value))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
-                          <button onClick={() => addToCart(product._id)}>
-                            <Image
-                              src={assets.increase_arrow}
-                              alt="increase_arrow"
-                              className="w-4 h-4"
-                            />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
-                    </tr>
+                    <CartRow 
+                      key={itemId}
+                      itemId={itemId}
+                      initialQty={globalQty}
+                      product={product}
+                      updateCartQuantity={updateCartQuantity}
+                      addToCart={addToCart}
+                    />
                   );
                 })}
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button onClick={() => router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
             <Image
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}

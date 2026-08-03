@@ -9,12 +9,12 @@ import { NextResponse } from "next/server";
 
 
 export async function GET(request) {
-    const auth = getAuth(request);
+    const auth =  getAuth(request);
     const userId = auth?.userId;
 
     try {
         if (!userId) {
-            return NextResponse.json({ success: false, message: "Unauthorized" });
+            return NextResponse.json({ success: false, message: "User Unauthorized" });
         }
 
         //console.log("User ID:", userId);
@@ -27,6 +27,7 @@ export async function GET(request) {
         }
 
         return NextResponse.json({ success: true, user });
+
     } catch (error) {
         return NextResponse.json({ success: false, message: error.message });
     }

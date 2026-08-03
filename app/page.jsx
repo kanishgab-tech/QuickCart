@@ -7,11 +7,13 @@ import NewsLetter from "@/components/NewsLetter";
 import FeaturedProduct from "@/components/FeaturedProduct";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Titlebar from '@/components/Titlebar';
 
 const Home = () => {
   return (
     <>
-      <Navbar/>
+      <Navbar />
+      <Titlebar />
       <div className="px-6 md:px-16 lg:px-32">
         <HeaderSlider />
         <HomeProducts />

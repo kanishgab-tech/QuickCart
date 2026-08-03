@@ -1,54 +1,70 @@
-import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import connectDB from "@/lib/connectDB";
 import Product from "@/models/Product";
 import User from "@/models/User";
-import connectDB from "@/config/db";
-import { inngest } from "@/config/inngest";
-
+import { inngest } from "@/lib/inngest/client";
 
 export async function POST(request) {
     try {
         const auth = getAuth(request);
-        const userId = auth?.userId;
+        const userId = auth?.userId; // Will be null or undefined if the user is a guest
 
-        const { address, items } = await request.json();
+        // 1. Destructure guestEmail alongside address and items from the incoming request body
+        const { address, items, guestEmail } = await request.json();
         await connectDB();
-        if (!userId) {
-            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+
+        // 2. REPLACED UNAUTHORIZED CHECK: If there is no userId, they MUST provide a guest email
+        if (!userId && !guestEmail) {
+            return NextResponse.json({ success: false, message: "Email required for guest checkout" }, { status: 400 });
         }
-        if (!address|| !items || items.length === 0) {
+
+        if (!address || !items || items.length === 0) {
             return NextResponse.json({ success: false, message: "Invalid order data" }, { status: 400 });
         }
 
-        //calculate amount using items
-        const amount = await items.reduce(async (acc, item) => {      
+        // 3. FIXED REDUCE BUG: Replaced async .reduce with a clean for...of loop
+        let rawAmount = 0;
+        for (const item of items) {
             const product = await Product.findById(item.product);
-            return await acc + (product.price * item.quantity);
-        }, 0);
+            if (product) {
+                rawAmount += product.price * item.quantity;
+            }
+        }
         
-        //console.log("Calculated amount:", amount);
+        // Apply 2% tax and use standard float rounding to prevent trailing JS math decimals
+        const totalAmount = Math.round((rawAmount + (rawAmount * 0.02)) * 100) / 100;
 
+        // 4. Send event data to Inngest, explicitly supplying guest configurations
         await inngest.send({
             name: "order/created",
             data: {
-            userId,   
-            items,       
-            amount: amount + (amount * 0.02), // Add 2% tax to the total amount
-            address,
-            date: Date.now(),
+                userId: userId || null,   // Falls back to null so Mongoose knows it's a guest
+                isGuest: !userId,        // Boolean flag for easy database indexing
+                guestEmail: userId ? null : guestEmail,
+                items,       
+                amount: totalAmount, 
+                address,
+                date: Date.now(),
             }
-        })
+        });
 
-        //clear cart after order is placed
-        //const user= await User.findById(userId);
-        const user = await User.findOne({ _id: userId });
-        user.cartItems = [];
-        await user.save();
+        // 5. HYBRID CART CLEARING: Only clear database carts for registered members
+        if (userId) {
+            const user = await User.findOne({ _id: userId });
+            if (user) {
+                user.cartItems = [];
+                await user.save();
+            }
+        }
 
-        return NextResponse.json({ success: true, message: "Order Placed Successfully" }, { status: 201 });
+        return NextResponse.json({ 
+            success: true, 
+            message: userId ? "Order Placed Successfully" : "Your Order Placed Successfully" 
+        }, { status: 201 });
         
-} catch (error) {
+    } catch (error) {
         console.log("Error creating order:", error);
-        return NextResponse.json({ success: false, message: error.message }, { status: 500 } );
-}
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    }
 }

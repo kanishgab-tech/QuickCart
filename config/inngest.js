@@ -104,6 +104,8 @@ export const createUserOrder = inngest.createFunction(
 
             return {
                 userId: payload.userId,
+                isGuest: payload.isGuest,
+                guestEmail: payload.guestEmail || null,
                 items:  payload.items,
                 amount: payload.amount,
                 address: payload.address,
@@ -112,10 +114,10 @@ export const createUserOrder = inngest.createFunction(
 
         })
         
-        // Optional: Log this to your console to see exactly what Mongoose is about to insert
+        //  to see exactly what Mongoose is about to insert
         //  console.log("Processed orders array for DB insertion:", JSON.stringify(orders, null, 2));
 
-        // 2. Safe debugging log to check your array before saving to MongoDB
+        // Safe debugging log to check your array before saving to MongoDB
     
         console.log("Processed orders array for DB insertion:", JSON.stringify(orders, null, 2));
 

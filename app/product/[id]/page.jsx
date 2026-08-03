@@ -112,14 +112,22 @@ const Product = () => {
                         </table>
                     </div>
 
-                    <div className="flex items-center mt-10 gap-4">
-                        <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition">
-                            Add to Cart
-                        </button>
-                        <button onClick={() => { addToCart(productData._id); router.push('/cart') }} className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition">
-                            Buy now
-                        </button>
-                    </div>
+                    <div className="flex flex-col sm:flex-row items-center mt-10 gap-4 w-full">
+                    <button 
+                        type="button"
+                        onClick={() => addToCart(productData._id)} 
+                        className="w-full sm:w-1/2 py-3.5 border-2 border-orange-600 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 active:bg-orange-100 transition duration-150 cursor-pointer text-center"
+                    >
+                        Add to Cart
+                    </button>
+                    <button 
+                        type="button"
+                        onClick={() => { addToCart(productData._id); router.push('/cart') }} 
+                        className="w-full sm:w-1/2 py-3.5 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 active:bg-orange-800 transition duration-150 cursor-pointer text-center"
+                    >
+                        Buy now
+                    </button>
+                </div>
                 </div>
             </div>
             <div className="flex flex-col items-center">

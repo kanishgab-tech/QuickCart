@@ -14,9 +14,19 @@ export async function POST(request)
         //const { userId } = await getAuth(request);
         const { cartData } = await request.json();
 
+        if (!userId) {
+            return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+        }
+
         await connectDB();
         const user= await User.findById(userId);
-    
+        
+        if (!user) {
+            return NextResponse.json({ 
+                error: `User database profile not found for ID: ${userId}` 
+            }, { status: 404 });
+        }
+        
         user.cartItems = cartData;
         await user.save();
 

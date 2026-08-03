@@ -26,6 +26,8 @@ export const AppContextProvider = (props) => {
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
 
+    const [toasts, setToasts] = useState([]);
+
     const fetchProductData = async () => {
         //setProducts(productsDummyData)
         try
@@ -36,7 +38,7 @@ export const AppContextProvider = (props) => {
                 setProducts(data.products)
             }else
             {
-                toast.error(data.message)
+                showToast(data.message, 'error')
             }
         }
         catch(error)
@@ -46,6 +48,18 @@ export const AppContextProvider = (props) => {
 
     }
     
+     // REUSABLE TOAST TRIGGER FUNCTION
+    const showToast = (message, type = 'success') => {
+        const id = Date.now();
+        
+        // Append new toast notification item configuration to memory stack array
+        setToasts((prev) => [...prev, { id, message, type }]);
+
+        // Automatically trigger dismissal pruning cleanup routine after 4 seconds
+        setTimeout(() => {
+            setToasts((prev) => prev.filter((toast) => toast.id !== id));
+        }, 4000);
+    };
 
     const fetchUserData = async () => {
       try {
@@ -97,7 +111,7 @@ export const AppContextProvider = (props) => {
             try{
                 const token = await getToken()
                 await axios.post('/api/cart/update', {cartData}, {headers: {Authorization: `Bearer ${token}`}})
-                toast.success('Item added to cart')
+                showToast('Item added to cart')
 
             }
             catch(error) {
@@ -120,7 +134,7 @@ export const AppContextProvider = (props) => {
             try{
                 const token = await getToken()
                 await axios.post('/api/cart/update', {cartData}, {headers: {Authorization: `Bearer ${token}`}})
-                toast.success('Cart updated')
+                showToast('Cart updated')
             }
             catch(error) {
                 toast.error(error.message)
@@ -158,7 +172,8 @@ export const AppContextProvider = (props) => {
 
     const getTaxAmount = () => {
 
-          return (getCartAmount() * 0.03);
+          const tax = getCartAmount() * 0.03;
+          return Math.round(tax * 100) / 100;
 
     }
 
@@ -173,6 +188,20 @@ export const AppContextProvider = (props) => {
         
    // },[])
         },[user])
+    
+    useEffect(() => {
+    // Only execute if a user session is absent
+    if (!user) {
+        const savedGuestCart = localStorage.getItem("guest_cart");
+        if (savedGuestCart) {
+            try {
+                setCartItems(JSON.parse(savedGuestCart));
+            } catch (e) {
+                console.error("Error parsing guest cart cache:", e);
+            }
+        }
+    }
+    }, [user]); // Automatically re-evaluates if a user logs in or logs out
 
     const value = {
         user, getToken,
@@ -182,12 +211,53 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount, getTaxAmount,
+        getCartCount, getCartAmount, getTaxAmount,showToast,
     }
 
+    
     return (
         <AppContext.Provider value={value}>
             {props.children}
+
+            {/* Toast Notification Overlay System */}
+                        {/* 4. MASTER GLOBAL TOAST NOTIFICATION VIEWPORT CONTAINER OVERLAY */}
+            <div className="fixed bottom-5 right-5 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+                {toasts.map((toast) => (
+                    <div
+                        key={toast.id}
+                        className={`pointer-events-auto flex items-center justify-between gap-3 p-4 rounded-xl shadow-lg border text-sm font-semibold animate-[slideIn_0.2s_ease-out] transition-all duration-300 ${
+                            toast.type === 'success'
+                                ? 'bg-emerald-50 text-emerald-900 border-emerald-200 shadow-emerald-100/50'
+                                : 'bg-red-50 text-red-900 border-red-200 shadow-red-100/50'
+                        }`}
+                    >
+                        <div className="flex items-center gap-2.5">
+                            {/* Dynamic Icon Anchor Vector Components */}
+                            {toast.type === 'success' ? (
+                                <svg className="h-5 w-5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            ) : (
+                                <svg className="h-5 w-5 text-red-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            )}
+                            <span>{toast.message}</span>
+                        </div>
+
+                        {/* Dismiss layout click trigger controller override */}
+                        <button
+                            type="button"
+                            onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
+                            className="text-gray-400 hover:text-gray-600 transition-colors p-0.5 rounded cursor-pointer"
+                        >
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                ))}
+            </div>
         </AppContext.Provider>
     )
 }
