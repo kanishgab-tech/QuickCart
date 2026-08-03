@@ -2,6 +2,7 @@ import mongoose from 'mongoose'; // Fixed import format to prevent Next.js hot-r
 
 const orderSchema = new mongoose.Schema({
     userId: { type: String, required: false, ref: 'User', default: null },
+    orderNumber: {type: String,  required: true, unique: true },
     isGuest: { type: Boolean, required: true, default: false },
     guestEmail: { type: String, required: false, default: null },
     items: [{

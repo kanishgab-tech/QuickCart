@@ -33,6 +33,7 @@ const [guestState, setGuestState] = useState("");
 const [guestPincode, setGuestPincode] = useState("");
 const [guestPhone, setGuestPhone] = useState("");
 
+
   const fetchUserAddresses = async () => {
     try {
       const token = await getToken();
@@ -147,7 +148,8 @@ const [guestPhone, setGuestPhone] = useState("");
           localStorage.removeItem("guest_cart"); 
         }
         setCartItems({});
-        router.push('/order-placed');
+        router.push(`/order-placed?orderNumber=${data.orderNumber}`);
+
       } else {
         toast.error(data.message || "Failed to process order.");
         setIsSubmitting(false);

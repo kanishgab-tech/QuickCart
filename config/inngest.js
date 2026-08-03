@@ -103,6 +103,7 @@ export const createUserOrder = inngest.createFunction(
             const payload = singleEvent.data|| singleEvent;
 
             return {
+                orderNumber: payload.orderNumber,
                 userId: payload.userId,
                 isGuest: payload.isGuest,
                 guestEmail: payload.guestEmail || null,

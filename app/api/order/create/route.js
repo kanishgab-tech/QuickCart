@@ -5,8 +5,21 @@ import User from "@/models/User";
 import connectDB from "@/config/db";
 import { inngest } from "@/config/inngest";
 
+const generateUniqueOrderNumber = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStamp = `${year}${month}${day}`;
+
+    // Generate a 5-character random alphanumeric string
+    const randomChars = Math.random().toString(36).substring(2, 7).toUpperCase();
+
+    return `ORD-${dateStamp}-${randomChars}`;
+};
 
 export async function POST(request) {
+ 
     try {
         const auth = getAuth(request);
         const userId = auth?.userId; // Will be null or undefined if the user is a guest
@@ -32,7 +45,7 @@ export async function POST(request) {
                 rawAmount += product.price * item.quantity;
             }
         }
-        
+        const orderNumber = generateUniqueOrderNumber();
         // Apply 2% tax and use standard float rounding to prevent trailing JS math decimals
         const totalAmount = Math.round((rawAmount + (rawAmount * 0.02)) * 100) / 100;
 
@@ -40,6 +53,7 @@ export async function POST(request) {
         await inngest.send({
             name: "order/created",
             data: {
+                orderNumber,
                 userId: userId || null,   // Falls back to null so Mongoose knows it's a guest
                 isGuest: !userId,        // Boolean flag for easy database indexing
                 guestEmail: userId ? null : guestEmail,
