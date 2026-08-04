@@ -4,12 +4,19 @@ import connectDB from "./db";
 import User from "@/models/User";
 import Order from "@/models/Order";
 import { connect } from "mongoose";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 export const inngest = new Inngest({ id: "kansan-next" });
 
-// Initialize Resend with your API Secret Key environment variable
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize a standard SMTP tunnel directly through Google
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
 
 export const createUserOrder = inngest.createFunction(
     { 
@@ -55,17 +62,18 @@ export const createUserOrder = inngest.createFunction(
             }
 
             // 3. TRIGGER AUTOMATED INVOICE EMAIL DISPATCH IF EMAIL EXISTS
-            if (targetEmail) {
+          // Inside your loop context:
+            if (targetEmail) {n
                 try {
-                    await resend.emails.send({
-                        from: "Shop Orders <kanishga.b@gmail.com>", // Replace with your verified Resend domain
-                        to: targetEmail.trim(),
+                    await transporter.sendMail({
+                        from: `"KanSan Orders" <${process.env.EMAIL_USER}>`,
+                        to: targetEmail.trim(), // Can now deliver to ANY email address!
                         subject: `Order Confirmation - ${payload.orderNumber}`,
-                        html: generateInvoiceHTML(payload, orderPayload.date) // Call HTML template builder
+                        html: generateInvoiceHTML(payload, orderPayload.date)
                     });
-                    console.log(`Invoice email dispatched successfully to: ${targetEmail}`);
+                    console.log(`Invoice emailed safely via Gmail SMTP to: ${targetEmail}`);
                 } catch (emailError) {
-                    console.error(`Failed to send invoice email for ${payload.orderNumber}:`, emailError);
+                    console.error("Nodemailer routing crash:", emailError);
                 }
             }
         }
