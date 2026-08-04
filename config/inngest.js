@@ -5,6 +5,8 @@ import User from "@/models/User";
 import Order from "@/models/Order";
 import { connect } from "mongoose";
 import nodemailer from "nodemailer";
+import Product from "@/models/Product";
+
 
 export const inngest = new Inngest({ id: "kansan-next" });
 
@@ -55,6 +57,19 @@ export const createUserOrder = inngest.createFunction(
                     return { skipped: true, reason: "No recipient address found" };
                 }
 
+                const enrichedItems = [];
+                for (const item of payload.items) {
+                    const productDoc = await Product.findById(item.product);
+                    enrichedItems.push({
+                        name: productDoc ? productDoc.name : "Purchased Item",
+                        description: productDoc ? productDoc.description : "No description available.",
+                        quantity: item.quantity,
+                        price: productDoc ? (productDoc.offerPrice || productDoc.price) : 0
+                    });
+                }
+
+                const htmlContent = generateInvoiceHTML(payload.orderNumber, payload.amount, payload.address, orderPayload.date, enrichedItems);
+
                 const transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
                     port: 465,       // Port for secure SSL
@@ -70,7 +85,7 @@ export const createUserOrder = inngest.createFunction(
                     from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
                     to: targetEmail.trim(), 
                     subject: `Order Confirmation - ${payload.orderNumber}`,
-                    html: generateInvoiceHTML(payload, orderPayload.date) 
+                    html: htmlContent 
                 });
 
                 return { success: true, messageId: info.messageId };
@@ -95,14 +110,21 @@ function generateInvoiceHTML(payload, orderDate) {
         year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    // Generate dynamic rows for items layout table safely
-    const itemRowsHTML = (payload.items || []).map(item => `
+        const itemRowsHTML = itemsList.map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">Product Reference ID: ${item.product}</td>
-            <td style="padding: 12px; font-size: 14px; color: #2d3748; text-align: center;">${item.quantity}</td>
+            <td style="padding: 16px 12px; text-align: left; vertical-align: top;">
+                <p style="margin: 0; font-size: 14px; font-weight: bold; color: #1a202c;">${item.name}</p>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #718096; line-height: 1.4; max-width: 340px;">${item.description}</p>
+            </td>
+            <td style="padding: 16px 12px; font-size: 14px; color: #4a5568; text-align: center; vertical-align: top; font-weight: 600;">
+                ${item.quantity}
+            </td>
+            <td style="padding: 16px 12px; font-size: 14px; color: #1a202c; text-align: right; vertical-align: top; font-weight: bold; width: 90px;">
+                ₹${(item.price * item.quantity).toLocaleString('en-IN')}
+            </td>
         </tr>
     `).join('');
-
+    
     return `
     <!DOCTYPE html>
     <html>
@@ -114,31 +136,35 @@ function generateInvoiceHTML(payload, orderDate) {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7fafc; padding: 24px; margin: 0;">
         <div style="max-w: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             
+            <!-- Banner Section -->
             <div style="background-color: #ea580c; padding: 32px 24px; text-align: center;">
                 <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Order Confirmed!</h1>
-                <p style="color: #ffedd5; margin: 8px 0 0 0; font-size: 14px;">Thank you for shopping with us.</p>
+                <p style="color: #ffedd5; margin: 8px 0 0 0; font-size: 14px;">Your order has been logged and is preparing for fulfillment.</p>
             </div>
 
+            <!-- Receipt Meta Details -->
             <div style="padding: 24px;">
-                <table style="width: 100%; margin-bottom: 20px;">
+                <table style="width: 100%; margin-bottom: 24px;">
                     <tr>
                         <td style="padding: 0; text-align: left;">
-                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase;">Order Number</span>
-                            <p style="font-family: monospace; font-size: 16px; font-weight: bold; color: #1a202c; margin: 4px 0 0 0;">${payload.orderNumber}</p>
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking-width: 1px;">Order Number</span>
+                            <p style="font-family: monospace; font-size: 15px; font-weight: bold; color: #1a202c; margin: 4px 0 0 0;">${orderNumber}</p>
                         </td>
                         <td style="padding: 0; text-align: right; vertical-align: top;">
-                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase;">Date Placed</span>
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking-width: 1px;">Date Placed</span>
                             <p style="font-size: 14px; font-weight: 600; color: #2d3748; margin: 4px 0 0 0;">${formattedDate}</p>
                         </td>
                     </tr>
                 </table>
 
-                <h3 style="font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px;">Items Ordered</h3>
+                <!-- Items Grid Breakdown Table Section -->
+                <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">Items Summary</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
                     <thead>
                         <tr style="background-color: #f7fafc; border-bottom: 2px solid #e2e8f0;">
                             <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: left; text-transform: uppercase;">Product Details</th>
-                            <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: center; text-transform: uppercase; width: 80px;">Qty</th>
+                            <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: center; text-transform: uppercase; width: 60px;">Qty</th>
+                            <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: right; text-transform: uppercase; width: 90px;">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,21 +172,22 @@ function generateInvoiceHTML(payload, orderDate) {
                     </tbody>
                 </table>
 
+                <!-- Grand Summary pricing tier component -->
                 <div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
                     <table style="width: 100%;">
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568;">Grand Total (Incl. 2% Tax):</td>
-                            <td style="font-weight: 800; color: #1a202c; font-size: 16px; text-align: right;">₹${(payload.amount || 0).toLocaleString('en-IN')}</td>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 2% Delivery Tax):</td>
+                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
                         </tr>
                     </table>
                 </div>
 
-                <h3 style="font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 6px;">Delivery Destination</h3>
+                <!-- Multiline Delivery Destination Box -->
+                <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Delivery Destination</h3>
                 <div style="background-color: #fffaf8; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
-                    ${payload.address}
+                    ${deliveryAddress}
                 </div>
             </div>
-
             <div style="background-color: #f7fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0;">
                 <p style="margin: 0;">This email is an automated receipt. Do not reply directly to this thread.</p>
                 <p style="margin: 4px 0 0 0;">&copy; 2026 QuickCart. All rights reserved.</p>
