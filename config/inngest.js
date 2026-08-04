@@ -68,7 +68,12 @@ export const createUserOrder = inngest.createFunction(
                     });
                 }
 
-                const htmlContent = generateInvoiceHTML(payload.orderNumber, payload.amount, payload.address, orderPayload.date, enrichedItems);
+                const htmlContent = generateInvoiceHTML(
+                    payload.orderNumber, 
+                    payload.amount, 
+                    payload.address,
+                    orderPayload.date,
+                    enrichedItems);
 
                 const transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
@@ -109,7 +114,7 @@ function generateInvoiceHTML(payload, orderDate) {
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });
-        const safeItemsList = itemsList || [];
+        const  itemsList = [];
         
         const itemRowsHTML = itemsList.map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
