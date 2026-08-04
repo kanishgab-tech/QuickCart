@@ -6,12 +6,6 @@ import connectDB from "@/config/db";
 import { inngest } from "@/config/inngest";
 import { Resend } from "resend";
 
-import { Inngest } from "inngest";
-import { Resend } from "resend";
-import connectDB from "@/lib/connectDB";
-import Order from "@/models/Order";
-import User from "@/models/User";
-
 // Initialize Resend with your API Secret Key environment variable
 const resend = new Resend(process.env.RESEND_API_KEY);
 
