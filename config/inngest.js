@@ -114,7 +114,6 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });
-        const  itemsList = [];
         
         const itemRowsHTML = itemsList.map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
