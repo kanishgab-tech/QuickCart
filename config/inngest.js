@@ -8,7 +8,7 @@ import nodemailer from "nodemailer";
 
 export const inngest = new Inngest({ id: "kansan-next" });
 
-// Initialize a standard SMTP tunnel directly through Google
+// 1. Initialize a standard secure SMTP tunnel directly through Google
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -16,7 +16,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
-
 
 export const createUserOrder = inngest.createFunction(
     { 
@@ -33,10 +32,11 @@ export const createUserOrder = inngest.createFunction(
         
         await connectDB();
 
+        // Use a standard sequential loop to ensure absolute thread safety
         for (const singleEvent of eventList) {
             const payload = singleEvent.data || singleEvent;
 
-            // 1. Map properties for MongoDB document
+            // Map properties for MongoDB document matching your exact schema layout
             const orderPayload = {
                 orderNumber: payload.orderNumber,
                 userId: payload.userId || null,
@@ -50,30 +50,28 @@ export const createUserOrder = inngest.createFunction(
 
             processedOrders.push(orderPayload);
 
-            // 2. DYNAMICALLY DETERMINE RECIPIENT EMAIL ADDRESS
+            // Determine recipient email address based on account status
             let targetEmail = payload.guestEmail;
 
             if (!payload.isGuest && payload.userId) {
-                // If they are a registered user, look up their email from the User schema
                 const databaseUser = await User.findById(payload.userId);
                 if (databaseUser && databaseUser.email) {
                     targetEmail = databaseUser.email;
                 }
             }
 
-            // 3. TRIGGER AUTOMATED INVOICE EMAIL DISPATCH IF EMAIL EXISTS
-          // Inside your loop context:
-            if (targetEmail) {n
+            // Trigger Nodemailer automated confirmation email if email exists
+            if (targetEmail) {
                 try {
                     await transporter.sendMail({
-                        from: `"KanSan Orders" <${process.env.EMAIL_USER}>`,
-                        to: targetEmail.trim(), // Can now deliver to ANY email address!
+                        from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
+                        to: targetEmail.trim(), 
                         subject: `Order Confirmation - ${payload.orderNumber}`,
-                        html: generateInvoiceHTML(payload, orderPayload.date)
+                        html: generateInvoiceHTML(payload, orderPayload.date) // Pass to layout builder below
                     });
                     console.log(`Invoice emailed safely via Gmail SMTP to: ${targetEmail}`);
                 } catch (emailError) {
-                    console.error("Nodemailer routing crash:", emailError);
+                    console.error(`Nodemailer routing crash for ${payload.orderNumber}:`, emailError);
                 }
             }
         }
@@ -82,22 +80,22 @@ export const createUserOrder = inngest.createFunction(
             return { success: false, message: "No valid orders found in this batch slice" };
         }
     
-        // Insert array blocks securely inside MongoDB registry
+        // Insert array blocks inside MongoDB registry
         await Order.insertMany(processedOrders);  
         return { success: true, processed: processedOrders.length };
     }
 );
 
-// --- 4. PROFESSIONAL CLEAN HTML INVOICE LAYOUT TEMPLATE ---
+// --- PROFESSIONAL CLEAN HTML INVOICE LAYOUT TEMPLATE ---
 function generateInvoiceHTML(payload, orderDate) {
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });
 
-    // Generate dynamic rows for items layout table
-    const itemRowsHTML = payload.items.map(item => `
+    // Generate dynamic rows for items layout table safely
+    const itemRowsHTML = (payload.items || []).map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
-            <td style="padding: 12px; font-size: 14px; color: #2d3748;">Product ID: ${item.product}</td>
+            <td style="padding: 12px; font-size: 14px; color: #2d3748;">Product Reference ID: ${item.product}</td>
             <td style="padding: 12px; font-size: 14px; color: #2d3748; text-align: center;">${item.quantity}</td>
         </tr>
     `).join('');
@@ -113,31 +111,30 @@ function generateInvoiceHTML(payload, orderDate) {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7fafc; padding: 24px; margin: 0;">
         <div style="max-w: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             
-            <!-- Email Header Banner Brand bar -->
             <div style="background-color: #ea580c; padding: 32px 24px; text-align: center;">
                 <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Order Confirmed!</h1>
                 <p style="color: #ffedd5; margin: 8px 0 0 0; font-size: 14px;">Thank you for shopping with us.</p>
             </div>
 
-            <!-- Main Metadata Grid box context -->
             <div style="padding: 24px;">
-                <div style="display: flex; justify-content: space-between; border-b: 1px solid #edf2f7; padding-bottom: 16px; margin-bottom: 20px;">
-                    <div>
-                        <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking: 1px;">Order Number</span>
-                        <p style="font-family: monospace; font-size: 16px; font-weight: bold; color: #1a202c; margin: 4px 0 0 0;">${payload.orderNumber}</p>
-                    </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking: 1px;">Date Placed</span>
-                        <p style="font-size: 14px; font-weight: 600; color: #2d3748; margin: 4px 0 0 0;">${formattedDate}</p>
-                    </div>
-                </div>
+                <table style="width: 100%; margin-bottom: 20px;">
+                    <tr>
+                        <td style="padding: 0; text-align: left;">
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase;">Order Number</span>
+                            <p style="font-family: monospace; font-size: 16px; font-weight: bold; color: #1a202c; margin: 4px 0 0 0;">${payload.orderNumber}</p>
+                        </td>
+                        <td style="padding: 0; text-align: right; vertical-align: top;">
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase;">Date Placed</span>
+                            <p style="font-size: 14px; font-weight: 600; color: #2d3748; margin: 4px 0 0 0;">${formattedDate}</p>
+                        </td>
+                    </tr>
+                </table>
 
-                <!-- Items Breakdown Summary Table layout metrics -->
                 <h3 style="font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px;">Items Ordered</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
                     <thead>
                         <tr style="background-color: #f7fafc; border-bottom: 2px solid #e2e8f0;">
-                            <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: left; text-transform: uppercase;">Product Reference</th>
+                            <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: left; text-transform: uppercase;">Product Details</th>
                             <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: center; text-transform: uppercase; width: 80px;">Qty</th>
                         </tr>
                     </thead>
@@ -146,26 +143,24 @@ function generateInvoiceHTML(payload, orderDate) {
                     </tbody>
                 </table>
 
-                <!-- Financial Billing Block Matrix Summary line references -->
                 <div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #4a5568;">
-                        <span>Grand Total (Incl. 2% Tax):</span>
-                        <span style="font-weight: 800; color: #1a202c; font-size: 16px;">₹${payload.amount.toLocaleString('en-IN')}</span>
-                    </div>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="font-size: 14px; color: #4a5568;">Grand Total (Incl. 2% Tax):</td>
+                            <td style="font-weight: 800; color: #1a202c; font-size: 16px; text-align: right;">₹${(payload.amount || 0).toLocaleString('en-IN')}</td>
+                        </tr>
+                    </table>
                 </div>
 
-                <!-- Shipping Address layout Block line display representation -->
                 <h3 style="font-size: 12px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 6px;">Delivery Destination</h3>
                 <div style="background-color: #fffaf8; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
                     ${payload.address}
                 </div>
-
             </div>
 
-            <!-- Email Footer Copyright tag area line info notation block link template -->
             <div style="background-color: #f7fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0;">
-                <p style="margin: 0;">This email is an automated receipt configuration. Do not reply directly.</p>
-                <p style="margin: 4px 0 0 0;">&copy; 2026 Your Company. All rights reserved.</p>
+                <p style="margin: 0;">This email is an automated receipt. Do not reply directly to this thread.</p>
+                <p style="margin: 4px 0 0 0;">&copy; 2026 QuickCart. All rights reserved.</p>
             </div>
 
         </div>
@@ -173,6 +168,7 @@ function generateInvoiceHTML(payload, orderDate) {
     </html>
     `;
 }
+
 
 
 //Inngest function to save user data to a database
