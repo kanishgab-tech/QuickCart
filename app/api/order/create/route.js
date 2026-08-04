@@ -56,7 +56,7 @@ export const createUserOrder = inngest.createFunction(
             if (targetEmail) {
                 try {
                     await resend.emails.send({
-                        from: "Shop Orders <orders@yourdomain.com>", // Replace with your verified Resend domain
+                        from: "Shop Orders <kanishga.b@gmail.com>", // Replace with your verified Resend domain
                         to: targetEmail.trim(),
                         subject: `Order Confirmation - ${payload.orderNumber}`,
                         html: generateInvoiceHTML(payload, orderPayload.date) // Call HTML template builder
@@ -164,7 +164,18 @@ function generateInvoiceHTML(payload, orderDate) {
     `;
 }
 
+const generateUniqueOrderNumber = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStamp = `${year}${month}${day}`;
 
+    // Generate a 5-character random alphanumeric string
+    const randomChars = Math.random().toString(36).substring(2, 7).toUpperCase();
+
+    return `ORD-${dateStamp}-${randomChars}`;
+};
 
 
 export async function POST(request) {
