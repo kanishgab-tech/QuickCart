@@ -7,11 +7,11 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Loading from "@/components/Loading";
 import axios from "axios";
-import toast from "react-hot-toast";
+
 
 const MyOrders = () => {
 
-    const { currency, getToken, user } = useAppContext();
+    const { currency, getToken, user,showToast } = useAppContext();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,11 +36,11 @@ const MyOrders = () => {
             }
             else
             {
-                toast.error(data.message)
+                showToast(data.message, 'error');
             }
         }
         catch(error) {
-            toast.error(error.message)
+            showToast(error.message, 'error')
         }     
     }
 

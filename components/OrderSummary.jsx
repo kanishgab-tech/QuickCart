@@ -158,7 +158,7 @@ const [guestPhone, setGuestPhone] = useState("");
       }
     } catch (error) {
       console.log("Error creating order:", error.message);
-      toast.error(error.response?.data?.message || "Checkout failed. Please try again.");
+      show.error(error.response?.data?.message || "Checkout failed. Please try again.");
       setIsSubmitting(false);
     }
   };

@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
+
 // 1. CREATE AN INNER COMPONENT TO SAFELY HANDLE HOOK LOOKUPS
 const OrderSuccessContent = () => {
     const searchParams = useSearchParams();

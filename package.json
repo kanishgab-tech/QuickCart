@@ -13,6 +13,8 @@
     "axios": "^1.18.1",
     "cloudinary": "^2.10.0",
     "inngest": "^4.13.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "mongoose": "^9.7.4",
     "next": "^16.2.10",
     "nodemailer": "^9.0.4",
@@ -20,8 +22,8 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.5.1",
-    "resend": "^6.18.1",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

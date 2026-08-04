@@ -87,7 +87,7 @@ export const createUserOrder = inngest.createFunction(
 
 
                 const info = await transporter.sendMail({
-                    from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
+                    from: `"KanSan Crakers Orders" <${process.env.EMAIL_USER}>`,
                     to: targetEmail.trim(), 
                     subject: `Order Confirmation - ${payload.orderNumber}`,
                     html: htmlContent 
