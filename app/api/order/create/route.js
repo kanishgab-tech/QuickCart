@@ -56,7 +56,7 @@ export const createUserOrder = inngest.createFunction(
             if (targetEmail) {
                 try {
                     await resend.emails.send({
-                        from: "Shop Orders <kanishga.b@gmail.com>", // Replace with your verified Resend domain
+                        from: "Shop Orders <kanishga.b@gmail.com>", // Replace with your verified Resend domain, update
                         to: targetEmail.trim(),
                         subject: `Order Confirmation - ${payload.orderNumber}`,
                         html: generateInvoiceHTML(payload, orderPayload.date) // Call HTML template builder
