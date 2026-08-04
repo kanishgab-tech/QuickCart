@@ -8,14 +8,6 @@ import nodemailer from "nodemailer";
 
 export const inngest = new Inngest({ id: "kansan-next" });
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
-
 export const createUserOrder = inngest.createFunction(
     { 
         id: 'create-user-order',
@@ -25,7 +17,6 @@ export const createUserOrder = inngest.createFunction(
             timeOut: '5s'
         }
     },
-    // ✅ ADDED 'step' to the argument destructurer here
     async ({ events, step }) => {
         const eventList = events || [];
         const processedOrders = [];
@@ -48,7 +39,6 @@ export const createUserOrder = inngest.createFunction(
 
             processedOrders.push(orderPayload);
 
-            // ✅ WRAP THE EMAIL DETERMINATION AND DISPATCH IN step.run
             await step.run("send-invoice-email", async () => {
                 let targetEmail = payload.guestEmail;
 
@@ -59,15 +49,21 @@ export const createUserOrder = inngest.createFunction(
                     }
                 }
 
-                // 🔍 DEBUGGER LOG: Will show up in your local Inngest function dashboard console terminal
-                console.log(`INNGEST DEBUG -> Attempting email route tracking for: [${targetEmail}]`);
+                console.log(`INNGEST DEBUG -> User check: [${process.env.EMAIL_USER ? 'FOUND' : 'MISSING'}]`);
 
                 if (!targetEmail) {
-                    console.log("INNGEST ERROR -> Skipped sending email: targetEmail evaluated to undefined/null.");
                     return { skipped: true, reason: "No recipient address found" };
                 }
 
-                // Fire mail transaction securely inside the step runner wrapper block
+                // ✅ MOVE INITIALIZATION HERE (Guarantees environment strings are loaded)
+                const transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: process.env.EMAIL_USER, // Will read correctly now
+                        pass: process.env.EMAIL_PASS  // Will read correctly now
+                    }
+                });
+
                 const info = await transporter.sendMail({
                     from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
                     to: targetEmail.trim(), 
@@ -83,7 +79,6 @@ export const createUserOrder = inngest.createFunction(
             return { success: false, message: "No valid orders found in this batch slice" };
         }
     
-        // Wrap database writes in step.run for best practice execution checkpointing
         await step.run("save-orders-to-db", async () => {
             await Order.insertMany(processedOrders);  
         });
