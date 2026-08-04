@@ -14,7 +14,7 @@ export const createUserOrder = inngest.createFunction(
         triggers: [{ event: 'order/created' }],
         batchEvents: {
             maxSize: 5,
-            timeOut: '5s'
+            timeout: '5s'
         }
     },
     async ({ events, step }) => {
@@ -55,14 +55,16 @@ export const createUserOrder = inngest.createFunction(
                     return { skipped: true, reason: "No recipient address found" };
                 }
 
-                // ✅ MOVE INITIALIZATION HERE (Guarantees environment strings are loaded)
                 const transporter = nodemailer.createTransport({
-                    service: "gmail",
+                    host: "smtp.gmail.com",
+                    port: 465,       // Port for secure SSL
+                    secure: true,    // Use SSL natively
                     auth: {
-                        user: process.env.EMAIL_USER, // Will read correctly now
-                        pass: process.env.EMAIL_PASS  // Will read correctly now
+                        user: process.env.EMAIL_USER, 
+                        pass: process.env.EMAIL_PASS  
                     }
                 });
+
 
                 const info = await transporter.sendMail({
                     from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
