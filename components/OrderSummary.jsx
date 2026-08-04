@@ -142,13 +142,15 @@ const [guestPhone, setGuestPhone] = useState("");
         headers: requestHeaders
       });
 
-      if (data.success) {
+      if (data &&data.success) {
         toast.success(data.message || "Order Placed Successfully!");
         if (!user) {
           localStorage.removeItem("guest_cart"); 
         }
         setCartItems({});
-        router.push(`/order-placed?orderNumber=${data.orderNumber}`);
+        const confirmedNumber = data.orderNumber || `ORD-${Date.now()}`;
+        
+        router.push(`/order-placed?orderNumber=${encodeURIComponent(confirmedNumber)}`);
 
       } else {
         toast.error(data.message || "Failed to process order.");

@@ -21,7 +21,7 @@ const OrderSuccessContent = () => {
 
             <div className="space-y-2">
                 <h1 className="text-2xl font-black text-gray-900 tracking-tight">Thank You For Your Order!</h1>
-                <p className="text-sm text-gray-500">Your transaction has been processed securely and your items are being prepared for shipping.</p>
+                <p className="text-sm text-gray-500">kindly make the payment referencing the order number and share the screenshot with our support team.</p>
             </div>
 
             {/* Display Order Number */}
@@ -47,13 +47,13 @@ const OrderSuccessContent = () => {
                 >
                     Continue Shopping
                 </button>
-               {/* <button
+               {<button
                     type="button"
-                    onClick={() => router.push('/track-order')}
+                    onClick={() => router.push('/')}
                     className="flex-1 py-3 bg-orange-600 text-white font-semibold text-xs rounded-xl hover:bg-orange-700 transition shadow-sm hover:shadow cursor-pointer text-center"
                 >
-                    Track Package
-                </button>*/}
+                    Track ackage
+                </button>}
             </div>
         </div>
     );

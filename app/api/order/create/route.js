@@ -73,10 +73,13 @@ export async function POST(request) {
             }
         }
 
+        // Inside your server-side POST handler route right after inngest.send():
         return NextResponse.json({ 
             success: true, 
-            message: userId ? "Order Placed Successfully" : "Your Order Placed Successfully" 
+            message: "Order Placed Successfully",
+            orderNumber: orderNumber // 🌟 ENSURE THIS KEY MATCHES EXACTLY IN LOWERCASE/CAMELCASE 🌟
         }, { status: 201 });
+
         
     } catch (error) {
         console.log("Error creating order:", error);
