@@ -109,7 +109,8 @@ function generateInvoiceHTML(payload, orderDate) {
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });
-
+        const safeItemsList = itemsList || [];
+        
         const itemRowsHTML = itemsList.map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
             <td style="padding: 16px 12px; text-align: left; vertical-align: top;">
