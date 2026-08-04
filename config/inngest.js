@@ -8,7 +8,6 @@ import nodemailer from "nodemailer";
 
 export const inngest = new Inngest({ id: "kansan-next" });
 
-// 1. Initialize a standard secure SMTP tunnel directly through Google
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -26,17 +25,16 @@ export const createUserOrder = inngest.createFunction(
             timeOut: '5s'
         }
     },
-    async ({ events }) => {
+    // ✅ ADDED 'step' to the argument destructurer here
+    async ({ events, step }) => {
         const eventList = events || [];
         const processedOrders = [];
         
         await connectDB();
 
-        // Use a standard sequential loop to ensure absolute thread safety
         for (const singleEvent of eventList) {
             const payload = singleEvent.data || singleEvent;
 
-            // Map properties for MongoDB document matching your exact schema layout
             const orderPayload = {
                 orderNumber: payload.orderNumber,
                 userId: payload.userId || null,
@@ -50,38 +48,46 @@ export const createUserOrder = inngest.createFunction(
 
             processedOrders.push(orderPayload);
 
-            // Determine recipient email address based on account status
-            let targetEmail = payload.guestEmail;
+            // ✅ WRAP THE EMAIL DETERMINATION AND DISPATCH IN step.run
+            await step.run("send-invoice-email", async () => {
+                let targetEmail = payload.guestEmail;
 
-            if (!payload.isGuest && payload.userId) {
-                const databaseUser = await User.findById(payload.userId);
-                if (databaseUser && databaseUser.email) {
-                    targetEmail = databaseUser.email;
+                if (!payload.isGuest && payload.userId) {
+                    const databaseUser = await User.findById(payload.userId);
+                    if (databaseUser && databaseUser.email) {
+                        targetEmail = databaseUser.email;
+                    }
                 }
-            }
 
-            // Trigger Nodemailer automated confirmation email if email exists
-            if (targetEmail) {
-                try {
-                    await transporter.sendMail({
-                        from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
-                        to: targetEmail.trim(), 
-                        subject: `Order Confirmation - ${payload.orderNumber}`,
-                        html: generateInvoiceHTML(payload, orderPayload.date) // Pass to layout builder below
-                    });
-                    console.log(`Invoice emailed safely via Gmail SMTP to: ${targetEmail}`);
-                } catch (emailError) {
-                    console.error(`Nodemailer routing crash for ${payload.orderNumber}:`, emailError);
+                // 🔍 DEBUGGER LOG: Will show up in your local Inngest function dashboard console terminal
+                console.log(`INNGEST DEBUG -> Attempting email route tracking for: [${targetEmail}]`);
+
+                if (!targetEmail) {
+                    console.log("INNGEST ERROR -> Skipped sending email: targetEmail evaluated to undefined/null.");
+                    return { skipped: true, reason: "No recipient address found" };
                 }
-            }
+
+                // Fire mail transaction securely inside the step runner wrapper block
+                const info = await transporter.sendMail({
+                    from: `"QuickCart Orders" <${process.env.EMAIL_USER}>`,
+                    to: targetEmail.trim(), 
+                    subject: `Order Confirmation - ${payload.orderNumber}`,
+                    html: generateInvoiceHTML(payload, orderPayload.date) 
+                });
+
+                return { success: true, messageId: info.messageId };
+            });
         }
         
         if (processedOrders.length === 0) {
             return { success: false, message: "No valid orders found in this batch slice" };
         }
     
-        // Insert array blocks inside MongoDB registry
-        await Order.insertMany(processedOrders);  
+        // Wrap database writes in step.run for best practice execution checkpointing
+        await step.run("save-orders-to-db", async () => {
+            await Order.insertMany(processedOrders);  
+        });
+
         return { success: true, processed: processedOrders.length };
     }
 );
