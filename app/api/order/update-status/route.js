@@ -9,7 +9,7 @@ export async function POST(request) {
 
         // 2. Extract input payload tracking keys
         const body = await request.json();
-        const { orderId, status } = body;
+        const { orderId, status, notes } = body;
 
         // Basic structural parameter safety validation
         if (!orderId || !status) {
@@ -31,8 +31,10 @@ export async function POST(request) {
         // using { new: true } to return the document after updates take effect
         const updatedOrder = await Order.findByIdAndUpdate(
             orderId,
-            { status: status },
-            { new: true, runValidators: true }
+            { status: status,
+              notes: notes !== undefined ? notes : ""
+             },
+            { returnDocument: 'after', runValidators: true }
         );
 
         if (!updatedOrder) {

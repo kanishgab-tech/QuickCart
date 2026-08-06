@@ -8,7 +8,9 @@ const productSchema = new mangooese.Schema({
     offerPrice: { type: Number, required: true },
     image: { type: Array, required: true },
     category: { type: String, required: true },
-    date: { type: Number, required: true }
+    date: { type: Number, required: true },
+    isActive: { type: Boolean, required: true, default: true },
+    isPopular: { type: Boolean, required: true, default: false }
 })
 
 const Product = mangooese.models.Product || mangooese.model('Product', productSchema)

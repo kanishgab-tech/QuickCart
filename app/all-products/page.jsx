@@ -5,18 +5,26 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Titlebar from "@/components/Titlebar";
 import { useAppContext } from "@/context/AppContext";
+import { PRODUCT_CATEGORIES } from "@/assets/assets"; // Imported central source of truth
 
 const AllProducts = () => {
     const { products } = useAppContext();
     const [selectedCategory, setSelectedCategory] = useState("All");
 
-    // Extract unique categories dynamically from products array
-    const categories = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
+    // Flatten "All" with your centralized list using the spread operator (...)
+    const categories = ["All", ...PRODUCT_CATEGORIES];
 
-    // Filter products based on active selection
-    const filteredProducts = selectedCategory === "All" 
-        ? products 
-        : products.filter(product => product.category === selectedCategory);
+    // Filter products based on active categories AND absolute visibility status
+    const filteredProducts = products ? products.filter(product => {
+        // 1. CRITICAL SECURITY FIX: Filter out soft-deleted/inactive items immediately
+        if (product.isActive === false) return false;
+
+        // 2. FIXED: If "All" is active, bypass specific string matching to display everything
+        if (selectedCategory === "All") return true;
+
+        // 3. Match the product category with the active string selection state
+        return product.category === selectedCategory;
+    }) : [];
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -40,8 +48,9 @@ const AllProducts = () => {
                             {categories.map((category) => (
                                 <li key={category}>
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedCategory(category)}
-                                        className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                                        className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${
                                             selectedCategory === category
                                                 ? "bg-orange-50 text-orange-600 border-l-4 border-orange-600 pl-2"
                                                 : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -54,21 +63,20 @@ const AllProducts = () => {
                         </ul>
                     </aside>
 
-                    {/* Right Side Product Grid */}
+                    {/* Right Side Public Product Catalog Grid */}
                     <main className="flex-grow w-full">
                         {filteredProducts.length === 0 ? (
-                            <div className="text-center py-20 text-gray-500">
-                                No products found in this category.
+                            <div className="text-center py-20 text-gray-500 font-medium">
+                                No active products found matching the selected categories.
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-6 w-full">
-                                {filteredProducts.map((product, index) => (
-                                    <ProductCard key={product.id || index} product={product} />
+                                {filteredProducts.map((product) => (
+                                    <ProductCard key={product._id || product.id} product={product} />
                                 ))}
                             </div>
                         )}
                     </main>
-
                 </div>
             </div>
             

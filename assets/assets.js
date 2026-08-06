@@ -130,6 +130,18 @@ export const HomeIcon = () => (
   </svg>
 );
 
+// Add this line at the bottom of your assets file
+export const PRODUCT_CATEGORIES = [
+  "Earphone",
+  "Headphone",
+  "Watch",
+  "Smartphone",
+  "Laptop",
+  "Camera",
+  "Accessories",
+  "kids"
+];
+
 export const productsDummyData = [
   {
     "_id": "67a1f4e43f34a77b6dde9144",

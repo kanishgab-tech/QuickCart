@@ -86,12 +86,20 @@ export const createUserOrder = inngest.createFunction(
                 });
 
 
-                const info = await transporter.sendMail({
-                    from: `"KanSan Crakers Orders" <${process.env.EMAIL_USER}>`,
-                    to: targetEmail.trim(), 
-                    subject: `Order Confirmation - ${payload.orderNumber}`,
-                    html: htmlContent 
-                });
+            const info = await transporter.sendMail({
+                from: `"KanSan Crakers Orders" <${process.env.EMAIL_USER}>`,
+                to: targetEmail.trim(), 
+                
+                // Add CC (Visible to all recipients)
+               // cc: "manager@kansancrakers.com, billing@kansancrakers.com", 
+                
+                // Add BCC (Hidden from other recipients)
+                //bcc: ["archive@kansancrakers.com", process.env.ADMIN_BACKUP_EMAIL], 
+                
+                subject: `Order Confirmation - ${payload.orderNumber}`,
+                html: htmlContent 
+            });
+
 
                 return { success: true, messageId: info.messageId };
             });
