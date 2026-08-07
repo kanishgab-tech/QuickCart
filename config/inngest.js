@@ -209,11 +209,11 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                             <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">-₹ ${discountAmount.toLocaleString('en-IN')}</td>
                         </tr>
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Tax Amount(3%})</td>
-                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">-₹ ${tax.toLocaleString('en-IN')}</td>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Tax Amount(3%)</td>
+                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">₹ ${tax}</td>
                         </tr>
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 2% Delivery Tax):</td>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 3% Tax):</td>
                             <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
                         </tr>
                     </table>
