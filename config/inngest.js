@@ -127,7 +127,7 @@ export const createUserOrder = inngest.createFunction(
 );
 
 // --- PROFESSIONAL CLEAN HTML INVOICE LAYOUT TEMPLATE ---
-function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList) {
+function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList,shippingCharges,discountAmount,couponCode) {
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });

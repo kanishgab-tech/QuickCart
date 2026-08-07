@@ -28,7 +28,7 @@ export async function POST(request) {
         const userId = auth?.userId; // Will be null or undefined if the user is a guest
 
         // 1. Destructure guestEmail alongside address and items from the incoming request body
-        const { address, items, guestEmail,discountAmount,couponCode} = await request.json();
+        const { address, items, guestEmail,discountAmount,shippingCharges,couponCode} = await request.json();
         await connectDB();
 
         // 2. REPLACED UNAUTHORIZED CHECK: If there is no userId, they MUST provide a guest email
@@ -36,7 +36,7 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "Email required for guest checkout" }, { status: 400 });
         }
 
-        if (!address || !items || items.length === 0 || amount === undefined) {
+        if (!address || !items || items.length === 0) {
             return NextResponse.json({ success: false, message: "Invalid order data" }, { status: 400 });
         }
 
