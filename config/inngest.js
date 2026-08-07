@@ -70,6 +70,7 @@ export const createUserOrder = inngest.createFunction(
                         description: productDoc ? productDoc.description : "No description available.",
                         quantity: item.quantity,
                         price: productDoc ? (productDoc.offerPrice || productDoc.price) : 0,
+
                     });
                 }
 
@@ -142,7 +143,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                 ${item.quantity}
             </td>
             <td style="padding: 16px 12px; font-size: 14px; color: #1a202c; text-align: right; vertical-align: top; font-weight: bold; width: 90px;">
-                ₹${(item.offerPrice * item.quantity).toLocaleString('en-IN')}
+                ₹${(item.price * item.quantity).toLocaleString('en-IN')}
             </td>
             
         </tr>
@@ -201,11 +202,14 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                         <tr>
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Shpping Charges :</td>
                             <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${shippingCharges.toLocaleString('en-IN')}</td>
-                      
-
+                        </tr>
+                         <tr>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Discount Amount(${couponCode})</td>
+                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${discountAmount.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr>
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 2% Delivery Tax):</td>
                             <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
-                        
                         </tr>
                     </table>
                 </div>
