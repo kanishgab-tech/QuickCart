@@ -237,7 +237,8 @@ const handleRemoveCoupon = () => {
         shippingCharges: shippingCharges, // Captured from your state logic
         discountAmount: appliedDiscount,   // Captured from your state logic
         couponCode: activeCouponLabel || "", // Captured from your state logic
-        guestEmail: user ? null : guestEmail.trim()
+        guestEmail: user ? null : guestEmail.trim(),
+        tax
       };
 
       const { data } = await axios.post('/api/order/create', payload, {

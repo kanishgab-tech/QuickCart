@@ -82,7 +82,8 @@ export const createUserOrder = inngest.createFunction(
                     enrichedItems,
                     payload.shippingCharges,
                     payload.discountAmount,
-                    payload.couponCode
+                    payload.couponCode,
+                    payload.tax
                 );
 
                 const transporter = nodemailer.createTransport({
@@ -128,7 +129,7 @@ export const createUserOrder = inngest.createFunction(
 );
 
 // --- PROFESSIONAL CLEAN HTML INVOICE LAYOUT TEMPLATE ---
-function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList,shippingCharges,discountAmount,couponCode) {
+function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList,shippingCharges,discountAmount,couponCode,tax) {
     const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric'
     });
@@ -168,7 +169,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
 
             <!-- Receipt Meta Details -->
             <div style="padding: 24px;">
-                <table style="width: 100%; margin-bottom: 24px;">
+                <table style="width: 80%; margin-bottom: 24px;">
                     <tr>
                         <td style="padding: 0; text-align: left;">
                             <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking-width: 1px;">Order Number</span>
@@ -183,7 +184,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
 
                 <!-- Items Grid Breakdown Table Section -->
                 <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">Items Summary</h3>
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+                <table style="width: 80%; border-collapse: collapse; margin-bottom: 24px;">
                     <thead>
                         <tr style="background-color: #f7fafc; border-bottom: 2px solid #e2e8f0;">
                             <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: left; text-transform: uppercase;">Product Details</th>
@@ -198,18 +199,22 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
 
                 <!-- Grand Summary pricing tier component -->
                 <div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-                    <table style="width: 100%;">
+                    <table style="width: 80%;">
                         <tr>
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Shpping Charges :</td>
-                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${shippingCharges.toLocaleString('en-IN')}</td>
+                            <td style="font-weight: 600; color: #262e3d; font-size: 18px; text-align: right;">₹${shippingCharges.toLocaleString('en-IN')}</td>
                         </tr>
                          <tr>
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Discount Amount(${couponCode})</td>
-                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${discountAmount.toLocaleString('en-IN')}</td>
+                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">-₹ ${discountAmount.toLocaleString('en-IN')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Tax Amount(3%})</td>
+                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">-₹ ${tax.toLocaleString('en-IN')}</td>
                         </tr>
                         <tr>
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 2% Delivery Tax):</td>
-                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
+                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
                         </tr>
                     </table>
                 </div>
