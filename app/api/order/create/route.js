@@ -28,7 +28,7 @@ export async function POST(request) {
         const userId = auth?.userId; // Will be null or undefined if the user is a guest
 
         // 1. Destructure guestEmail alongside address and items from the incoming request body
-        const { address, items, guestEmail } = await request.json();
+        const { address, items, guestEmail,discountAmount,couponCode} = await request.json();
         await connectDB();
 
         // 2. REPLACED UNAUTHORIZED CHECK: If there is no userId, they MUST provide a guest email
@@ -36,7 +36,7 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "Email required for guest checkout" }, { status: 400 });
         }
 
-        if (!address || !items || items.length === 0) {
+        if (!address || !items || items.length === 0 || amount === undefined) {
             return NextResponse.json({ success: false, message: "Invalid order data" }, { status: 400 });
         }
 
@@ -45,12 +45,18 @@ export async function POST(request) {
         for (const item of items) {
             const product = await Product.findById(item.product);
             if (product) {
-                rawAmount += product.price * item.quantity;
+                rawAmount += product.offerPrice * item.quantity;
             }
         }
         const orderNumber = generateUniqueOrderNumber();
-        // Apply 2% tax and use standard float rounding to prevent trailing JS math decimals
-        const totalAmount = Math.round((rawAmount + (rawAmount * 0.02)) * 100) / 100;
+        // Apply 3% tax and use standard float rounding to prevent trailing JS math decimals
+        const totalAmount = Math.round((rawAmount + (rawAmount * 0.03)) * 100) / 100;
+        // Calculate expected shipping costs using your tier rules
+        const expectedShipping = totalAmount >= 2000 || couponCode === "FREESHIP" ? 0 : 150;
+        
+        // Final server-side grand total calculation confirmation cross-check validation
+        const verifiedGrandTotal = Math.max(0, (totalAmount + expectedShipping) - (discountAmount || 0));
+
 
         // 4. Send event data to Inngest, explicitly supplying guest configurations
         await inngest.send({
@@ -59,10 +65,15 @@ export async function POST(request) {
                 orderNumber,
                 userId: userId || null,   // Falls back to null so Mongoose knows it's a guest
                 isGuest: !userId,        // Boolean flag for easy database indexing
-                guestEmail: userId ? null : guestEmail,
+                guestEmail: userId ? null : guestEmail.trim().toLowerCase(),
                 items,       
-                amount: totalAmount, 
+                amount: verifiedGrandTotal, 
                 address,
+                status: "Order Placed",
+                notes: "", 
+                shippingCharges:shippingCharges !== undefined ? Number(shippingCharges) : expectedShipping, 
+                discountAmount:discountAmount !== undefined ? Number(discountAmount) : 0, 
+                couponCode:couponCode ? couponCode.trim().toUpperCase() : "", 
                 date: Date.now(),
             }
         });

@@ -13,7 +13,10 @@ const orderSchema = new mongoose.Schema({
     address: { type: String, required: true }, 
     status:  { type: String, required: true, default: 'Order Placed' },
     date: { type: Number, required: true },
-    notes: { type: String, required: false, default: "" }
+    notes: { type: String, required: false, default: "" },
+    shippingCharges: { type: Number, required: true, default: 0 },
+    discountAmount: { type: Number, required: true, default: 0 },
+    couponCode: { type: String, required: false, default: "" }
 });
 
 const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);

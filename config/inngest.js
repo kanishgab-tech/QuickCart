@@ -36,6 +36,11 @@ export const createUserOrder = inngest.createFunction(
                 items: payload.items,
                 amount: payload.amount,
                 address: payload.address,
+                status:payload.status,
+                notes:payload.notes,
+                shippingCharges:payload.shippingCharges,
+                discountAmount:payload.discountAmount,
+                couponCode:payload.couponCode,
                 date: payload.date || Date.now() 
             };
 
@@ -64,7 +69,7 @@ export const createUserOrder = inngest.createFunction(
                         name: productDoc ? productDoc.name : "Purchased Item",
                         description: productDoc ? productDoc.description : "No description available.",
                         quantity: item.quantity,
-                        price: productDoc ? (productDoc.offerPrice || productDoc.price) : 0
+                        price: productDoc ? (productDoc.offerPrice || productDoc.price) : 0,
                     });
                 }
 
@@ -73,7 +78,11 @@ export const createUserOrder = inngest.createFunction(
                     payload.amount, 
                     payload.address,
                     orderPayload.date,
-                    enrichedItems);
+                    enrichedItems,
+                    payload.shippingCharges,
+                    payload.discountAmount,
+                    payload.couponCode
+                );
 
                 const transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
@@ -133,8 +142,9 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                 ${item.quantity}
             </td>
             <td style="padding: 16px 12px; font-size: 14px; color: #1a202c; text-align: right; vertical-align: top; font-weight: bold; width: 90px;">
-                ₹${(item.price * item.quantity).toLocaleString('en-IN')}
+                ₹${(item.offerPrice * item.quantity).toLocaleString('en-IN')}
             </td>
+            
         </tr>
     `).join('');
     
@@ -189,12 +199,18 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                 <div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
                     <table style="width: 100%;">
                         <tr>
+                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Shpping Charges :</td>
+                            <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${shippingCharges.toLocaleString('en-IN')}</td>
+                      
+
                             <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 2% Delivery Tax):</td>
                             <td style="font-weight: 900; color: #1a202c; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
+                        
                         </tr>
                     </table>
                 </div>
 
+                
                 <!-- Multiline Delivery Destination Box -->
                 <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Delivery Destination</h3>
                 <div style="background-color: #fffaf8; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
@@ -211,7 +227,6 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
     </html>
     `;
 }
-
 
 
 //Inngest function to save user data to a database

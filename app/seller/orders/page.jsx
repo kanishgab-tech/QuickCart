@@ -120,17 +120,20 @@ useEffect(() => {
         )
     ];
 
-    // Document Exporters (Respect active filtering and sub-menu arrays implicitly)
+        // CSV Export Logic
     const handleExportCSV = () => {
         if (filteredOrders.length === 0) {
             showToast("No data rows available to export.", "error");
             return;
         }
-        const headers = ["Order Number", "Date", "Items Summary", "Total Amount", "Status", "Delivery Address"];
+        const headers = ["Order Number", "Date", "Items Summary", "Shipping Cost", "Coupon", "Discount", "Grand Total", "Status", "Address"];
         const rows = filteredOrders.map(order => [
             `"${order.orderNumber}"`,
             `"${new Date(order.date).toLocaleDateString()}"`,
             `"${order.items.map(i => `${typeof i.product === 'object' ? i.product.name : 'Product'} (x${i.quantity})`).join(" | ")}"`,
+            order.shippingCharges || 0,
+            `"${order.couponCode || 'NONE'}"`,
+            order.discountAmount || 0,
             order.amount,
             `"${order.status}"`,
             `"${order.address ? order.address.replace(/\n/g, ' ') : ""}"`
@@ -138,12 +141,13 @@ useEffect(() => {
         const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
-        link.setAttribute("download", `${activeMenuTab}_orders_${new Date().toISOString().split('T')[0]}.csv`);
+        link.setAttribute("download", `${activeMenuTab}_orders_report.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
+    // Excel Export Logic
     const handleExportExcel = () => {
         if (filteredOrders.length === 0) {
             showToast("No data rows available to export.", "error");
@@ -154,52 +158,54 @@ useEffect(() => {
             "Order Number": order.orderNumber,
             "Order Date": new Date(order.date).toLocaleDateString(),
             "Products Summary": order.items.map(i => `${typeof i.product === 'object' ? i.product.name : 'Product'} (x${i.quantity})`).join(", "),
-            "Amount": `${currency}${order.amount}`,
+            "Shipping Cost": order.shippingCharges || 0,
+            "Coupon Code": order.couponCode || "NONE",
+            "Discount": order.discountAmount || 0,
+            "Grand Total": order.amount,
             "Status": order.status,
             "Shipping Address": order.address ? order.address.replace(/\n/g, ' ') : ""
         }));
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Orders Report");
-        worksheet["!cols"] = Object.keys(excelData[0]).map(key => ({
-            wch: Math.max(key.length, ...excelData.map(row => (row[key] ? row[key].toString().length : 0))) + 4
-        }));
-        XLSX.writeFile(workbook, `${activeMenuTab}_orders_${new Date().toISOString().split('T')[0]}.xlsx`);
+        XLSX.writeFile(workbook, `${activeMenuTab}_orders_report.xlsx`);
     };
 
+    // PDF Export Logic
     const handleExportPDF = () => {
         if (filteredOrders.length === 0) {
             showToast("No data rows available to export.", "error");
             return;
         }
         const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.text(`${activeMenuTab.toUpperCase()} ORDERS MANAGEMENT REPORT`, 14, 15);
+        doc.setFont("helvetica", "bold").setFontSize(14);
+        doc.text(`${activeMenuTab.toUpperCase()} ORDERS DETAILED REPORT`, 14, 15);
         
-        const tableHeaders = [["#", "Order ID", "Date", "Items/Qty", "Total", "Status", "Shipping Destination"]];
+        const tableHeaders = [["#", "Order ID", "Date", "Items/Qty", "Shipping", "Coupon", "Discount", "Total", "Status"]];
         const tableRows = filteredOrders.map((order, idx) => [
             idx + 1,
             order.orderNumber,
             new Date(order.date).toLocaleDateString(),
             order.items.map(i => `${typeof i.product === 'object' ? i.product.name : 'Product'} (x${i.quantity})`).join("\n"),
+            `${currency}${order.shippingCharges || 0}`,
+            order.couponCode || "NONE",
+            `${currency}${order.discountAmount || 0}`,
             `${currency}${order.amount.toLocaleString('en-IN')}`,
-            order.status,
-            order.address || "N/A"
+            order.status
         ]);
 
         autoTable(doc, {
-            startY: 25,
+            startY: 22,
             head: tableHeaders,
             body: tableRows,
             theme: 'grid',
-            headStyles: { fillColor: [30, 30, 30], textColor: [255, 255, 255], fontSize: 9, fontStyle: 'bold', halign: 'center' },
-            bodyStyles: { fontSize: 8, textColor: [50, 50, 50], valign: 'top' },
-            columnStyles: { 0: { cellWidth: 10 }, 1: { cellWidth: 35 }, 2: { cellWidth: 25 }, 3: { cellWidth: 65 }, 4: { cellWidth: 30 }, 5: { cellWidth: 30 }, 6: { cellWidth: 85 } },
-            styles: { overflow: 'linebreak', cellPadding: 3 }
+            headStyles: { fillColor:'#ea580c', textColor:'#000000', fontSize: 8, halign: 'center' },
+            bodyStyles: { fontSize: 8, valign: 'top' },
+            columnStyles: { 0: { cellWidth: 8 }, 1: { cellWidth: 32 }, 2: { cellWidth: 20 }, 3: { cellWidth: 60 }, 4: { cellWidth: 18 }, 5: { cellWidth: 22 }, 6: { cellWidth: 18 }, 7: { cellWidth: 24 }, 8: { cellWidth: 25 } }
         });
-        doc.save(`${activeMenuTab}_orders_report_${new Date().toISOString().split('T')[0]}.pdf`);
+        doc.save(`${activeMenuTab}_orders_report.pdf`);
     };
+
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -347,34 +353,42 @@ useEffect(() => {
                                         </div>
 
                                         {/* Column 2: Shipping Address Container Block (Takes 1 column) */}
-                                        <div className="md:col-span-1 text-gray-600 leading-relaxed text-xs">
+                                        <div className="md:col-span-1 justify-right text-gray-600 leading-relaxed text-xs">
                                             <h4 className="font-bold text-gray-400 text-[10px] uppercase tracking-wider mb-1">Shipping Destination</h4>
                                             <p className="whitespace-pre-line text-gray-900 font-medium bg-gray-50/50 p-2.5 rounded border border-gray-100">
                                                 {order.address || "No address data payload block captured."}
                                             </p>
                                         </div>
-
-                                        {/* Column 3: WIDENED Logistics Comments & Financial Metrics (Takes 2 columns) */}
+                                          
+                                        {/* Column 3: Upgraded Detailed Financial Summary & Logistics Notes */}
                                         <div className="md:col-span-2 flex flex-col sm:flex-row justify-end gap-4 w-full items-start">
                                             
-                                             {/* Financial & Metric Values Column (Column 3) */}
-                                        <div className="flex md:flex-col justify-between items-baseline md:items-end gap-1 md:text-right">
-                                            <div>
-                                                <h4 className="font-bold text-gray-400 text-[10px] uppercase tracking-wider block mb-0.5">
-                                                    Fulfillment Total
-                                                </h4>
-                                                <p className="font-black text-base text-gray-950">
-                                                    {currency}{order.amount?.toLocaleString('en-IN')}
-                                                </p>
+                                            {/* Detailed Cost Breakdown Grid Layout */}
+                                            <div className="bg-gray-50/50 border border-gray-200/80 p-3 rounded-lg flex flex-col gap-1 text-[11px] text-gray-500 font-medium shrink-0 min-w-[150px]">
+                                                <div className="flex justify-between">
+                                                    <span>Shipping:</span>
+                                                    <span className="text-gray-900 font-semibold">
+                                                        {order.shippingCharges === 0 ? "Free" : `${currency}${order.shippingCharges}`}
+                                                    </span>
+                                                </div>
+                                                {order.discountAmount > 0 && (
+                                                    <div className="flex justify-between text-green-600">
+                                                        <span className="truncate max-w-[80px]">Coupon ({order.couponCode}):</span>
+                                                        <span>&minus;{currency}{order.discountAmount}</span>
+                                                    </div>
+                                                )}
+                                                <div className="border-t border-gray-200 pt-1 mt-1 flex flex-col items-baseline sm:items-start">
+                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Grand Total</span>
+                                                    <p className="font-black text-base text-gray-950 leading-tight">
+                                                        {currency}{order.amount?.toLocaleString('en-IN')}
+                                                    </p>
+                                                    <span className="text-[10px] text-gray-400 font-normal mt-0.5">
+                                                        Date: {new Date(order.date).toLocaleDateString()}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div className="text-gray-400 font-medium text-xs mt-1">
-                                                <span>Date: <span className="text-gray-700 font-medium">{new Date(order.date).toLocaleDateString()}</span></span>
-                                            </div>
-                                        </div>
-
-                                            
-
-                                        </div>
+                                        </div>                                      
+                                    
 
                                     </div> {/* Closes Grid Columns Row Container */}
                                     {/* Increased Width Comments / Tracking Logs Text Input Box */}

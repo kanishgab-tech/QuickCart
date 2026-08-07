@@ -233,6 +233,10 @@ const handleRemoveCoupon = () => {
       const payload = {
         address: finalAddressValue,
         items: cartItemsArray,
+        amount: grandTotal,           // Post-discount final grand total
+        shippingCharges: shippingCharges, // Captured from your state logic
+        discountAmount: appliedDiscount,   // Captured from your state logic
+        couponCode: activeCouponLabel || "", // Captured from your state logic
         guestEmail: user ? null : guestEmail.trim()
       };
 
