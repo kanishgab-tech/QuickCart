@@ -1,5 +1,5 @@
 'use client'
-import { productsDummyData, userDummyData } from "@/assets/assets";
+import {PREDEFINED_COUPONS,PREDEFINED_TAX}  from "@/assets/assets";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,12 @@ export const AppContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({})
 
     const [toasts, setToasts] = useState([]);
+    const [coupon, setCoupon] = useState(null); 
+
+    const [couponCode, setCouponCode] = useState("");
+    const [isCouponApplied, setIsCouponApplied] = useState(false);
+    const [activeCouponLabel, setActiveCouponLabel] = useState("");
+    const [appliedDiscount, setAppliedDiscount] = useState(0);
 
     const fetchProductData = async () => {
         //setProducts(productsDummyData)
@@ -170,12 +176,108 @@ export const AppContextProvider = (props) => {
         return (totalAmount * 100) / 100;
     }
 
-    const getTaxAmount = () => {
+    const subtotal = Object.entries(cartItems || {}).reduce((acc, [id, qty]) => {
+    const product = products.find(p => (p.id || p._id) === id);
+    return acc + (product ? product.offerPrice * qty : 0);
+    }, 0);
 
-          const tax = getCartAmount() * 0.03;
-          return Math.round(tax * 100) / 100;
+   
+     // Calculate Dynamic Shipping Logistics
+    const shippingCharges = (() => {
+        if (subtotal === 0) return 0;
+        
+        // FIXED: Check against isCouponApplied and activeCouponLabel context tracking parameters
+        const currentCoupon = PREDEFINED_COUPONS[activeCouponLabel];
+        if (isCouponApplied && currentCoupon?.type === "shipping") {
+            return 0; // Explicitly forces delivery fees to zero
+        }
+        
+        return subtotal >= 2000 ? 0 : 150; // Free shipping over ₹2000 tier rule
+    })();
 
-    }
+    // Recalculate promo discounts automatically if cart items change after a code is applied
+    useEffect(() => {
+        if (!isCouponApplied || !activeCouponLabel) {
+            setAppliedDiscount(0);
+            return;
+        }
+        const couponMeta = PREDEFINED_COUPONS[activeCouponLabel];
+        if (couponMeta.type === "percentage") {
+            setAppliedDiscount((subtotal * couponMeta.value) / 100);
+        } else if (couponMeta.type === "fixed") {
+            setAppliedDiscount(Math.min(couponMeta.value, subtotal));
+        } else if (couponMeta.type === "shipping") {
+            // FIXED: Free shipping coupon deducts 0 from item prices; it only overrides shippingCharges
+            setAppliedDiscount(0); 
+        } else {
+            setAppliedDiscount(0);
+        }
+    }, [subtotal, isCouponApplied, activeCouponLabel]);
+
+    // Global Action Handlers moved into context scope
+    const applyCouponGlobal = (inputCode) => {
+        const codeInput = inputCode.trim().toUpperCase();
+
+        if (!codeInput) {
+            toast.error("Please type a coupon code before hitting apply.");
+            return false;
+        }
+
+        const couponMeta = PREDEFINED_COUPONS[codeInput];
+
+        if (couponMeta) {
+            let discountAmount = 0;
+            if (couponMeta.type === "percentage") {
+                discountAmount = (subtotal * couponMeta.value) / 100;
+            } else if (couponMeta.type === "fixed") {
+                discountAmount = Math.min(couponMeta.value, subtotal);
+            } else if (couponMeta.type === "shipping") {
+                // FIXED: Free shipping coupon deducts 0 from items price
+                discountAmount = 0; 
+            }
+            
+            setAppliedDiscount(discountAmount);
+            setActiveCouponLabel(codeInput);
+            setIsCouponApplied(true);
+            toast.success(`Coupon "${codeInput}" applied successfully!`);
+            return true;
+        } else {
+            toast.error("Invalid coupon code. Please check your spelling.");
+            removeCouponGlobal();
+            return false;
+        }
+    };
+
+    const removeCouponGlobal = () => {
+        setCouponCode("");
+        setIsCouponApplied(false);
+        setActiveCouponLabel("");
+        setAppliedDiscount(0);
+        toast.success("Coupon code removed successfully.");
+    };
+
+    // Calculate Tax Metrics (e.g. 5% GST/Sales Tax calculated after promotional discounts)
+    // A. Calculate the taxable basis amount after cash coupons are applied
+    const taxableBasis = Math.max(0, subtotal - appliedDiscount);
+    const taxBreakdown = (() => {
+    if (subtotal === 0) return {};
+    
+    const breakdown = {};
+        Object.entries(PREDEFINED_TAX).forEach(([key, meta]) => {
+            // Calculates tax value based on the post-discount taxable basis
+            breakdown[key] = {
+                label: meta.type,
+                rate: meta.value,
+                amount: (taxableBasis * meta.value) / 100
+            };
+            //console.log(taxableBasis)
+            //console.log(breakdown)
+        });
+        return breakdown;
+    })();
+    // C. Aggregate total cumulative tax value for grand total evaluation
+    const totalTaxAmount = Object.values(taxBreakdown).reduce((acc, tax) => acc + tax.amount, 0);
+    const grandTotal = Math.max(0, (subtotal + shippingCharges + totalTaxAmount) - appliedDiscount);
 
     useEffect(() => {
         fetchProductData()
@@ -211,7 +313,12 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount, getTaxAmount,showToast,
+        getCartCount, subtotal,
+        taxBreakdown, totalTaxAmount,
+        showToast,
+        shippingCharges, appliedDiscount,
+        grandTotal, applyCouponGlobal,
+        removeCouponGlobal,activeCouponLabel,isCouponApplied,setCouponCode,couponCode
     }
 
     

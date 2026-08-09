@@ -2,10 +2,10 @@ import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Product from "@/models/Product";
 import User from "@/models/User";
+import Coupon from "@/models/Coupon"; // NEW: Imported dynamic models
+import Tax from "@/models/Tax";       // NEW: Imported dynamic models
 import connectDB from "@/config/db";
 import { inngest } from "@/config/inngest";
-
-
 
 const generateUniqueOrderNumber = () => {
     const date = new Date();
@@ -13,72 +13,127 @@ const generateUniqueOrderNumber = () => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const dateStamp = `${year}${month}${day}`;
-
-    // Generate a 5-character random alphanumeric string
     const randomChars = Math.random().toString(36).substring(2, 7).toUpperCase();
-
     return `ORD-${dateStamp}-${randomChars}`;
 };
 
-
 export async function POST(request) {
- 
     try {
         const auth = getAuth(request);
-        const userId = auth?.userId; // Will be null or undefined if the user is a guest
+        const userId = auth?.userId; 
 
-        // 1. Destructure guestEmail alongside address and items from the incoming request body
-        const { address, items, guestEmail,discountAmount,shippingCharges,couponCode} = await request.json();
+        const { 
+            address, 
+            items, 
+            amount, 
+            guestEmail, 
+            discountAmount, 
+            shippingCharges, 
+            couponCode, 
+            notes 
+        } = await request.json();
+        
         await connectDB();
 
-        // 2. REPLACED UNAUTHORIZED CHECK: If there is no userId, they MUST provide a guest email
+        // 1. Basic configuration validations
         if (!userId && !guestEmail) {
             return NextResponse.json({ success: false, message: "Email required for guest checkout" }, { status: 400 });
         }
-
-        if (!address || !items || items.length === 0) {
-            return NextResponse.json({ success: false, message: "Invalid order data" }, { status: 400 });
+        if (!address || !items || items.length === 0 || amount === undefined) {
+            return NextResponse.json({ success: false, message: "Invalid or incomplete order data parameters." }, { status: 400 });
         }
 
-        // 3. FIXED REDUCE BUG: Replaced async .reduce with a clean for...of loop
-        let rawAmount = 0;
+        const cleanCouponCode = couponCode ? couponCode.trim().toUpperCase() : "";
+
+        // 2. NEW: Fetch dynamic tax rules and coupons from MongoDB in parallel to optimize speed
+        const [dbCoupon, dbTaxComponents] = await Promise.all([
+            cleanCouponCode ? Coupon.findOne({ code: cleanCouponCode }) : Promise.resolve(null),
+            Tax.find({}) // Downloads your entire active multi-component tax dictionary list
+        ]);
+
+        // 3. SECURITY RECALCULATION LOOP: Validate prices directly via database records
+        let serverSubtotal = 0;
         for (const item of items) {
             const product = await Product.findById(item.product);
-            if (product) {
-                rawAmount += product.offerPrice * item.quantity;
+            if (!product || product.isActive === false) {
+                return NextResponse.json({ 
+                    success: false, 
+                    message: `Product reference ${item.product} is currently unavailable or inactive.` 
+                }, { status: 400 });
+            }
+            serverSubtotal += product.offerPrice * item.quantity;
+        }
+
+        // 4. SERVER-SIDE DYNAMIC DISCOUNTS EVALUATION
+        let serverDiscountAmount = 0;
+        if (dbCoupon) {
+            if (dbCoupon.type === "percentage") {
+                serverDiscountAmount = (serverSubtotal * dbCoupon.value) / 100;
+            } else if (dbCoupon.type === "fixed") {
+                serverDiscountAmount = Math.min(dbCoupon.value, serverSubtotal);
+            }
+            // Dynamic "shipping" coupons maintain product discount at 0, only override delivery fees
+        }
+        serverDiscountAmount = Math.round(serverDiscountAmount * 100) / 100;
+
+        // 5. SERVER-SIDE DYNAMIC SHIPPING CHARGES EVALUATION
+        let serverShippingCharges = 0;
+        if (serverSubtotal > 0) {
+            if (dbCoupon?.type === "shipping") {
+                serverShippingCharges = 0; // Dynamic free shipping database override rule
+            } else {
+                serverShippingCharges = serverSubtotal >= 2000 ? 0 : 150; 
             }
         }
-        const orderNumber = generateUniqueOrderNumber();
-        // Apply 3% tax and use standard float rounding to prevent trailing JS math decimals
-        const totalAmount = Math.round((rawAmount + (rawAmount * 0.03)) * 100) / 100;
-        // Calculate expected shipping costs using your tier rules
-        const expectedShipping = totalAmount >= 2000 || couponCode === "FREESHIP" ? 0 : 150;
+
+        // 6. SERVER-SIDE DYNAMIC TAX BREAKDOWN EVALUATION
+        const taxableBasis = Math.max(0, serverSubtotal - serverDiscountAmount);
+        let serverTotalTaxAmount = 0;
         
-        // Final server-side grand total calculation confirmation cross-check validation
-        const verifiedGrandTotal = Math.max(0, (totalAmount + expectedShipping) - (discountAmount || 0));
+        // Loops through whatever rules currently exist in your MongoDB Tax collection
+        dbTaxComponents.forEach((taxRule) => {
+            const calculatedComponentTax = (taxableBasis * taxRule.value) / 100;
+            serverTotalTaxAmount += calculatedComponentTax;
+        });
+        serverTotalTaxAmount = Math.round(serverTotalTaxAmount * 100) / 100;
 
+        // 7. COMPUTE SECURE SERVER GRAND TOTAL
+        const serverVerifiedGrandTotal = Math.max(0, (serverSubtotal + serverShippingCharges + serverTotalTaxAmount) - serverDiscountAmount);
+        const serverVerifiedGrandTotalRounded = Math.round(serverVerifiedGrandTotal * 100) / 100;
 
-        // 4. Send event data to Inngest, explicitly supplying guest configurations
+        // 8. ANTI-FRAUD CROSS-CHECK: Intercept payload if totals deviate from server database calculations
+        if (Math.abs(Number(amount) - serverVerifiedGrandTotalRounded) > 1.0) {
+            console.error(`PRICE TAMPER LOCK: Frontend sent ${amount}, Database verified ${serverVerifiedGrandTotalRounded}`);
+            return NextResponse.json({ 
+                success: false, 
+                message: "Transaction blocked. Security validation error: Invoice totals calculation variance detected." 
+            }, { status: 400 });
+        }
+
+        const orderNumber = generateUniqueOrderNumber();
+
+        // 9. Send validated data mapping arrays to Inngest microservice queue pipeline
         await inngest.send({
             name: "order/created",
             data: {
                 orderNumber,
-                userId: userId || null,   // Falls back to null so Mongoose knows it's a guest
-                isGuest: !userId,        // Boolean flag for easy database indexing
+                userId: userId || null,   
+                isGuest: !userId,        
                 guestEmail: userId ? null : guestEmail.trim().toLowerCase(),
                 items,       
-                amount: verifiedGrandTotal, 
-                address,
+                amount: serverVerifiedGrandTotalRounded, 
+                address: address.trim(),
                 status: "Order Placed",
-                notes: "", 
-                shippingCharges:shippingCharges !== undefined ? Number(shippingCharges) : expectedShipping, 
-                discountAmount:discountAmount !== undefined ? Number(discountAmount) : 0, 
-                couponCode:couponCode ? couponCode.trim().toUpperCase() : "", 
+                notes: notes ? notes.trim() : "", 
+                shippingCharges: serverShippingCharges, 
+                discountAmount: serverDiscountAmount, 
+                couponCode: dbCoupon ? dbCoupon.code : "", 
+                tax: serverTotalTaxAmount,
                 date: Date.now(),
             }
         });
 
-        // 5. HYBRID CART CLEARING: Only clear database carts for registered members
+        // 10. HYBRID CART CLEARING: Only reset database profiles for registered members
         if (userId) {
             const user = await User.findOne({ _id: userId });
             if (user) {
@@ -87,16 +142,14 @@ export async function POST(request) {
             }
         }
 
-        // Inside your server-side POST handler route right after inngest.send():
         return NextResponse.json({ 
             success: true, 
             message: "Order Placed Successfully",
-            orderNumber: orderNumber // 🌟 ENSURE THIS KEY MATCHES EXACTLY IN LOWERCASE/CAMELCASE 🌟
+            orderNumber: orderNumber 
         }, { status: 201 });
 
-        
     } catch (error) {
-        console.log("Error creating order:", error);
-        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+        console.error("Critical Exception in Order Creation Route Handler:", error);
+        return NextResponse.json({ success: false, message: error.message || "Internal server error occurred." }, { status: 500 });
     }
 }

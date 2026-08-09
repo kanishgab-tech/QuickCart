@@ -317,34 +317,25 @@ useEffect(() => {
                                             </select>
                                         </div>
                                     </div>
-
-                                                                        {/* Table Grid Columns - Upgraded to 5-Columns matrix layout */}
-                                    <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
+                                    {/* Auto-Adjusting Fluid Layout (Replaced rigid grid-cols-5) */}
+                                    <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-3 w-full text-sm">
                                         
-                                        {/* Column 1: Items Display (Takes 2 columns) */}
-                                        <div className="md:col-span-2 flex gap-4">
-                                            <Image className="max-w-14 max-h-14 object-cover bg-gray-50 p-1 border border-gray-200 rounded self-start shrink-0" src={assets.box_icon} alt="box_icon" />
+                                        {/* Block 1: Products Summary - Autogrows to fit long text strings */}
+                                        <div className="flex gap-4 min-w-[240px] max-w-full md:max-w-[30%] shrink-0">
+                                            <Image className="w-14 h-14 object-cover bg-gray-50 p-1 border border-gray-200 rounded self-start shrink-0" src={assets.box_icon} alt="box_icon" />
                                             <div className="flex flex-col gap-1 min-w-0">
-                                                <p className="font-semibold text-gray-900 leading-tight">
-                                                {order.items.map((item) => {
-                                                    let pName = "Product Item";
-                                                    
-                                                    // Scenario A: Check if the product was successfully populated as an object
-                                                    if (item.product && typeof item.product === 'object') {
-                                                        pName = item.product.name;
-                                                    } 
-                                                    // Scenario B: If it's a raw String ID, lookup the name from your AppContext's products array
-                                                    else if (typeof item.product === 'string' && products) {
-                                                        const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
-                                                        if (matchedProduct) {
-                                                            pName = matchedProduct.name;
+                                                <p className="font-semibold text-gray-900 leading-snug break-words">
+                                                    {order.items.map((item) => {
+                                                        let pName = "Product Item";
+                                                        if (item.product && typeof item.product === 'object') {
+                                                            pName = item.product.name;
+                                                        } else if (typeof item.product === 'string' && products) {
+                                                            const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
+                                                            if (matchedProduct) pName = matchedProduct.name;
                                                         }
-                                                    }
-                                                    
-                                                    return `${pName} x ${item.quantity}`;
-                                                }).join(", ")}
-                                            </p>
-
+                                                        return `${pName} x ${item.quantity}`;
+                                                    }).join(", ")}
+                                                </p>
                                                 <span className="text-xs text-gray-400 font-medium mt-1">Unique Lines: {order.items.length}</span>
                                                 {order.isGuest && order.guestEmail && (
                                                     <span className="text-xs text-gray-500 font-medium truncate mt-0.5">Email: {order.guestEmail}</span>
@@ -352,45 +343,41 @@ useEffect(() => {
                                             </div>
                                         </div>
 
-                                        {/* Column 2: Shipping Address Container Block (Takes 1 column) */}
-                                        <div className="md:col-span-1 justify-right text-gray-600 leading-relaxed text-xs">
+                                        {/* Block 2: Shipping Destination - Wider allocation prevents word congestion */}
+                                        <div className="text-gray-600 leading-relaxed text-xs min-w-[200px] flex-1 max-w-sm">
                                             <h4 className="font-bold text-gray-400 text-[10px] uppercase tracking-wider mb-1">Shipping Destination</h4>
-                                            <p className="whitespace-pre-line text-gray-900 font-medium bg-gray-50/50 p-2.5 rounded border border-gray-100">
+                                            <p className="whitespace-pre-line text-gray-900 font-medium bg-gray-50/50 p-3 rounded border border-gray-100 shadow-2xs">
                                                 {order.address || "No address data payload block captured."}
                                             </p>
                                         </div>
-                                          
-                                        {/* Column 3: Upgraded Detailed Financial Summary & Logistics Notes */}
-                                        <div className="md:col-span-2 flex flex-col sm:flex-row justify-end gap-4 w-full items-start">
-                                            
-                                            {/* Detailed Cost Breakdown Grid Layout */}
-                                            <div className="bg-gray-50/50 border border-gray-200/80 p-3 rounded-lg flex flex-col gap-1 text-[11px] text-gray-500 font-medium shrink-0 min-w-[150px]">
-                                                <div className="flex justify-between">
-                                                    <span>Shipping:</span>
-                                                    <span className="text-gray-900 font-semibold">
-                                                        {order.shippingCharges === 0 ? "Free" : `${currency}${order.shippingCharges}`}
-                                                    </span>
-                                                </div>
-                                                {order.discountAmount > 0 && (
-                                                    <div className="flex justify-between text-green-600">
-                                                        <span className="truncate max-w-[80px]">Coupon ({order.couponCode}):</span>
-                                                        <span>&minus;{currency}{order.discountAmount}</span>
-                                                    </div>
-                                                )}
-                                                <div className="border-t border-gray-200 pt-1 mt-1 flex flex-col items-baseline sm:items-start">
-                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Grand Total</span>
-                                                    <p className="font-black text-base text-gray-950 leading-tight">
-                                                        {currency}{order.amount?.toLocaleString('en-IN')}
-                                                    </p>
-                                                    <span className="text-[10px] text-gray-400 font-normal mt-0.5">
-                                                        Date: {new Date(order.date).toLocaleDateString()}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>                                      
-                                    
 
-                                    </div> {/* Closes Grid Columns Row Container */}
+                                        {/* Block 3: Financial Summary - Compact fixed structural block */}
+                                        <div className="bg-gray-50/50 border border-gray-200/80 p-3 rounded-lg flex flex-col gap-1 text-[11px] text-gray-500 font-medium shrink-0 w-[160px] shadow-2xs">
+                                            <div className="flex justify-between">
+                                                <span>Shipping:</span>
+                                                <span className="text-gray-900 font-semibold">
+                                                    {order.shippingCharges === 0 ? "Free" : `${currency}${order.shippingCharges}`}
+                                                </span>
+                                            </div>
+                                            {order.discountAmount > 0 && (
+                                                <div className="flex justify-between text-green-600">
+                                                    <span className="truncate max-w-[85px]">Coupon ({order.couponCode}):</span>
+                                                    <span>&minus;{currency}{order.discountAmount}</span>
+                                                </div>
+                                            )}
+                                            <div className="border-t border-gray-200 pt-1 mt-1 flex flex-col items-start">
+                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Grand Total</span>
+                                                <p className="font-black text-base text-gray-950 leading-tight">
+                                                    {currency}{order.amount?.toLocaleString('en-IN')}
+                                                </p>
+                                                <span className="text-[10px] text-gray-400 font-normal mt-0.5">
+                                                    Date: {new Date(order.date).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+                                       
+                                    </div> {/* Closes Row Container */}
+
                                     {/* Increased Width Comments / Tracking Logs Text Input Box */}
                                             <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg flex flex-col gap-1.5 flex-grow w-full">
                                                 <div className="flex items-center justify-between">

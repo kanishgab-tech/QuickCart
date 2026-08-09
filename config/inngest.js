@@ -222,11 +222,11 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                 
                 <!-- Multiline Delivery Destination Box -->
                 <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Delivery Destination</h3>
-                <div style="background-color: #fffaf8; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
+                <div style="background-color: #fffaf8; "width: 80%; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
                     ${deliveryAddress}
                 </div>
             </div>
-            <div style="background-color: #f7fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0;">
+            <div style="background-color: #f7fafc; "width: 80%; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0;">
                 <p style="margin: 0;">This email is an automated receipt. Do not reply directly to this thread.</p>
                 <p style="margin: 4px 0 0 0;">&copy; 2026 QuickCart. All rights reserved.</p>
             </div>
