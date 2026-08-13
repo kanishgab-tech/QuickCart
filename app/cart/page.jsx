@@ -13,7 +13,13 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart })
 
   // Keep local view synced if global context changes via +/- click controls
   useEffect(() => {
-    setLocalQty(initialQty.toString());
+    
+    if (initialQty <= 999) {
+      setLocalQty(initialQty.toString());
+    } else {
+      setLocalQty("999");
+    }
+
   }, [initialQty]);
 
    const handleKeyDown = (e) => {
@@ -42,7 +48,8 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart })
     if (isNaN(numericVal) || numericVal <= 0) {
       updateCartQuantity(product._id, 0);
     } else {
-      updateCartQuantity(product._id, numericVal);
+      const cappedVal = Math.min(numericVal, 999);
+      updateCartQuantity(product._id, cappedVal);
     }
   };
 
@@ -81,21 +88,30 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart })
       <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
       <td className="py-4 md:px-4 px-1">
         <div className="flex items-center md:gap-2 gap-1">
-          <button type="button" onClick={() => updateCartQuantity(product._id, initialQty - 1)}>
+          <button type="button" onClick={() => updateCartQuantity(product._id, Math.max(0, initialQty - 1))}>
             &minus;
           </button>
+               {/* FIXED: Swapped w-8 to w-14 so 4 digits fit cleanly, added max="999", px-1 for safety padding */}
           <input 
             type="number" 
             min="0"
+            max="999"
             value={localQty} 
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
-            className="w-8 border text-center appearance-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-14 border text-center px-1 py-0.5 rounded text-sm appearance-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-1 focus:ring-orange-500"
           />
-          <button type="button" onClick={() => addToCart(product._id)}>
+         {/* Prevent increments above 999 */}
+          <button 
+            type="button" 
+            onClick={() => initialQty < 999 && addToCart(product._id)}
+            disabled={initialQty >= 999}
+            className={initialQty >= 999 ? "opacity-40 cursor-not-allowed" : ""}
+          >
             +
           </button>
+
         </div>
       </td>
       <td className="py-4 md:px-4 px-1 text-gray-600">

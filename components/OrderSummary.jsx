@@ -43,6 +43,8 @@ const OrderSummary = () => {
   const [guestTextAddress, setGuestTextAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [validationErrors, setValidationErrors] = useState([]);
+
   const [guestFullName, setGuestFullName] = useState("");
   const [guestArea, setGuestArea] = useState("");
   const [guestCity, setGuestCity] = useState("");
@@ -113,6 +115,44 @@ const OrderSummary = () => {
     .join('\n');
 };
 
+  // FIX: Core validation tracking routine engine 
+  const validateOrderRules = () => {
+    const errors = [];
+
+    // Rule 1: Validate Grand Total minimum limit
+    if (grandTotal < 2500) {
+      errors.push(`Grand total must be at least ${currency || '₹'}2,500 to proceed.`);
+    }
+
+    // Determine current state based on checkout type (User vs Guest)
+    let currentState = "";
+    if (user) {
+      currentState = selectedAddress ? selectedAddress.state : "";
+    } else {
+      currentState = guestState;
+    }
+
+    const normalizedState = currentState ? currentState.trim().toLowerCase() : "";
+    const allowedStates = ["tn", "tamilnadu", "tamil nadu"];
+
+    // Rule 2: Validate delivery address state restriction
+    if (user && !selectedAddress) {
+      errors.push("Please select a saved shipping address.");
+    } else if (!user && !guestState) {
+      errors.push("Please enter your shipping state.");
+    } else if (!allowedStates.includes(normalizedState)) {
+      errors.push("Delivery is currently restricted to Tamil Nadu (TN) only.");
+    }
+
+    setValidationErrors(errors);
+  };
+
+  // FIX: Re-run calculations automatically whenever variables change
+  useEffect(() => {
+    validateOrderRules();
+  }, [grandTotal, selectedAddress, guestState, user, currency]);
+
+
   const createOrder = async () => {
     if (isSubmitting) return;
     let cleanAddressValue=""
@@ -130,7 +170,7 @@ const OrderSummary = () => {
         //console.log("Got address-", finalAddressValue)
 
       } else {
-        if (!guestEmail.trim()) return toast.error("Email address is required.");
+        if (!guestEmail.trim()) return toast.error("Email address is required."); 
         if (!/\S+@\S+\.\S+/.test(guestEmail)) return toast.error("Please enter a valid email address.");
         if (!guestFullName.trim()) return toast.error("Full Name is required.");
         if (!guestArea.trim()) return toast.error("Address Area details are required.");
@@ -154,6 +194,13 @@ const OrderSummary = () => {
       if (cartItemsArray.length === 0) {
         return toast.error("Your cart is empty.");
       }
+
+   /* for (const item of cartItemsArray) {
+      const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
+      if (matchedProduct && item.quantity > matchedProduct.stock) {
+        return toast.error(`Stock mismatch! "${matchedProduct.name}" only has ${matchedProduct.stock} units remaining. Please reduce your cart quantity.`);
+      }
+    }*/
 
       setIsSubmitting(true);
 
@@ -212,7 +259,47 @@ const OrderSummary = () => {
     <div className="w-full max-w-sm bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
       <h3 className="text-xl font-bold text-gray-800 border-b pb-3">Order Summary</h3>
 
-      {user ? (
+      {/* Tailwind CSS Error Banner */}
+    {validationErrors.length > 0 && (
+      <div 
+        className="rounded-xl bg-red-50 p-4 border border-red-200 transition-all duration-300" 
+        role="alert"
+      >
+        <div className="flex items-start">
+          {/* Warning Icon */}
+          <div className="flex-shrink-0">
+            <svg 
+              className="h-5 w-5 text-red-500 mt-0.5" 
+              viewBox="0 0 20 20" 
+              fill="currentColor" 
+              aria-hidden="true"
+            >
+              <path 
+                fillRule="evenodd" 
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" 
+                clipRule="evenodd" 
+              />
+            </svg>
+          </div>
+          
+          {/* Content Wrapper */}
+          <div className="ml-3">
+            <h4 className="text-xs font-bold text-red-800 uppercase tracking-wider">
+              Validation Alert
+            </h4>
+            <div className="mt-1.5 text-xs text-red-700">
+              <ul className="list-disc space-y-1 pl-4 font-medium">
+                {validationErrors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+     {user ? (
      <div className="flex flex-col gap-2 w-full max-w-md">
   <label className="text-sm font-semibold text-gray-700" htmlFor="address-select">
     Shipping Address
@@ -432,11 +519,16 @@ const OrderSummary = () => {
 
       <button
         type="button"
-        disabled={isSubmitting}
+        // Disable button if submitting OR if validation errors exist
+        disabled={isSubmitting || validationErrors.length > 0}
         onClick={createOrder}
-        className={`w-full py-3.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold text-sm rounded-xl shadow transition duration-150 text-center flex items-center justify-center gap-2 ${
-          isSubmitting ? "opacity-75 cursor-not-allowed bg-orange-700" : "cursor-pointer"
-        }`}
+        className={`w-full py-3.5 text-white font-bold text-sm rounded-xl shadow transition duration-150 text-center flex items-center justify-center gap-2 
+          ${isSubmitting 
+            ? "opacity-75 cursor-not-allowed bg-orange-700" 
+            : validationErrors.length > 0 
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
+              : "bg-orange-600 hover:bg-orange-700 active:bg-orange-800 cursor-pointer"
+          }`}
       >
         {isSubmitting ? (
           <>
@@ -450,6 +542,7 @@ const OrderSummary = () => {
           "Place Order"
         )}
       </button>
+
     </div>
   );
 };

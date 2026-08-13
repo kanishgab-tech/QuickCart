@@ -1,5 +1,4 @@
 'use client'
-import {PREDEFINED_COUPONS,PREDEFINED_TAX}  from "@/assets/assets";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -26,13 +25,17 @@ export const AppContextProvider = (props) => {
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
 
-    const [toasts, setToasts] = useState([]);
+    const [toasts, setToasts] = useState([]);   
     const [coupon, setCoupon] = useState(null); 
 
     const [couponCode, setCouponCode] = useState("");
     const [isCouponApplied, setIsCouponApplied] = useState(false);
     const [activeCouponLabel, setActiveCouponLabel] = useState("");
     const [appliedDiscount, setAppliedDiscount] = useState(0);
+
+    const [dbCoupons, setDbCoupons] = useState({});
+    const [dbTaxes, setDbTaxes] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const fetchProductData = async () => {
         //setProducts(productsDummyData)
@@ -55,17 +58,16 @@ export const AppContextProvider = (props) => {
     }
     
      // REUSABLE TOAST TRIGGER FUNCTION
-    const showToast = (message, type = 'success') => {
-        const id = Date.now();
-        
-        // Append new toast notification item configuration to memory stack array
-        setToasts((prev) => [...prev, { id, message, type }]);
+ const showToast = (message, type = "success") => {
+    // FIXED: Appending a randomized micro-hash completely eliminates standard millisecond key collisions
+    const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    
+    setToasts((prev) => [...prev, { id, message, type }]);
 
-        // Automatically trigger dismissal pruning cleanup routine after 4 seconds
-        setTimeout(() => {
-            setToasts((prev) => prev.filter((toast) => toast.id !== id));
-        }, 4000);
-    };
+    setTimeout(() => {
+        setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    }, 4000);
+};
 
     const fetchUserData = async () => {
       try {
@@ -176,10 +178,32 @@ export const AppContextProvider = (props) => {
         return (totalAmount * 100) / 100;
     }
 
+     useEffect(() => {
+        const fetchConfigurations = async () => {
+            try {
+                const [couponsRes, taxesRes] = await Promise.all([
+                    axios.get('/api/coupon'),
+                    axios.get('/api/tax')
+                ]);
+                
+                // Transform arrays from MongoDB back into your lookup maps if needed
+                setDbCoupons(couponsRes.data); 
+                setDbTaxes(taxesRes.data);
+            } catch (error) {
+                console.error("Failed to load configurations", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchConfigurations();
+    }, []);
+
+
     const subtotal = Object.entries(cartItems || {}).reduce((acc, [id, qty]) => {
     const product = products.find(p => (p.id || p._id) === id);
     return acc + (product ? product.offerPrice * qty : 0);
     }, 0);
+
 
    
      // Calculate Dynamic Shipping Logistics
@@ -187,7 +211,7 @@ export const AppContextProvider = (props) => {
         if (subtotal === 0) return 0;
         
         // FIXED: Check against isCouponApplied and activeCouponLabel context tracking parameters
-        const currentCoupon = PREDEFINED_COUPONS[activeCouponLabel];
+        const currentCoupon = dbCoupons[activeCouponLabel];
         if (isCouponApplied && currentCoupon?.type === "shipping") {
             return 0; // Explicitly forces delivery fees to zero
         }
@@ -201,7 +225,7 @@ export const AppContextProvider = (props) => {
             setAppliedDiscount(0);
             return;
         }
-        const couponMeta = PREDEFINED_COUPONS[activeCouponLabel];
+        const couponMeta = dbCoupons[activeCouponLabel];
         if (couponMeta.type === "percentage") {
             setAppliedDiscount((subtotal * couponMeta.value) / 100);
         } else if (couponMeta.type === "fixed") {
@@ -223,7 +247,7 @@ export const AppContextProvider = (props) => {
             return false;
         }
 
-        const couponMeta = PREDEFINED_COUPONS[codeInput];
+        const couponMeta = dbCoupons[codeInput];
 
         if (couponMeta) {
             let discountAmount = 0;
@@ -263,7 +287,7 @@ export const AppContextProvider = (props) => {
     if (subtotal === 0) return {};
     
     const breakdown = {};
-        Object.entries(PREDEFINED_TAX).forEach(([key, meta]) => {
+        Object.entries(dbTaxes).forEach(([key, meta]) => {
             // Calculates tax value based on the post-discount taxable basis
             breakdown[key] = {
                 label: meta.type,

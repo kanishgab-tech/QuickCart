@@ -134,7 +134,7 @@ const SellerAdminDashboard = () => {
         try {
             const token = await getToken();
             // Connect to your deletion routing logic matching your backend rules
-            // const { data } = await axios.post('/api/seller/admin/delete', { id, type: targetType }, { headers: { Authorization: `Bearer ${token}` } });
+            const { data } = await axios.post('/api/seller/admin/delete', { id, type: targetType }, { headers: { Authorization: `Bearer ${token}` } });
 
             showToast(`${targetType === 'coupon' ? 'Coupon' : 'Tax parameter'} purged successfully!`, "success");
             

@@ -5,7 +5,9 @@ import Product from "@/models/Product";
 
 export  async function GET(request) {
     try{
-        await connectDB();
+        await connectDB().catch(err => {
+            throw new Error("Database connection timed out");
+        });
           // { isActive: { $ne: false } } matches documents where isActive is true OR undefined (for old products)
         const products = await Product.find({ 
             isActive: { $ne: false } 

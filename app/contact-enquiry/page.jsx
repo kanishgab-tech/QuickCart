@@ -2,10 +2,13 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";   
+import axios from "axios";
 import { useAppContext } from "@/context/AppContext";
 
-
 const ContactEnquiry = () => {
+
+    const {showToast } = useAppContext();
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -19,9 +22,25 @@ const ContactEnquiry = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Construct your backend API form processing logic here
+          try {
+                    
+                       const { data } = await axios.post('/api/contact',formData)
+                       if (data.success) {
+                            showToast(data.message);
+                            // Only clear the form if sending was a success
+                            setFormData({ firstName: "", lastName: "", email: "", mobile: "", message: "" });
+                        } else {
+                            showToast(data.message, 'error');
+                        }  
+                }              
+                catch (error) {
+                    console.log('Error adding address:', error.message);
+                }
+        
+
         console.log("Enquiry Form Submitted Data:", formData);
         alert("Thank you! Your enquiry has been received successfully.");
         setFormData({ firstName: "", lastName: "", email: "", mobile: "", message: "" });
@@ -163,7 +182,7 @@ const ContactEnquiry = () => {
 
                         {/* Interactive UI Placeholder Area for Map Engine Integration */}
                          Office Location Map
-                            <ln />
+                            
                             <div className="w-full h-80 rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center relative group"> </div>
                             <div className="absolute inset-0 bg-gray-200 animate-pulse hidden group-data-[loading=true]:block" /></div>
                            

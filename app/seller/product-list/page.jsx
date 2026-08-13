@@ -47,6 +47,7 @@ const filteredProducts = products.filter((product) => {
         formData.append("isPopular", product.isPopular ? "true" : "false");
         formData.append("existingImages", JSON.stringify(product.image));
         formData.append("isActive", "true"); // Forces state flag cleanly back to active status
+        formData.append("stock", product.stock || 0);
 
         const { data } = await axios.post('/api/product/update', formData, { 
           headers: { 
@@ -145,6 +146,7 @@ const filteredProducts = products.filter((product) => {
       formData.append("offerPrice", editingProduct.offerPrice);
       formData.append("isPopular", editingProduct.isPopular ? "true" : "false");
       formData.append("existingImages", JSON.stringify(editingProduct.image));
+      formData.append("stock", editingProduct.stock || 0);
 
       selectedImageFiles.forEach((file) => {
         formData.append("newImages", file);
@@ -431,6 +433,16 @@ const filteredProducts = products.filter((product) => {
                   </label>
                 </div>
               </div>
+
+          <div>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Available Stock Units</label>
+              <input 
+                  type="number" required min="0"
+                  value={editingProduct.stock || 0}
+                  onChange={(e) => setEditingProduct(prev => ({ ...prev, stock: e.target.value }))}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-600 font-bold"
+              />
+          </div>
 
               {/* Twin Prices Grid Row */}
               <div className="grid grid-cols-2 gap-4">

@@ -34,6 +34,7 @@ export async function POST(request) {
     const existingImagesRaw = formData.get("existingImages");
     const description = formData.get("description");
     const price = formData.get("price");
+    const stock = formData.get("stock");
 
     if (!productId || !name || !category || !offerPrice|| !price) {
       return NextResponse.json(
@@ -94,6 +95,7 @@ export async function POST(request) {
         image: finalImageUrls,
         isPopular, 
         isActive,
+        stock,
       },
       { returnDocument: 'after', runValidators: true }
     );

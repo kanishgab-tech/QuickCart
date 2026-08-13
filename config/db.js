@@ -25,7 +25,13 @@ async function connectDB() {
     cached.Promise = mongoose.connect(process.env.MONGODB_URI, opts).then((mongooseInstance) => mongooseInstance);
   }
 
+  try {
   cached.conn = await cached.Promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
   return cached.conn;
 }
 

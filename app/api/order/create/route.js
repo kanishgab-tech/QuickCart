@@ -21,6 +21,7 @@ export async function POST(request) {
     try {
         const auth = getAuth(request);
         const userId = auth?.userId; 
+        let rawAmount = 0;
 
         const { 
             address, 
@@ -61,6 +62,12 @@ export async function POST(request) {
                     message: `Product reference ${item.product} is currently unavailable or inactive.` 
                 }, { status: 400 });
             }
+               /*if (item.quantity > product.stock) {
+                    return NextResponse.json({ 
+                        success: false, 
+                        message: `Overselling Blocked! "${product.name}" only has ${product.stock} units remaining in stock. Please reduce your cart quantity.` 
+                    }, { status: 400 });
+               }*/
             serverSubtotal += product.offerPrice * item.quantity;
         }
 
@@ -110,7 +117,19 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        const orderNumber = generateUniqueOrderNumber();
+    //
+  
+    // AFTER successful order verification and right before sending response data, 
+    // deduct stock levels using atomic Mongoose operations:
+    /*for (const item of items) {
+        await Product.findByIdAndUpdate(
+            item.product,
+            { $inc: { stock: -item.quantity } } // Subtracts purchased quantity cleanly from MongoDB
+        );
+    }*/
+        
+    const orderNumber = generateUniqueOrderNumber();
+
 
         // 9. Send validated data mapping arrays to Inngest microservice queue pipeline
         await inngest.send({

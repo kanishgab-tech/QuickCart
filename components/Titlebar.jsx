@@ -98,7 +98,7 @@ const Titlebar = () => {
   }, []);
 
   return (
-    <nav className="grid grid-cols-3 items-center px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700 relative">
+    <nav className="grid grid-cols-3 items-center px-6 md:px-16 lg:px-32 py-3 bg-orange-500 border-b border-orange-600 text-white relative">
       
       {/* Left Column: User Welcome Message */}
       <div className="flex gap-4 lg:gap-8 max-md:hidden">
@@ -184,7 +184,7 @@ const Titlebar = () => {
   
       {/* Right Column: Mobile Contact */}
       <div className="font-medium text-lg justify-self-end items-center max-md:hidden">
-        Mobile : <span className="text-orange-600">(+91) 123 456 7890</span>
+        Mobile : <span className="text-white-600">(+91) 123 456 7890</span>
       </div>
 
     </nav>

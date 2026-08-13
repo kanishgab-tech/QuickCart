@@ -21,6 +21,8 @@ const AddProduct = () => {
   const [isActive, setIsActive] = useState(true);
   const [isPopular, setIsPopular] = useState(false);
 
+  const [stock, setStock] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,6 +38,7 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
+    formData.append('stock', stock);
     
     // NEW: Appending visibility and featured attributes safely as string tokens
     formData.append('isActive', isActive ? "true" : "false");
@@ -71,6 +74,7 @@ const AddProduct = () => {
         setOfferPrice('');
         setIsActive(true); // Reset flag tracking values back to initial defaults
         setIsPopular(false);
+        setStock('');
       } else {
         toast.error(data.message);
       }
@@ -189,6 +193,7 @@ const AddProduct = () => {
               required
             />
           </div>
+
           
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="offer-price">
@@ -211,6 +216,15 @@ const AddProduct = () => {
             />
           </div>
         </div>
+    <div className="flex flex-col gap-1 w-32">
+      <label className="text-base font-medium" htmlFor="stock">Inventory Stock</label>
+      <input
+          id="stock" type="number" placeholder="100" min="0" required
+          className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 focus:border-orange-500"
+          onChange={(e) => setStock(e.target.value)}
+          value={stock}
+            />
+      </div>
 
         {/* Real-time Pricing Mismatch Warning Callout */}
         {price && offerPrice && Number(offerPrice) > Number(price) && (

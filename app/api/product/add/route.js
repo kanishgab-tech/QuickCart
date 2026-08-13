@@ -36,6 +36,7 @@ export async function POST(request) {
     const category = formData.get('category');
     const files = formData.getAll('images').filter(Boolean);
     const offerPrice = formData.get('offerPrice');
+    const stock = formData.get('stock');
    
 
     if (!files.length) {
@@ -79,6 +80,7 @@ export async function POST(request) {
       offerPrice: Number(offerPrice),
       image,
       category,
+      stock,
       date: Date.now(),
     });
 

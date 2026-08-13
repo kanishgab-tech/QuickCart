@@ -1,4 +1,5 @@
-import logo from "./logo.svg";
+import logo from  "./Orange5.png"; //"./ChatGPT.png";
+import brand_name from  "./Aurora_M.png" 
 import search_icon from "./search_icon.svg";
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
@@ -95,7 +96,8 @@ export const assets = {
   product_details_page_apple_earphone_image3,
   product_details_page_apple_earphone_image4,
   product_details_page_apple_earphone_image5,
-  checkmark
+  checkmark,
+  brand_name
 };
 
 export const BagIcon = () => {
@@ -151,6 +153,6 @@ export const PRODUCT_CATEGORIES = [
 
    export const PREDEFINED_TAX = {
         "TAX1": { type: "Tax-GST", value: 5 }, // STATE GST
-        "TAX2": { type: "Tax-GEN", value: 2 },  // FEDERAL GST
-        "TAX3": { type: "Tax-NEW", value: 1 }  // FEDERAL GST
+        "TAX2": { type: "Tax-GEN", value: 2 }  // FEDERAL GST
+  
       };
