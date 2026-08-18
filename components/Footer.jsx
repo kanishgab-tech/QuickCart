@@ -5,14 +5,12 @@ import Image from "next/image";
 const Footer = () => {
   return (
     <footer>
-      <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-gray-500/30 text-gray-500">
-        <div className="w-4/5">
-          <Image className="w-28 md:w-32" src={assets.logo} alt="logo" />
+      <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-48 gap-10 py-14 border-b border-gray-500/30 text-gray-500">
+        <div className="w-4/5.5">
+          <Image className="w-28 md:w-28" src={assets.logo} alt="logo" />
           <p className="mt-6 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+            We are <b>KanSan Crackers</b> wholesale dealer of fireworks and crackers owning a shop in Sivakasi, Tamilnadu.
+            we sell crackers for your special events and celebrations throughout the year.We are into this business from past few years and has been successfully running our company with selling fireworks in Sivakasi and crackers in Sivakasi. Since the day of our initiation, we have anticipated largely in making millions of lives happier and lightened up.
           </p>
         </div>
 
@@ -21,13 +19,13 @@ const Footer = () => {
             <h2 className="font-medium text-gray-900 mb-5">Company</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:underline transition" href="#">Home</a>
+                <a className="hover:underline transition" href="/">Home</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="#">About us</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Contact us</a>
+                <a className="hover:underline transition" href="/contact-enquiry">Contact us</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="#">Blog</a>
@@ -45,16 +43,16 @@ const Footer = () => {
             <h2 className="font-medium text-gray-900 mb-5">Customer Service</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:underline transition" href="#">Term and Conditions</a>
+                <a className="hover:underline transition" href="./terms-conditions">Term and Conditions</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="#">Return policy</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">FAQ</a>
+                <a className="hover:underline transition" href="./faq">FAQ</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Privacy policy</a>
+                <a className="hover:underline transition" href="./privacy-policy">Privacy policy</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="#">Disclaimer</a>
@@ -81,6 +79,8 @@ const Footer = () => {
   </div>
 
     </footer>
+    
+    
   );
 };
 

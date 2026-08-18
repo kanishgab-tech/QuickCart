@@ -102,8 +102,8 @@ const Titlebar = () => {
       
       {/* Left Column: User Welcome Message */}
       <div className="flex gap-4 lg:gap-8 max-md:hidden">
-        {user && <span className="text-sm font-medium">Welcome {user.firstName} !!</span>}       
-      </div>    
+        {user && <span className="text-lg font-medium">Welcome {user.firstName} !!</span>}       
+      </div>
 
       {/* Center Column: Search Box and Dropdown Container */}
       <div className="flex justify-center items-center col-span-3 md:col-span-1" ref={dropdownRef}>

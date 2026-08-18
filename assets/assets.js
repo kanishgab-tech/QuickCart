@@ -1,6 +1,7 @@
-import logo from  "./Orange5.png"; //"./ChatGPT.png";
+import logo from  "./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
 import brand_name from  "./Aurora_M.png" 
 import search_icon from "./search_icon.svg";
+import upi_img from "./ChatGPT.png"
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
 import add_icon from "./add_icon.svg";
@@ -21,9 +22,9 @@ import heart_icon from "./heart_icon.svg";
 import star_icon from "./star_icon.svg";
 import redirect_icon from "./redirect_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
-import header_headphone_image from "./header_headphone_image.png";
-import header_playstation_image from "./header_playstation_image.png";
-import header_macbook_image from "./header_macbook_image.png";
+import header_headphone_image from "./banner3.png";
+import header_playstation_image from "./banner1.png";
+import header_macbook_image from "./banner2.png";
 import macbook_image from "./macbook_image.png";
 import bose_headphone_image from "./bose_headphone_image.png";
 import apple_earphone_image from "./apple_earphone_image.png";
@@ -51,6 +52,7 @@ import product_details_page_apple_earphone_image5 from "./product_details_page_a
 export const assets = {
   logo,
   search_icon,
+  upi_img,
   user_icon,
   cart_icon,
   add_icon,
@@ -134,14 +136,22 @@ export const HomeIcon = () => (
 
 // Add this line at the bottom of your assets file
 export const PRODUCT_CATEGORIES = [
-  "Earphone",
-  "Headphone",
-  "Watch",
-  "Smartphone",
-  "Laptop",
-  "Camera",
-  "Accessories",
-  "kids"
+  "Bombs",
+  "Colour Matches",
+  "Sparklers",
+  "Flower Pots",
+  "Gift Boxes",
+  "Ground Chakkars",
+  "Bijili Crackers",
+  "One Sound Crackers",
+  "Multi Sound Crackers",
+  "Rockets",
+  "Kids Zone",
+  "Twinkling Stars",
+  "Multi Shots",
+  "Family Back",
+  "New Arrivals",
+  "Aerial & Sky Shots"
 ];
 
  // Predefined Promotional Coupons Configuration Map

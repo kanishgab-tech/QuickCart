@@ -316,6 +316,67 @@ export const syncUserDeletion = inngest.createFunction(
     }
 )
 
+export const orderUpdatedNotification = inngest.createFunction(
+  { 
+    id: "order-updated-email-notice" ,
+    triggers:[{event: "order/updated" }]
+   }, // Listens explicitly to the event token pushed from our edit modal API
+  async ({ event, step }) => {
+    const { orderNumber, customerEmail, address, amount, items, notes } = event.data;
+
+    if (!customerEmail) return { message: "Skipped. Customer email contact parameters absent." };
+
+    // Compile an attractive HTML layout detailing changes for the buyer
+    await step.run("send-update-email", async () => {
+      await resend.emails.send({
+        from: "QuickCart Updates <kanishga.b@gmail.com>",
+        to: [customerEmail],
+        subject: `⚠️ Order Update Notification: ${orderNumber}`,
+        html: `
+          <div style="font-family: sans-serif; padding: 24px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 12px;">
+            <h2 style="color: #ea580c; border-b: 2px solid #f3f4f6; padding-bottom: 8px;">Your Order Has Been Updated</h2>
+            <p style="font-size: 14px;">Hello,</p>
+            <p style="font-size: 14px; line-height: 1.5;">
+              This notification is to confirm that administrative changes were recently made to your order <strong>${orderNumber}</strong> based on your customer request.
+            </p>
+            
+            <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; margin: 16px 0;">
+              <h4 style="margin-top: 0; text-transform: uppercase; font-size: 11px; color: #9ca3af; tracking: 0.5px;">Updated Shipping Destination</h4>
+              <p style="font-size: 13px; font-weight: bold; white-space: pre-line; margin: 0; color: #111827;">${address}</p>
+            </div>
+
+            <h4 style="text-transform: uppercase; font-size: 11px; color: #9ca3af; border-bottom: 1px solid #f3f4f6; padding-bottom: 4px;">Updated Items List</h4>
+            <ul style="list-style: none; padding-left: 0; font-size: 13px; color: #4b5563;">
+              ${items.map(item => `
+                <li style="padding: 6px 0; border-bottom: 1px dashed #f3f4f6; display: flex; justify-content: space-between;">
+                  <strong>${item.name}</strong> <span style="color: #ea580c; font-weight: bold;">x ${item.quantity}</span>
+                </li>
+              `).join('')}
+            </ul>
+
+            <div style="margin-top: 20px; text-align: right; border-top: 2px solid #f3f4f6; padding-top: 12px;">
+              <span style="font-size: 13px; font-weight: bold; color: #4b5563;">Revised Total Amount Due:</span>
+              <p style="font-size: 20px; font-weight: 900; color: #ea580c; margin: 4px 0 0 0;">₹${amount.toLocaleString('en-IN')}</p>
+            </div>
+
+            ${notes ? `
+              <div style="margin-top: 16px; font-size: 11px; color: #6b7280; font-style: italic; background-color: #fff7ed; border-left: 3px solid #f97316; padding: 8px 12px;">
+                <strong>Seller Logistics Note:</strong> ${notes}
+              </div>
+            ` : ''}
+
+            <p style="font-size: 11px; color: #9ca3af; margin-top: 24px; border-top: 1px solid #f3f4f6; padding-top: 12px; text-align: center;">
+              Thank you for shopping with us. This is an automated transaction tracking log statement.
+            </p>
+          </div>
+        `
+      });
+    });
+
+    return { success: true, message: `Notification email successfully streamed to ${customerEmail}` };
+  }
+);
+
 //ingest function to create user's order in database 
 /*
 export const createUserOrder = inngest.createFunction(

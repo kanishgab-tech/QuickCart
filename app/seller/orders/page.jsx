@@ -26,6 +26,44 @@ const Orders = () => {
     const [setPendingCount] = useState(0);
     const [setCompletedCount] = useState(0);
 
+    // Order Editing Window Lifecycle States
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingOrder, setEditingOrder] = useState(null);
+    const [modalSubmitLoading, setSubmitLoading] = useState(false);
+
+    const openEditOrderModal = (order) => {
+        // Clone order reference cleanly into local working memory scope
+        setEditingOrder(JSON.parse(JSON.stringify(order)));
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdateOrderDetails = async (e) => {
+        e.preventDefault();
+        setSubmitLoading(true);
+
+        try {
+            const token = await getToken();
+            const { data } = await axios.post('/api/order/update-details', {
+                orderId: editingOrder._id,
+                address: editingOrder.address,
+                items: editingOrder.items,
+                notes: editingOrder.notes
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (data.success) {
+                showToast("Order records updated successfully!", "success");
+                setIsEditModalOpen(false);
+                fetchSellerOrders(); // Refresh master workspace lists from server
+            }
+        } catch (error) {
+            showToast(error.response?.data?.message || "Failed to update details.", "error");
+        } finally {
+            setSubmitLoading(false);
+        }
+    };
+
     const fetchSellerOrders = async () => {
         try {
             setLoading(true); // Shows loading layout skeletons while waiting for network responses
@@ -302,7 +340,14 @@ useEffect(() => {
                                         </div>
                                         
                                         {/* Status Modifier Dropdown Controller */}
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                type="button"
+                                                onClick={() => openEditOrderModal(order)}
+                                                className="bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 font-bold text-xs px-2.5 py-1 rounded-md transition cursor-pointer"
+                                            >
+                                                ✏️ Edit Order
+                                            </button>
                                             <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Status:</span>
                                             <select
                                                 value={order.status}
@@ -407,6 +452,100 @@ useEffect(() => {
                             </div>
                         )}
                     </div>
+                                {/* Inline Administrative Order Editor Modal Overlay */}
+            {isEditModalOpen && editingOrder && (
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto flex flex-col border border-gray-100">
+                        
+                        <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                            <div>
+                                <h3 className="text-base font-bold text-gray-900">Modify Order Parameters</h3>
+                                <p className="text-[11px] text-gray-400 mt-0.5 font-medium">Ref: {editingOrder.orderNumber}</p>
+                            </div>
+                            <button 
+                                type="button" onClick={() => setIsEditModalOpen(false)}
+                                className="w-8 h-8 rounded-full bg-gray-200/60 text-gray-500 font-bold flex items-center justify-center hover:bg-gray-200 cursor-pointer"
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleUpdateOrderDetails} className="p-5 space-y-4 flex-grow text-xs font-semibold text-gray-600">
+                            
+                            {/* Address Snapshot Input Area */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="text-gray-400 text-[10px] uppercase tracking-wider block">Shipping Address Destination</label>
+                                <textarea
+                                    rows={3} required value={editingOrder.address}
+                                    onChange={(e) => setEditingOrder(prev => ({ ...prev, address: e.target.value }))}
+                                    className="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-xs text-gray-800 focus:outline-none focus:border-orange-500 font-medium leading-relaxed"
+                                />
+                            </div>
+                            {/* Dynamic Items Quantities Tracker Matrix */}
+                            <div className="space-y-2">
+                                <label className="text-gray-400 text-[10px] uppercase tracking-wider block border-b pb-1">Purchased Product Quantities</label>
+                                <div className="divide-y divide-gray-100 max-h-44 overflow-y-auto space-y-2 pr-1">
+                                    {editingOrder.items.map((item, idx) => {
+                                        // FIXED: Multi-Scenario Fallback logic matching populated objects or raw string catalog caches
+                                        let productName = "Product Line Item";
+                                        
+                                        // Scenario A: Check if the product was successfully populated as an object reference
+                                        if (item.product && typeof item.product === 'object') {
+                                            productName = item.product.name;
+                                        } 
+                                        // Scenario B: If it's a raw String ID, extract the true name from your AppContext's products array
+                                        else if (typeof item.product === 'string' && products) {
+                                            const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
+                                            if (matchedProduct) {
+                                                productName = matchedProduct.name;
+                                            }
+                                        }
+
+                                        return (
+                                            <div key={idx} className="flex items-center justify-between gap-4 py-2 pt-3">
+                                                <span className="text-gray-900 font-semibold truncate max-w-xs">{productName}</span>
+                                                <div className="flex items-center gap-1.5 shrink-0">
+                                                    <span className="text-gray-400 text-[10px]">Qty:</span>
+                                                    <input
+                                                        type="number" min="1" required
+                                                        value={item.quantity}
+                                                        onChange={(e) => {
+                                                            const updatedItems = [...editingOrder.items];
+                                                            updatedItems[idx].quantity = Math.max(1, parseInt(e.target.value, 10) || 1);
+                                                            setEditingOrder(prev => ({ ...prev, items: updatedItems }));
+                                                        }}
+                                                        className="w-16 border border-gray-300 rounded px-2 py-1 text-center font-bold text-gray-900 focus:outline-none focus:border-orange-500 bg-gray-50/50"
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+
+                            {/* Operational Command Buttons Footer */}
+                            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button" onClick={() => setIsEditModalOpen(false)} disabled={modalSubmitLoading}
+                                    className="px-4 py-2 border border-gray-300 rounded-lg font-bold text-gray-500 hover:bg-gray-50 transition cursor-pointer text-[11px]"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit" disabled={modalSubmitLoading}
+                                    className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white font-bold rounded-lg shadow-sm transition cursor-pointer text-[11px] flex items-center gap-1.5"
+                                >
+                                    {modalSubmitLoading ? (
+                                        <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    ) : "Save Changes & Recalculate"}
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            )}
                 </div>
             )}
             <Footer />

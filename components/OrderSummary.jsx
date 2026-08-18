@@ -37,13 +37,15 @@ const OrderSummary = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false); // Initializes unchecked by default
+
   
   // Guest input states
   const [guestEmail, setGuestEmail] = useState("");
   const [guestTextAddress, setGuestTextAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [validationErrors, setValidationErrors] = useState([]);
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const [guestFullName, setGuestFullName] = useState("");
   const [guestArea, setGuestArea] = useState("");
@@ -154,9 +156,15 @@ const OrderSummary = () => {
 
 
   const createOrder = async () => {
+
+    if (!hasAcceptedTerms) {
+    return toast.error("Please accept the Terms and Conditions to proceed.");
+    }
+
     if (isSubmitting) return;
     let cleanAddressValue=""
     let finalAddressValue = "";
+
     try {
       
       if (user) {
@@ -236,7 +244,7 @@ const OrderSummary = () => {
         setCartItems({});
         const confirmedNumber = data.orderNumber || `ORD-${Date.now()}`;
         
-        router.push(`/order-placed?orderNumber=${encodeURIComponent(confirmedNumber)}`);
+        router.push(`/order-placed?orderNumber=${encodeURIComponent(confirmedNumber)}&amount=${encodeURIComponent(grandTotal)}`);
 
       } else {
         toast.error(data.message || "Failed to process order.");
@@ -244,7 +252,7 @@ const OrderSummary = () => {
       }
     } catch (error) {
       console.log("Error creating order:", error.message);
-      showToast(error.response?.data?.message || "Checkout failed. Please try again.");
+      toast.error(error.response?.data?.message || "Checkout failed. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -516,32 +524,66 @@ const OrderSummary = () => {
               <span>{currency}{grandTotal.toLocaleString('en-IN')}</span>
            </div>
       </div>
+      
+                {/* NEW: Mandatory Terms and Conditions Agreement Checkbox */}
+        <div className="pt-4 border-t border-gray-100/80">
+          <label className="flex items-start gap-2.5 cursor-pointer text-xs font-medium text-gray-600 select-none group">
+            <input 
+              type="checkbox"
+              checked={hasAcceptedTerms || false} // Bind this to a local boolean state variable
+              onChange={(e) => setHasAcceptedTerms(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500 accent-orange-600 cursor-pointer mt-0.5"
+            />
+            <div className="leading-normal">
+              <span>I have read and agree to the website </span>
+              <a 
+                href="/terms-conditions" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange-600 font-bold hover:text-orange-700 underline cursor-pointer"
+              >
+                Terms and Conditions
+              </a>
+              <span> and </span>
+              <a 
+                href="/privacy-policy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange-600 font-bold hover:text-orange-700 underline cursor-pointer"
+              >
+                Privacy Policy
+              </a>
+              <span className="text-red-500 font-bold"> *</span>
+            </div>
+          </label>
+        </div>
 
-      <button
-        type="button"
-        // Disable button if submitting OR if validation errors exist
-        disabled={isSubmitting || validationErrors.length > 0}
-        onClick={createOrder}
-        className={`w-full py-3.5 text-white font-bold text-sm rounded-xl shadow transition duration-150 text-center flex items-center justify-center gap-2 
-          ${isSubmitting 
-            ? "opacity-75 cursor-not-allowed bg-orange-700" 
-            : validationErrors.length > 0 
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none" 
-              : "bg-orange-600 hover:bg-orange-700 active:bg-orange-800 cursor-pointer"
-          }`}
-      >
-        {isSubmitting ? (
-          <>
-            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://w3.org" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span>Processing Order...</span>
-          </>
-        ) : (
-          "Place Order"
-        )}
-      </button>
+        {/* Place Order Checkout Action Button */}
+        <div className="pt-2">
+          <button
+            type="button"
+            // FIXED: Locked state disables the click route if submitting OR if terms are unchecked
+            disabled={isSubmitting || !hasAcceptedTerms}
+            onClick={createOrder}
+            className={`w-full py-3.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold text-sm rounded-xl shadow-xs transition duration-150 text-center flex items-center justify-center gap-2 ${
+              isSubmitting || !hasAcceptedTerms 
+                ? "opacity-50 bg-gray-400 text-gray-200 cursor-not-allowed shadow-none" 
+                : "cursor-pointer"
+            }`}
+          >
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://w3.org" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Processing Order...</span>
+              </>
+            ) : (
+              "Place Order"
+            )}
+          </button>
+        </div>
 
     </div>
   );

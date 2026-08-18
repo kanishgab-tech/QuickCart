@@ -8,6 +8,7 @@ import FeaturedProduct from "@/components/FeaturedProduct";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Titlebar from '@/components/Titlebar';
+import Media from '@/components/Media';
 
 const Home = () => {
   return (
@@ -22,6 +23,7 @@ const Home = () => {
         {/*<NewsLetter />*/}
       </div>
       <Footer />
+      <Media />
     </>
   );
 };

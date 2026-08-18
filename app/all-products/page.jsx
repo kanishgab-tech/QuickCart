@@ -35,26 +35,30 @@ const AllProductsContent = () => {
     return (
         <div className="flex flex-col md:flex-row gap-8 mt-12 pb-14 w-full items-start">
             {/* Desktop Sidebar Panel Container */}
-            <aside className="hidden md:block w-64 shrink-0 sticky top-4 max-h-[70vh] overflow-y-auto pr-2 border-r border-gray-200 pb-0">
-                <h3 className="text-base font-bold mb-4 text-gray-800">Categories</h3>
-                <ul className="space-y-1.5">
-                    {categories.map((category) => (
-                        <li key={category}>
-                            <button
-                                type="button"
-                                onClick={() => setSelectedCategory(category)}
-                                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                                    selectedCategory === category
-                                        ? "bg-orange-50 text-orange-600 border-l-4 border-orange-600 pl-2 shadow-2xs font-bold"
-                                        : "text-gray-600 hover:bg-gray-100"
-                                }`}
-                            >
-                                {category === "All" ? "All Categories" : category}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </aside>
+             <aside className="hidden md:block w-64 shrink-0 sticky top-4 max-h-[70vh] overflow-y-auto pr-2 border-r border-gray-200 pb-0 
+        [&::-webkit-scrollbar]:w-1.5
+        [&::-webkit-scrollbar-track]:bg-orange-50/50 
+        [&::-webkit-scrollbar-thumb]:bg-orange-500 
+        [&::-webkit-scrollbar-thumb]:rounded-full">
+        
+        <ul className="space-y-1.5">
+            {categories.map((category) => (
+                <li key={category}>
+                    <button
+                        type="button"
+                        onClick={() => setSelectedCategory(category)}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm font-normal transition-all cursor-pointer ${
+                            selectedCategory === category
+                                ? "bg-orange-50 text-orange-600 border-l-4 border-orange-600 pl-2 shadow-2xs font-bold"
+                                : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                    >
+                        {category === "All" ? "All Categories" : category}
+                    </button>
+                </li>
+            ))}
+        </ul>
+    </aside>
 
             {/* Product Display Canvas Grid */}
             <main className="flex-grow w-full">
@@ -83,7 +87,7 @@ const AllProducts = () => {
             
             <div className="flex flex-col px-6 md:px-16 lg:px-32 flex-grow">
                 <div className="flex flex-col items-start pt-12">
-                    <p className="text-2xl font-bold text-gray-900 tracking-tight">All products</p>
+                    <p className="text-2xl font-semibold text-gray-900 tracking-tight">Our Products</p>
                     <div className="w-16 h-0.5 bg-orange-600 rounded-full mt-1.5"></div>
                 </div>
 

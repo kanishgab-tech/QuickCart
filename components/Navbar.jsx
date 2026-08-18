@@ -30,19 +30,33 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700 bg-white relative z-50">
       
-     {/* Brand Logo Wrapper - Adjusted for High Visibility */}
-      <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
-        <Image
-          className="cursor-pointer w-40 sm:w-52 md:w-64 lg:w-72 xl:w-80 h-auto object-contain transition-all duration-200 hover:opacity-95"
-          onClick={() => router.push('/')}
-          src={assets.logo}
-          alt="logo"
-          width={320} // High resolution layout master box
-          height={80}
-          priority // Loads instantly to completely eliminate page-jump layout shifts
-        />
-      </div>
-    
+   {/* Brand Logo Wrapper - Adjusted for High Visibility */}
+     <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
+      <Image
+        className="cursor-pointer w-[110px] sm:w-[140px] md:w-[180px] lg:w-[200px] xl:w-[220px] h-auto object-contain transition-all duration-200 hover:opacity-95"
+        onClick={() => router.push('/')}
+        src={assets.logo}
+        alt="logo"
+        width={320}
+        height={80}
+        priority
+      />
+    </div>
+{/*
+    <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
+    <Image
+      className="cursor-pointer w-36 md:w-52 h-auto object-contain transition-all duration-200 hover:opacity-95"
+      onClick={() => router.push('/')}
+      src={assets.logo}
+      alt="logo"
+      width={320}
+      height={80}
+      priority
+    />
+  </div>
+  */}
+
+
       {/* --- DESKTOP VIEWPORT HEADER LINKS (Hidden on Mobile) --- */}
       <div className="flex items-center gap-4 lg:gap-10 max-md:hidden font-medium text-sm">
         <Link href="/" className="hover:text-gray-900 transition">Home</Link>

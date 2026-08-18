@@ -188,6 +188,7 @@ const ContactEnquiry = () => {
                            
                             {/*Corporate Office Location MapMap viewport interactive module mounted underneath tracking view.);*/}
                     </main>
+                    <Footer />
             </div>
          
         );
