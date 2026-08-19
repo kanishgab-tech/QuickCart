@@ -14,6 +14,7 @@ const OrderSummary = () => {
     cartItems, 
     setCartItems, 
     showToast,
+    userData,
     
     //Financials
     currency,
@@ -227,7 +228,7 @@ const OrderSummary = () => {
         shippingCharges: shippingCharges, // Captured from your state logic
         discountAmount: appliedDiscount,   // Captured from your state logic
         couponCode: activeCouponLabel || "", // Captured from your state logic
-        guestEmail: user ? null : guestEmail.trim(),
+        guestEmail: user ? userData.email : guestEmail.trim(),
         tax:totalTaxAmount,
         notes: `Tax breakdown: ${Object.values(taxBreakdown).map(t => `${t.label}:${t.amount}`).join(", ")}`
       };

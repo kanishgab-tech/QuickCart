@@ -138,7 +138,7 @@ export async function POST(request) {
                 orderNumber,
                 userId: userId || null,   
                 isGuest: !userId,        
-                guestEmail: userId ? null : guestEmail.trim().toLowerCase(),
+                guestEmail: userId ? guestEmail : guestEmail.trim().toLowerCase(),
                 items,       
                 amount: serverVerifiedGrandTotalRounded, 
                 address: address.trim(),

@@ -30,11 +30,35 @@ const Orders = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingOrder, setEditingOrder] = useState(null);
     const [modalSubmitLoading, setSubmitLoading] = useState(false);
+    const [resendingEmailId, setResendingEmailId] = useState({});
 
     const openEditOrderModal = (order) => {
         // Clone order reference cleanly into local working memory scope
         setEditingOrder(JSON.parse(JSON.stringify(order)));
         setIsEditModalOpen(true);
+    };
+
+    const handleResendNotificationEmail = async (orderId, orderNumber) => {
+    // Flag this specific row item index as loading to show progress animations
+    setResendingEmailId(prev => ({ ...prev, [orderId]: true }));
+    
+        try {
+            const token = await getToken();
+            const { data } = await axios.post('/api/order/resend-email', { orderId }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (data.success) {
+                showToast(data.message || `Notification for ${orderNumber} resent successfully!`, "success");
+            } else {
+                showToast(data.message || "Failed to dispatch email details.", "error");
+            }
+        } catch (error) {
+            showToast(error.response?.data?.message || "Failed to complete communication request.", "error");
+        } finally {
+            // Toggle the specific row spinner state back off
+            setResendingEmailId(prev => ({ ...prev, [orderId]: false }));
+        }
     };
 
     const handleUpdateOrderDetails = async (e) => {
@@ -348,6 +372,28 @@ useEffect(() => {
                                             >
                                                 ✏️ Edit Order
                                             </button>
+
+                                           {/* NEW: Interactive Resend Notification Email Action Button Tool */}
+                                            <button
+                                                type="button"
+                                                disabled={resendingEmailId[order._id]}
+                                                onClick={() => handleResendNotificationEmail(order._id, order.orderNumber)}
+                                                className={`text-xs font-bold px-2.5 py-1 rounded-md border transition-all flex items-center gap-1.5 ${
+                                                    resendingEmailId[order._id]
+                                                        ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                                                        : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 active:scale-[0.98] cursor-pointer"
+                                                }`}
+                                            >
+                                                {resendingEmailId[order._id] ? (
+                                                    <>
+                                                        <div className="w-3 h-3 border-2 border-gray-400/30 border-t-gray-500 rounded-full animate-spin" />
+                                                        <span>Sending...</span>
+                                                    </>
+                                                ) : (
+                                                    <>📧 Resend Email</>
+                                                )}
+                                            </button>
+                                             
                                             <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Status:</span>
                                             <select
                                                 value={order.status}

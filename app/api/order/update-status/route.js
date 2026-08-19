@@ -1,9 +1,24 @@
+import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import connectDB from "@/config/db"; // Adjust the path to your database connector
 import Order from "@/models/Order";     // Adjust the path to your Mongoose Order model
+import authSeller from "@/lib/authSeller";
 
 export async function POST(request) {
     try {
+        const auth = getAuth(request);
+        const userId = auth?.userId;
+       
+        if (!userId) {
+                   return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 401 });
+        }
+       
+        const isSeller=await authSeller(userId)
+            if(!isSeller)
+                {
+                                   return NextResponse.json({success:false, message: 'Not Authorized'})
+                }
+        
         // 1. Establish database connection pool
         await connectDB();
 
