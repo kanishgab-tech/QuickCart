@@ -28,6 +28,7 @@ export const AppContextProvider = (props) => {
     const [toasts, setToasts] = useState([]);   
     const [coupon, setCoupon] = useState(null); 
 
+
     const [couponCode, setCouponCode] = useState("");
     const [isCouponApplied, setIsCouponApplied] = useState(false);
     const [activeCouponLabel, setActiveCouponLabel] = useState("");
@@ -67,6 +68,46 @@ export const AppContextProvider = (props) => {
     setTimeout(() => {
         setToasts((prev) => prev.filter((toast) => toast.id !== id));
     }, 4000);
+};
+
+// ====== Place this inside your AppContextProvider Component ======
+
+// 1. Initialize Wishlist State from LocalStorage directly on mount
+const [wishlist, setWishlist] = useState(() => {
+    if (typeof window !== "undefined") {
+        const cachedWishlist = localStorage.getItem("quickcart_wishlist");
+        try {
+            return cachedWishlist ? JSON.parse(cachedWishlist) : [];
+        } catch (e) {
+            console.error("Failed to parse wishlist cache:", e);
+            return [];
+        }
+    }
+    return [];
+});
+
+// 2. Synchronize memory modifications to localStorage instantly
+useEffect(() => {
+    localStorage.setItem("quickcart_wishlist", JSON.stringify(wishlist));
+}, [wishlist]);
+
+// 3. High-Performance Client-Side Toggle Action Handler
+const toggleWishlist = (productId) => {
+    if (!productId) return;
+
+    const isPresent = wishlist.includes(productId);
+    
+    // Instantly update the state array in less than 1 millisecond
+    setWishlist(prev => 
+        isPresent ? prev.filter(id => id !== productId) : [...prev, productId]
+    );
+
+    // Provide reactive user feedback popup warnings
+    if (isPresent) {
+        if (typeof showToast === "function") showToast("Removed from favorites.", "success");
+    } else {
+        if (typeof showToast === "function") showToast("Added to favorites!", "success");
+    }
 };
 
     const fetchUserData = async () => {
@@ -342,7 +383,8 @@ export const AppContextProvider = (props) => {
         showToast,
         shippingCharges, appliedDiscount,
         grandTotal, applyCouponGlobal,
-        removeCouponGlobal,activeCouponLabel,isCouponApplied,setCouponCode,couponCode
+        removeCouponGlobal,activeCouponLabel,isCouponApplied,setCouponCode,couponCode,wishlist,
+        toggleWishlist
     }
 
     

@@ -5,15 +5,16 @@
     import Titlebar from "@/components/Titlebar";
     import { useAppContext } from "@/context/AppContext";
     import { useUser } from "@clerk/nextjs";
-
+    import ProductPreviewBlock from "@/components/ProductPreviewBlock";
 
     const QuickShop = () => {
-        const { products, setCartItems, cartItems, showToast} = useAppContext();
+        const { products, setCartItems, cartItems, showToast,router} = useAppContext();
 
         // Store row quantities in an object: { [productId]: quantity }
         const [quantities, setQuantities] = useState({});
         const [isSubmitting, setIsSubmitting] = useState(false);
-
+       
+        const [activePreviewProduct, setActivePreviewProduct] = useState(null);
         const { user } = useUser(); 
         const userId = user?.id;
     
@@ -83,7 +84,7 @@
             return products ? products.reduce((acc, product) => {
                 const id = product.id || product._id;
                 const qty = quantities[id] || 0;
-                return acc + (product.price * qty);
+                return acc + (product.offerPrice * qty);
             }, 0) : 0;
         };
 
@@ -166,7 +167,7 @@
             <form onSubmit={handleAddToBag} className="flex-grow px-6 md:px-16 lg:px-32 py-12 space-y-8">
                 <main>
                     {/* Header & Actions Section (Top Side Alignment) */}
-                    <div className="sticky top-0 z-50 bg-gray-50/90 backdrop-blur-md flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 pt-4 border-b border-gray-200 transition-all duration-200">
+                    <div className="sticky top-0 z-20 bg-gray-50/90 backdrop-blur-md flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 pt-4 border-b border-gray-200 transition-all duration-200">
                         <div className="flex flex-col items-start">
                             <h1 className="text-3xl font-bold tracking-tight">Quick Shop</h1>
                             <div className="w-16 h-0.5 bg-orange-600 rounded-full mt-2"></div>
@@ -222,20 +223,31 @@
                                     products.map((product) => {
                                         const id = product.id || product._id;
                                         const qty = quantities?.[id] || 0;
-                                        const rowSubtotal = (product.price || 0) * qty;
+                                        const rowSubtotal = (product.offerPrice || 0) * qty;
 
                                         return (
                                             <tr key={id} className="hover:bg-gray-50/50 transition-colors">
-                                                {/* Image cell */}
+                                                                                                {/* Image cell - Upgraded to roll open the Product Details Workspace Modal */}
                                                 <td className="py-4 px-6">
-                                                    <div className="w-16 h-16 rounded border border-gray-100 bg-white overflow-hidden relative shrink-0">
+                                                    <div 
+                                                        onClick={() => setActivePreviewProduct(product)}
+                                                        className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
+                                                        title={`Click to view full interactive specifications for ${product.name}`}
+                                                    >
                                                         <img 
                                                             src={Array.isArray(product.image) ? product.image[0] : (product.image || '')} 
                                                             alt={product.name || 'Product'}
-                                                            className="w-full h-full object-contain"
+                                                            className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200"
                                                         />
+                                                        
+                                                        {/* Hover overlay hint indicator overlay mask */}
+                                                        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
+                                                            👁️ Info
+                                                        </div>
                                                     </div>
                                                 </td>
+
+
                                                 {/* Details text cells */}
                                                 <td className="py-4 px-4 max-w-xs">
                                                     <p className="font-semibold text-gray-900 truncate">{product.name || 'Unnamed Item'}</p>
@@ -248,10 +260,25 @@
                                                     {typeof product.category === 'object' ? product.category?.name : (product.category || "Uncategorized")}  
                                                 </td>
 
-                                                {/* Unit price dynamic block rendering */}
-                                                <td className="py-4 px-4 text-right font-medium text-gray-600">
-                                                    ₹{(product.price || 0).toLocaleString('en-IN')}
+                                                {/* Unit price dynamic block rendering - Highlights discount difference */}
+                                                <td className="py-4 px-4 text-right font-medium">
+                                                    {/* Changed to flex-row, items-baseline to align text bottoms, and justify-end to keep right-alignment */}
+                                                    <div className="flex flex-row items-baseline justify-end gap-1.5">
+                                                        {/* Prominent Current Offer Price */}
+                                                        <span className="text-gray-950 font-bold text-sm">
+                                                            ₹{(product.offerPrice || 0).toLocaleString('en-IN')}
+                                                        </span>
+                                                        
+                                                        {/* Strikethrough Original Base Price */}
+                                                        {product.price > product.offerPrice && (
+                                                            <span className="text-gray-400 line-through text-[11px] font-semibold tracking-wide">
+                                                                ₹{(product.price || 0).toLocaleString('en-IN')}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </td>
+
+
                                                 {/* Quantity Field with Modifier Controls */}
                                                 <td className="py-4 px-4">
                                                     <div className="flex items-center justify-center border border-gray-300 rounded-md w-36 mx-auto overflow-hidden bg-white">
@@ -291,7 +318,62 @@
                 
             </form>
             <Footer />
-            
+                        {/* FIXED: Changed ProductPreviewBlock condition to check your local activePreviewProduct state instead */}
+            {activePreviewProduct && (
+                <div 
+                    onClick={() => setActivePreviewProduct(null)} // Click outside onto dark blur to exit instantly
+                    className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 md:p-10 animate-fade-in"
+                >
+                    {/* The Inner Modal Content Board Box */}
+                    <div 
+                        onClick={(e) => e.stopPropagation()} // Stop propagation prevents closing panel if clicking content inside
+                        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col border border-gray-100 relative animate-scale-up"
+                    >
+                        {/* Modal Header Controls flex bar row */}
+                        <div className="p-4 bg-orange-500 border-b border-gray-200 flex items-center justify-between sticky top-0 z-10">
+                            <div>
+                                <h3 className="text-sm font-black text-white  tracking-wider flex items-center gap-1.5">
+                                    Product Preview
+                                </h3>
+                            </div>
+                            <button 
+                                type="button" 
+                                onClick={() => setActivePreviewProduct(null)}
+                                className="w-8 h-8 rounded-full bg-gray-200/60 text-gray-500 font-bold flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer select-none text-lg"
+                                title="Close Preview Window"
+                            >
+                                &times;
+                            </button>
+                        </div>
+
+                        {/* Modal Body: Renders your full detailed product view page layout */}
+                        <div className="p-6 overflow-y-auto flex-grow bg-white">
+                            {/* Reusing your verified details view, passing hideCheckoutButtons=true safely */}
+                            <ProductPreviewBlock 
+                                productData={activePreviewProduct} 
+                                hideCheckoutButtons={true} 
+                            />
+                        </div>
+
+                        {/* Modal Action Footer flex row bar */}
+                        <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
+                            <span className="text-[12px] text-gray-400 font-normal hidden sm:inline mr-auto">
+                                💡 Click anywhere outside this white card container window frame to slide back down
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setActivePreviewProduct(null)}
+                                className="px-4 py-2 bg-orange-500 hover:bg-orange-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer active:scale-95"
+                            >
+                                Close Preview
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
     }

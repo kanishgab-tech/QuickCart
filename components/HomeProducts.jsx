@@ -33,7 +33,7 @@ const HomeProducts = () => {
         onClick={() => { router.push('/all-products') }} 
         className="px-12 py-2.5 border rounded text-gray-500/70 hover:bg-slate-50/90 transition cursor-pointer font-medium text-sm"
       >
-        See more
+        See more Products
       </button>
     </div>
   );

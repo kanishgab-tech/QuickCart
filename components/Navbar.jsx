@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useClerk, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
-  const { isSeller, router, user, cartItems } = useAppContext();
+  const { isSeller, router, user, cartItems,wishlist } = useAppContext();
   const { openSignIn } = useClerk();
 
   // Core Lifecycle States for Mobile Hamburger Drawer Panel
@@ -28,37 +28,39 @@ const Navbar = () => {
   };
 
   return (
+      
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700 bg-white relative z-50">
       
-   {/* Brand Logo Wrapper - Adjusted for High Visibility */}
-     <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
-      <Image
-        className="cursor-pointer w-[110px] sm:w-[140px] md:w-[180px] lg:w-[200px] xl:w-[220px] h-auto object-contain transition-all duration-200 hover:opacity-95"
-        onClick={() => router.push('/')}
-        src={assets.logo}
-        alt="logo"
-        width={320}
-        height={80}
-        priority
-      />
-    </div>
-{/*
-    <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
-    <Image
-      className="cursor-pointer w-36 md:w-52 h-auto object-contain transition-all duration-200 hover:opacity-95"
-      onClick={() => router.push('/')}
-      src={assets.logo}
-      alt="logo"
-      width={320}
-      height={80}
-      priority
-    />
-  </div>
-  */}
+      {/* LEFT CONTAINER: Groups Hamburger and Logo on mobile viewports */}
+      <div className="flex items-center gap-3">
+        {/* FIXED: Pure CSS Animated 3-Line Hamburger Trigger Button placed BEFORE the logo */}
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="flex flex-col justify-center gap-1 w-5 h-5 cursor-pointer group p-1 md:hidden"
+          aria-label="Toggle Navigation Drawer Menu"
+        >
+          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-all duration-300 transform origin-left ${isMobileMenuOpen ? "rotate-45 translate-x-[2px] bg-orange-600" : ""}`}></span>
+          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-opacity duration-200 ${isMobileMenuOpen ? "opacity-0" : ""}`}></span>
+          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-all duration-300 transform origin-left ${isMobileMenuOpen ? "-rotate-45 translate-x-[2px] bg-orange-600" : ""}`}></span>
+        </button>
 
+        {/* Brand Logo Wrapper */}
+        <div className="flex items-center shrink-0 -my-2 select-none overflow-hidden">
+          <Image
+            className="cursor-pointer w-[110px] sm:w-[140px] md:w-[180px] lg:w-[200px] xl:w-[220px] h-auto object-contain transition-all duration-200 hover:opacity-95"
+            onClick={() => router.push('/')}
+            src={assets.logo}
+            alt="logo"
+            width={320}
+            height={80}
+            priority
+          />
+        </div>
+      </div>
 
       {/* --- DESKTOP VIEWPORT HEADER LINKS (Hidden on Mobile) --- */}
-      <div className="flex items-center gap-4 lg:gap-10 max-md:hidden font-medium text-sm">
+      <div className="flex items-center gap-4 lg:gap-10 max-md:hidden font-semibold text-sm">
         <Link href="/" className="hover:text-gray-900 transition">Home</Link>
         <Link href="/all-products" className="hover:text-gray-900 transition">Shop</Link>
         <Link href="/quick-shop" className="hover:text-gray-900 transition">Quick Shop</Link>
@@ -73,9 +75,35 @@ const Navbar = () => {
           </button>
         )}
       </div>
+
        
       {/* --- DESKTOP VIEWPORT ACCOUNT & ACTIONS PANEL (Hidden on Mobile) --- */}
       <ul className="hidden md:flex items-center gap-4">
+             
+        {/* Desktop Wishlist Shortcut Button - Upgraded to Orange Theme */}
+        <button 
+          onClick={() => router.push('/my-wishlist')}
+          className="relative flex flex-col items-center  p-2 group cursor-pointer"
+          title="View Wishlist"
+         
+        >
+          {/* FIXED: Transition properties now fade smoothly into orange parameters */}
+          <svg 
+            className="w-6 h-6 text-gray-700 transition-colors group-hover:text-orange-600 group-hover:fill-orange-600 fill-none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.318 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+
+          {wishlist && wishlist.length > 0 && (
+            <span className="absolute top-1.5 right-1.5 bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-xs border border-white whitespace-nowrap z-10 animate-fade-in">
+              {wishlist.length}
+            </span>
+          )}
+        </button>
+
         {/* Desktop Cart Button */}
         <button 
           onClick={() => router.push('/cart')}
@@ -110,7 +138,7 @@ const Navbar = () => {
         )}
       </ul>
 
-      {/* --- MOBILE VIEWPORT CONTROLS BAR (Visible ONLY on Small Devices) --- */}
+      {/* --- MOBILE VIEWPORT CONTROLS BAR (Right Side Actions) --- */}
       <div className="flex items-center md:hidden gap-2">
         {/* Mobile Cart Button Shortcut */}
         <button 
@@ -142,18 +170,6 @@ const Navbar = () => {
             </UserButton.MenuItems>
           </UserButton>
         )}
-
-        {/* Pure CSS Animated 3-Line Hamburger Trigger Button */}
-        <button
-          type="button"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="flex flex-col justify-center gap-1 w-5 h-5 cursor-pointer group p-1 ml-1"
-          aria-label="Toggle Navigation Drawer Menu"
-        >
-          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-all duration-300 transform origin-left ${isMobileMenuOpen ? "rotate-45 translate-x-[2px] bg-orange-600" : ""}`}></span>
-          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-opacity duration-200 ${isMobileMenuOpen ? "opacity-0" : ""}`}></span>
-          <span className={`h-[2px] w-full bg-gray-700 rounded-full transition-all duration-300 transform origin-left ${isMobileMenuOpen ? "-rotate-45 translate-x-[2px] bg-orange-600" : ""}`}></span>
-        </button>
       </div>
 
       {/* --- RESPONSIVE MOBILE SLIDE-OUT OVERLAY CANVAS DRAWER --- */}
@@ -220,7 +236,16 @@ const Navbar = () => {
                 </div>
               )}
             </li>
-
+             {/* FIXED NEW ADDITION: High-Utility Favorites Wishlist Page Mobile Link Shortcut */}
+            <li>
+              <button 
+                type="button" 
+                onClick={() => handleMobileNavClick('/my-wishlist')} 
+                className="w-full text-left py-2 hover:text-orange-600 transition flex items-center gap-2 cursor-pointer select-none text-red-500/90 font-bold"
+              >
+                <span>❤️</span> My Wishlist
+              </button>
+            </li>
             <li>
               <button onClick={() => handleMobileNavClick('/quick-shop')} className="w-full text-left py-2 hover:text-orange-600 transition block cursor-pointer">Quick Shop</button>
             </li>
