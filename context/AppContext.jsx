@@ -8,6 +8,13 @@ import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
+export const STORE_POLICIES = {
+    MINIMUM_ORDER_AMOUNT: 3000,
+    SHIPPING_CHARGES: 150,
+    ALLOWED_STATES: ["tn", "tamilnadu", "tamil nadu"],
+    ALLOWED_STATES_DISPLAY: "Tamil Nadu (TN)"
+};
+
 export const useAppContext = () => {
     return useContext(AppContext)
 }
@@ -133,13 +140,13 @@ const toggleWishlist = (productId) => {
         }
         else
         {  
-           toast.error(data.message)
+           showToast(data.message,'error')
         }
 
       }
       catch(error) {
 
-        toast.error(error.message)
+        showToast(error.message,'error')
 
       }
     }
@@ -164,7 +171,7 @@ const toggleWishlist = (productId) => {
 
             }
             catch(error) {
-                toast.error(error.message)
+                showToast(error.message,'error')
             }
         }
     }
@@ -186,7 +193,7 @@ const toggleWishlist = (productId) => {
                 showToast('Cart updated')
             }
             catch(error) {
-                toast.error(error.message)
+                showToast(error.message,'error')
             }
         }
 
@@ -304,10 +311,10 @@ const toggleWishlist = (productId) => {
             setAppliedDiscount(discountAmount);
             setActiveCouponLabel(codeInput);
             setIsCouponApplied(true);
-            toast.success(`Coupon "${codeInput}" applied successfully!`);
+           //showToast(`Coupon "${codeInput}" applied successfully!`);
             return true;
         } else {
-            toast.error("Invalid coupon code. Please check your spelling.");
+            toast.error("Invalid coupon code.");
             removeCouponGlobal();
             return false;
         }
@@ -318,7 +325,7 @@ const toggleWishlist = (productId) => {
         setIsCouponApplied(false);
         setActiveCouponLabel("");
         setAppliedDiscount(0);
-        toast.success("Coupon code removed successfully.");
+        //toast.success("Coupon code removed successfully.");
     };
 
     // Calculate Tax Metrics (e.g. 5% GST/Sales Tax calculated after promotional discounts)
@@ -384,7 +391,7 @@ const toggleWishlist = (productId) => {
         shippingCharges, appliedDiscount,
         grandTotal, applyCouponGlobal,
         removeCouponGlobal,activeCouponLabel,isCouponApplied,setCouponCode,couponCode,wishlist,
-        toggleWishlist
+        toggleWishlist, STORE_POLICIES
     }
 
     

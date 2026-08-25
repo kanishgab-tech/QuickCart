@@ -130,12 +130,15 @@ const ProductCard = ({ product }) => {
 
             {/* Pricing Area Layout */}
             <div className="w-full mt-1 flex flex-col justify-end flex-grow">
-             <p className="text-base font-bold text-gray-900 flex items-center">
+            <p className="text-base font-bold text-gray-900 flex items-center">
                 {currency}{product.offerPrice}
-                <span className="text-base font-normal text-gray-800/60 line-through ml-2">
-                    {currency}{product.price}
-                </span>
-                </p>
+                {Number(product.offerPrice) < Number(product.price) && (
+                    <span className="text-base font-normal text-gray-800/60 line-through ml-2">
+                        {currency}{product.price}
+                    </span>
+                )}
+            </p>
+
                 {/* 4. MOBILE VISIBILITY FALLBACK CONTAINER */}
                 {/* Always visible on touch viewports, hidden entirely on desktop profiles */}
                 <div className="flex md:hidden items-center gap-1.5 w-full mt-2">

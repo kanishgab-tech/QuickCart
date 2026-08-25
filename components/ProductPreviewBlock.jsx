@@ -77,9 +77,11 @@ const ProductPreviewBlock = ({ productData, hideCheckoutButtons = false }) => {
 
                 <p className="text-2xl font-black text-gray-900 mt-6 flex items-baseline gap-2">
                     {currency || "$"}{productData.offerPrice}
+                    {Number(productData.offerPrice) < Number(productData.price) && (
                     <span className="text-sm font-normal text-gray-400 line-through">
                         {currency || "$"}{productData.price}
                     </span>
+                    )}
                 </p>
 
                 <hr className="border-gray-200 my-6" />
@@ -89,15 +91,19 @@ const ProductPreviewBlock = ({ productData, hideCheckoutButtons = false }) => {
                         <tbody>
                             <tr className="border-b border-gray-100">
                                 <td className="py-2 pr-4 font-bold text-gray-400 uppercase tracking-wider">Brand</td>
-                                <td className="py-2 text-gray-900">Generic</td>
+                                <td className="py-2 text-gray-700">{productData.brand || "Generic"}</td>
+                            </tr>
+                            <tr className="border-b border-gray-100">
+                                <td className="py-2 pr-4 font-bold text-gray-400 uppercase tracking-wider">Size</td>
+                                <td className="py-2 text-gray-700">{productData.size || "Free Size"}</td>
                             </tr>
                             <tr className="border-b border-gray-100">
                                 <td className="py-2 pr-4 font-bold text-gray-400 uppercase tracking-wider">Color</td>
-                                <td className="py-2 text-gray-900">Multi</td>
+                                <td className="py-2 text-gray-700">Multi</td>
                             </tr>
                             <tr>
                                 <td className="py-2 pr-4 font-bold text-gray-400 uppercase tracking-wider">Category</td>
-                                <td className="py-2 text-gray-900 capitalize">{productData.category}</td>
+                                <td className="py-2 text-gray-700 capitalize">{productData.category}</td>
                             </tr>
                         </tbody>
                     </table>

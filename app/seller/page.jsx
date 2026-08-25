@@ -22,6 +22,9 @@ const AddProduct = () => {
   const [isPopular, setIsPopular] = useState(false);
 
   const [stock, setStock] = useState('');
+  const [brand, setBrand] = useState('');
+  const [size, setSize] = useState('');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +42,8 @@ const AddProduct = () => {
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
     formData.append('stock', stock);
-    
+    formData.append('brand', brand.trim() || 'Generic');
+    formData.append('size', size.trim() || 'Free Size');
     // NEW: Appending visibility and featured attributes safely as string tokens
     formData.append('isActive', isActive ? "true" : "false");
     formData.append('isPopular', isPopular ? "true" : "false");
@@ -75,6 +79,8 @@ const AddProduct = () => {
         setIsActive(true); // Reset flag tracking values back to initial defaults
         setIsPopular(false);
         setStock('');
+        setBrand('');
+        setSize('');
       } else {
         toast.error(data.message);
       }
@@ -132,6 +138,29 @@ const AddProduct = () => {
             required
           />
         </div>
+        <div className="flex flex-col sm:flex-row gap-4 w-full text-xs font-semibold text-gray-500">
+        {/* Optional Brand Input Box */}
+        <div className="flex flex-col gap-1.5 flex-1">
+            <label className="text-base font-medium" htmlFor="brand">Brand (Optional)</label>
+            <input
+                id="brand" type="text" placeholder="e.g. Nike, Apple, Puma"
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-xs text-gray-800 font-medium focus:outline-none focus:border-orange-500 bg-gray-50/50"
+                onChange={(e) => setBrand(e.target.value)}
+                value={brand}
+            />
+        </div>
+
+      {/* Optional Size Input Box */}
+      <div className="flex flex-col gap-1.5 flex-1">
+              <label className="text-base font-medium" htmlFor="size">Size Details (Optional)</label>
+              <input
+                  id="size" type="text" placeholder="e.g. S, M, L, XL, 6.1-inch"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-xs text-gray-800 font-medium focus:outline-none focus:border-orange-500 bg-gray-50/50"
+                  onChange={(e) => setSize(e.target.value)}
+                  value={size}
+              />
+          </div>
+      </div>
 
         {/* Product Description Textarea */}
         <div className="flex flex-col gap-1 max-w-md">

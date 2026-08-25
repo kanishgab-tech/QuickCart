@@ -36,6 +36,10 @@ export async function POST(request) {
     const price = formData.get("price");
     const stock = formData.get("stock");
 
+    const brand = formData.get('brand');
+    const size = formData.get('size');
+
+
     if (!productId || !name || !category || !offerPrice|| !price) {
       return NextResponse.json(
         { success: false, message: "Missing required textual parameters." },
@@ -96,6 +100,8 @@ export async function POST(request) {
         isPopular, 
         isActive,
         stock,
+        brand,
+        size,
       },
       { returnDocument: 'after', runValidators: true }
     );

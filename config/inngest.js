@@ -12,22 +12,17 @@ export const inngest = new Inngest({ id: "kansan-next" });
 
 export const createUserOrder = inngest.createFunction(
     { 
-        id: 'create-user-order',
-        triggers: [{ event: 'order/created' }],
-        batchEvents: {
-            maxSize: 5,
-            timeout: '5s'
-        }
-    },
+        id: 'create-user-order', 
+        triggers: [{ event: 'order/created' }], 
+        batchEvents: { maxSize: 5, timeout: '5s' } 
+    }, 
     async ({ events, step }) => {
         const eventList = events || [];
         const processedOrders = [];
-        
         await connectDB();
 
         for (const singleEvent of eventList) {
             const payload = singleEvent.data || singleEvent;
-
             const orderPayload = {
                 orderNumber: payload.orderNumber,
                 userId: payload.userId || null,
@@ -36,92 +31,89 @@ export const createUserOrder = inngest.createFunction(
                 items: payload.items,
                 amount: payload.amount,
                 address: payload.address,
-                status:payload.status,
-                notes:payload.notes,
-                shippingCharges:payload.shippingCharges,
-                discountAmount:payload.discountAmount,
-                couponCode:payload.couponCode,
-                date: payload.date || Date.now() 
+                status: payload.status,
+                notes: payload.notes,
+                shippingCharges: payload.shippingCharges,
+                discountAmount: payload.discountAmount,
+                couponCode: payload.couponCode,
+                date: payload.date || Date.now()
             };
-
             processedOrders.push(orderPayload);
 
             await step.run("send-invoice-email", async () => {
                 let targetEmail = payload.guestEmail;
-
                 if (!payload.isGuest && payload.userId) {
                     const databaseUser = await User.findById(payload.userId);
                     if (databaseUser && databaseUser.email) {
                         targetEmail = databaseUser.email;
                     }
                 }
-
+                
                 console.log(`INNGEST DEBUG -> User check: [${process.env.EMAIL_USER ? 'FOUND' : 'MISSING'}]`);
-
                 if (!targetEmail) {
                     return { skipped: true, reason: "No recipient address found" };
                 }
 
                 const enrichedItems = [];
+                // 1. FIXED VALUE INITIALIZATION: Tracks raw subtotal of items
+                let itemsSubtotal = 0; 
+
                 for (const item of payload.items) {
                     const productDoc = await Product.findById(item.product);
+                    const itemPrice = productDoc ? (productDoc.offerPrice || productDoc.price) : 0;
+                    
+                    // Increment the subtotal accumulation loop
+                    itemsSubtotal += (itemPrice * item.quantity);
+
                     enrichedItems.push({
                         name: productDoc ? productDoc.name : "Purchased Item",
                         description: productDoc ? productDoc.description : "No description available.",
                         quantity: item.quantity,
-                        price: productDoc ? (productDoc.offerPrice || productDoc.price) : 0,
-
+                        price: itemPrice,
                     });
                 }
 
+                // 2. FIXED FUNCTION CALL: Appended itemsSubtotal into the parameter footprint
                 const htmlContent = generateInvoiceHTML(
-                    payload.orderNumber, 
-                    payload.amount, 
+                    payload.orderNumber,
+                    payload.amount,
                     payload.address,
                     orderPayload.date,
                     enrichedItems,
                     payload.shippingCharges,
                     payload.discountAmount,
                     payload.couponCode,
-                    payload.tax
+                    payload.tax,
+                    itemsSubtotal 
                 );
 
                 const transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
-                    port: 465,       // Port for secure SSL
-                    secure: true,    // Use SSL natively
+                    port: 465,
+                    secure: true,
                     auth: {
-                        user: process.env.EMAIL_USER, 
-                        pass: process.env.EMAIL_PASS  
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
                     }
                 });
 
-
-            const info = await transporter.sendMail({
-                from: `"KanSan Crakers Orders" <${process.env.EMAIL_USER}>`,
-                to: targetEmail.trim(), 
-                
-                // Add CC (Visible to all recipients)
-               // cc: "manager@kansancrakers.com, billing@kansancrakers.com", 
-                
-                // Add BCC (Hidden from other recipients)
-                //bcc: ["archive@kansancrakers.com", process.env.ADMIN_BACKUP_EMAIL], 
-                
-                subject: `Order Confirmation - ${payload.orderNumber}`,
-                html: htmlContent 
-            });
-
+                const info = await transporter.sendMail({
+                    from: `"KanSan Crakers Orders" <${process.env.EMAIL_USER}>`,
+                    to: targetEmail.trim(),
+                    subject: `Order Confirmation - ${payload.orderNumber}`,
+                    html: htmlContent
+                });
 
                 return { success: true, messageId: info.messageId };
             });
         }
-        
+
         if (processedOrders.length === 0) {
             return { success: false, message: "No valid orders found in this batch slice" };
         }
-    
+
         await step.run("save-orders-to-db", async () => {
-            await Order.insertMany(processedOrders);  
+            await Order.insertMany(processedOrders);
         });
 
         return { success: true, processed: processedOrders.length };
@@ -129,12 +121,11 @@ export const createUserOrder = inngest.createFunction(
 );
 
 // --- PROFESSIONAL CLEAN HTML INVOICE LAYOUT TEMPLATE ---
-function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList,shippingCharges,discountAmount,couponCode,tax) {
-    const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', {
-        year: 'numeric', month: 'long', day: 'numeric'
-    });
-        
-        const itemRowsHTML = itemsList.map(item => `
+// 3. UPDATED PARAMETERS: Injected itemsSubtotal parameter to handle dynamic display
+function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDate, itemsList, shippingCharges, discountAmount, couponCode, tax, itemsSubtotal) {
+    const formattedDate = new Date(orderDate).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    const itemRowsHTML = itemsList.map(item => `
         <tr style="border-bottom: 1px solid #edf2f7;">
             <td style="padding: 16px 12px; text-align: left; vertical-align: top;">
                 <p style="margin: 0; font-size: 14px; font-weight: bold; color: #1a202c;">${item.name}</p>
@@ -146,10 +137,9 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
             <td style="padding: 16px 12px; font-size: 14px; color: #1a202c; text-align: right; vertical-align: top; font-weight: bold; width: 90px;">
                 ₹${(item.price * item.quantity).toLocaleString('en-IN')}
             </td>
-            
         </tr>
     `).join('');
-    
+
     return `
     <!DOCTYPE html>
     <html>
@@ -159,8 +149,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
         <title>Your Order Invoice</title>
     </head>
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7fafc; padding: 24px; margin: 0;">
-        <div style="max-w: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-            
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
             <!-- Banner Section -->
             <div style="background-color: #ea580c; padding: 32px 24px; text-align: center;">
                 <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Order Confirmed!</h1>
@@ -169,14 +158,14 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
 
             <!-- Receipt Meta Details -->
             <div style="padding: 24px;">
-                <table style="width: 80%; margin-bottom: 24px;">
+                <table style="width: 100%; margin-bottom: 24px;">
                     <tr>
                         <td style="padding: 0; text-align: left;">
-                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking-width: 1px;">Order Number</span>
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px;">Order Number</span>
                             <p style="font-family: monospace; font-size: 15px; font-weight: bold; color: #1a202c; margin: 4px 0 0 0;">${orderNumber}</p>
                         </td>
                         <td style="padding: 0; text-align: right; vertical-align: top;">
-                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; tracking-width: 1px;">Date Placed</span>
+                            <span style="font-size: 10px; font-weight: bold; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px;">Date Placed</span>
                             <p style="font-size: 14px; font-weight: 600; color: #2d3748; margin: 4px 0 0 0;">${formattedDate}</p>
                         </td>
                     </tr>
@@ -184,7 +173,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
 
                 <!-- Items Grid Breakdown Table Section -->
                 <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">Items Summary</h3>
-                <table style="width: 80%; border-collapse: collapse; margin-bottom: 24px;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
                     <thead>
                         <tr style="background-color: #f7fafc; border-bottom: 2px solid #e2e8f0;">
                             <th style="padding: 10px 12px; font-size: 11px; font-weight: bold; color: #4a5568; text-align: left; text-transform: uppercase;">Product Details</th>
@@ -197,45 +186,97 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                     </tbody>
                 </table>
 
-                <!-- Grand Summary pricing tier component -->
+                 <!-- Grand Summary pricing tier component -->
                 <div style="background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-                    <table style="width: 80%;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <!-- Render the Items Subtotal row clearly at the top of pricing stacks -->
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Shpping Charges :</td>
-                            <td style="font-weight: 600; color: #262e3d; font-size: 18px; text-align: right;">₹${shippingCharges.toLocaleString('en-IN')}</td>
-                        </tr>
-                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Discount Amount(${couponCode})</td>
-                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">-₹ ${discountAmount.toLocaleString('en-IN')}</td>
+                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Items Subtotal:</td>
+                            <td style="font-weight: 700; color: #1a202c; font-size: 15px; text-align: right; padding: 4px 0;">₹${(itemsSubtotal || 0).toLocaleString('en-IN')}</td>
                         </tr>
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Tax Amount(3%)</td>
-                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">₹ ${tax}</td>
+                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Shipping Charges:</td>
+                            <td style="font-weight: 600; color: #262e3d; font-size: 15px; text-align: right; padding: 4px 0;">₹${shippingCharges.toLocaleString('en-IN')}</td>
                         </tr>
+                        
+                        <!-- FIXED CONDITION: Omit Discount row completely if it is zero or empty -->
+                        ${discountAmount && Number(discountAmount) > 0 ? `
                         <tr>
-                            <td style="font-size: 14px; color: #4a5568; font-weight: 500;">Grand Total (Incl. 3% Tax):</td>
-                            <td style="font-weight: 600; color: #242d3d; font-size: 18px; text-align: right;">₹${totalAmount.toLocaleString('en-IN')}</td>
+                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Discount Amount ${couponCode ? `(${couponCode})` : ''}:</td>
+                            <td style="font-weight: 600; color: #16a34a; font-size: 15px; text-align: right; padding: 4px 0;">-₹${Number(discountAmount).toLocaleString('en-IN')}</td>
+                        </tr>
+                        ` : ''}
+
+                        <!-- FIXED CONDITION: Omit Tax row completely if it is zero, empty, or un-evaluated -->
+                        ${tax && Number(tax) > 0 ? `
+                        <tr>
+                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Tax Amount (3%):</td>
+                            <td style="font-weight: 600; color: #242d3d; font-size: 15px; text-align: right; padding: 4px 0;">₹${Number(tax).toLocaleString('en-IN')}</td>
+                        </tr>
+                        ` : ''}
+
+                        <tr style="border-top: 1px solid #e2e8f0;">
+                            <td style="font-size: 14px; color: #1a202c; font-weight: bold; padding-top: 10px;">Grand Total:</td>
+                            <td style="font-weight: 800; color: #ea580c; font-size: 20px; text-align: right; padding-top: 10px;">₹${totalAmount.toLocaleString('en-IN')}</td>
                         </tr>
                     </table>
                 </div>
 
-                
                 <!-- Multiline Delivery Destination Box -->
                 <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Delivery Destination</h3>
-                <div style="background-color: #fffaf8; "width: 80%; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6;">
+                <div style="background-color: #fffaf8; border: 1px solid #ffedd5; border-radius: 12px; padding: 16px; font-size: 13px; color: #4a5568; white-space: pre-line; line-height: 1.6; width: 100%; box-sizing: border-box; margin-bottom: 24px;">
                     ${deliveryAddress}
                 </div>
-            </div>
-            <div style="background-color: #f7fafc; "width: 80%; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0;">
-                <p style="margin: 0;">This email is an automated receipt. Do not reply directly to this thread.</p>
-                <p style="margin: 4px 0 0 0;">&copy; 2026 QuickCart. All rights reserved.</p>
-            </div>
 
+                <!-- NEW ADDITION: OFFICIAL BANKING & UPI PAYMENT CREDENTIALS RECEPTACLE BOX -->
+                <h3 style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Official Payment Instructions</h3>
+                <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px; font-size: 13px; color: #334155; width: 100%; box-sizing: border-box; margin-bottom: 8px;">
+                    <div style="font-weight: bold; color: #0f172a; margin-bottom: 12px; font-size: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+                        🏦 Direct Bank Wire Details
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;">
+                        <tr>
+                            <td style="padding: 4px 0; color: #64748b; font-weight: 500;">Account Holder:</td>
+                            <td style="padding: 4px 0; color: #0f172a; font-weight: bold; text-align: right;">QUICKCART RETAILS PVT LTD</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; color: #64748b; font-weight: 500;">Account Number:</td>
+                            <td style="padding: 4px 0; color: #0f172a; font-family: monospace; font-weight: bold; text-align: right; letter-spacing: 0.5px;">924020054781632</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px 0; color: #64748b; font-weight: 500;">Bank IFSC Code:</td>
+                            <td style="padding: 4px 0; color: #ea580c; font-family: monospace; font-weight: bold; text-align: right; uppercase; text-transform: uppercase;">UTIB0000290</td>
+                        </tr>
+                    </table>
+
+                    <div style="font-weight: bold; color: #0f172a; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-top: 4px;">
+                        📲 Smart Phone App Transfer (UPI / GPay / BHIM)
+                    </div>
+                    <p style="margin: 0; font-size: 12px; color: #475569; line-height: 1.5;">
+                        To pay via smartphone apps, initiate a transfer to our verified corporate merchant identifier below and input your exact bill of <strong style="color: #ea580c; font-size: 14px;">₹${totalAmount.toLocaleString('en-IN')}</strong>:
+                    </p>
+                    <div style="background-color: #ffffff; border: 1px dashed #ea580c; padding: 10px; text-align: center; border-radius: 8px; font-family: monospace; font-size: 15px; font-weight: bold; color: #ea580c; margin: 12px 0; letter-spacing: 0.5px;">
+                        KanSanCrackers@axisbank
+                    </div>
+                    
+                    <div style="background-color: #fff7ed; border-left: 3px solid #f97316; padding: 10px; font-size: 11px; color: #9a3412; border-radius: 4px; line-height: 1.4; margin-top: 12px; font-weight: 500;">
+                        💡<strong>Fulfillment Notice:</strong> Once your transfer processes successfully, please capture a screenshot of the receipt panel and upload it through your customer account order dashboard to expedite verification.
+                    </div>
+                </div>
+
+            </div>
+            
+            <div style="background-color: #f7fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px; text-align: center; font-size: 11px; color: #a0aec0; width: 100%; box-sizing: border-box;">
+                <p style="margin: 0;">This email is an automated receipt. Do not reply directly to this thread.</p>
+                <p style="margin: 4px 0 0 0;">&copy; 2026 KanSan Crackers. All rights reserved.</p>
+            </div>
         </div>
     </body>
     </html>
     `;
 }
+
+
 
 
 //Inngest function to save user data to a database

@@ -37,7 +37,8 @@ export async function POST(request) {
     const files = formData.getAll('images').filter(Boolean);
     const offerPrice = formData.get('offerPrice');
     const stock = formData.get('stock');
-   
+    const brand = formData.get('brand') || "Generic";
+    const size = formData.get('size') || "Free Size";
 
     if (!files.length) {
       return NextResponse.json({ success: false, message: 'Please upload at least one image' }, { status: 400 });
@@ -81,6 +82,8 @@ export async function POST(request) {
       image,
       category,
       stock,
+      brand: brand.trim(),
+      size: size.trim(),
       date: Date.now(),
     });
 

@@ -30,18 +30,20 @@ const OrderSummary = () => {
     activeCouponLabel,
     appliedDiscount,
     applyCouponGlobal,
-    removeCouponGlobal
+    removeCouponGlobal,
+    STORE_POLICIES 
   
   } = useAppContext();
+
 
   // Address states
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false); // Initializes unchecked by default
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
-  
-  // Guest input states
+    // Guest input states
   const [guestEmail, setGuestEmail] = useState("");
   const [guestTextAddress, setGuestTextAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -118,33 +120,25 @@ const OrderSummary = () => {
     .join('\n');
 };
 
-  // FIX: Core validation tracking routine engine 
-  const validateOrderRules = () => {
+   const validateOrderRules = () => {
     const errors = [];
 
     // Rule 1: Validate Grand Total minimum limit
-    if (grandTotal < 2500) {
-      errors.push(`Grand total must be at least ${currency || '₹'}2,500 to proceed.`);
+    if (grandTotal < STORE_POLICIES.MINIMUM_ORDER_AMOUNT) {
+      errors.push(`Grand total must be at least ${currency || '₹'} ${STORE_POLICIES.MINIMUM_ORDER_AMOUNT.toLocaleString('en-IN')} to proceed.`);
     }
 
     // Determine current state based on checkout type (User vs Guest)
-    let currentState = "";
-    if (user) {
-      currentState = selectedAddress ? selectedAddress.state : "";
-    } else {
-      currentState = guestState;
-    }
-
+    let currentState = user ? (selectedAddress ? selectedAddress.state : "") : guestState;
     const normalizedState = currentState ? currentState.trim().toLowerCase() : "";
-    const allowedStates = ["tn", "tamilnadu", "tamil nadu"];
 
     // Rule 2: Validate delivery address state restriction
     if (user && !selectedAddress) {
       errors.push("Please select a saved shipping address.");
     } else if (!user && !guestState) {
       errors.push("Please enter your shipping state.");
-    } else if (!allowedStates.includes(normalizedState)) {
-      errors.push("Delivery is currently restricted to Tamil Nadu (TN) only.");
+    } else if (!STORE_POLICIES.ALLOWED_STATES.includes(normalizedState)) {
+      errors.push(`Delivery is currently restricted to ${STORE_POLICIES.ALLOWED_STATES_DISPLAY} only.`);
     }
 
     setValidationErrors(errors);
@@ -157,6 +151,10 @@ const OrderSummary = () => {
 
 
   const createOrder = async () => {
+
+     if (validationErrors && validationErrors.length > 0) {
+        return toast.error(validationErrors[0]);
+    }
 
     if (!hasAcceptedTerms) {
     return toast.error("Please accept the Terms and Conditions to proceed.");
@@ -204,7 +202,8 @@ const OrderSummary = () => {
         return toast.error("Your cart is empty.");
       }
 
-   /* for (const item of cartItemsArray) {
+    /*
+      for (const item of cartItemsArray) {
       const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
       if (matchedProduct && item.quantity > matchedProduct.stock) {
         return toast.error(`Stock mismatch! "${matchedProduct.name}" only has ${matchedProduct.stock} units remaining. Please reduce your cart quantity.`);
@@ -218,9 +217,7 @@ const OrderSummary = () => {
         const token = await getToken();
         requestHeaders = { Authorization: `Bearer ${token}` };
       }
-      console.log("clean address",cleanAddressValue)
-      console.log("final address",finalAddressValue)
-
+      
       const payload = {
         address: finalAddressValue,
         items: cartItemsArray,
@@ -526,50 +523,50 @@ const OrderSummary = () => {
            </div>
       </div>
       
-                {/* NEW: Mandatory Terms and Conditions Agreement Checkbox */}
+        {/* Mandatory Terms and Conditions Agreement Checkbox with Popup Trigger */}
         <div className="pt-4 border-t border-gray-100/80">
           <label className="flex items-start gap-2.5 cursor-pointer text-xs font-medium text-gray-600 select-none group">
             <input 
               type="checkbox"
-              checked={hasAcceptedTerms || false} // Bind this to a local boolean state variable
+              checked={hasAcceptedTerms || false}
               onChange={(e) => setHasAcceptedTerms(e.target.checked)}
               className="w-4 h-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500 accent-orange-600 cursor-pointer mt-0.5"
             />
             <div className="leading-normal">
-              <span>I have read and agree to the website </span>
-              <a 
-                href="/terms-conditions" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-orange-600 font-bold hover:text-orange-700 underline cursor-pointer"
+              <span>I have read and agree to the </span>
+              {/* FIXED: Swapped traditional link anchoring to trigger our beautiful modal view instead */}
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsTermsModalOpen(true);
+                }}
+                className="text-orange-600 font-semibold hover:text-orange-700 underline cursor-pointer inline bg-transparent p-0 border-0 focus:outline-none"
               >
                 Terms and Conditions
-              </a>
-              <span> and </span>
-              <a 
-                href="/privacy-policy" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-orange-600 font-bold hover:text-orange-700 underline cursor-pointer"
-              >
-                Privacy Policy
-              </a>
+              </button>
               <span className="text-red-500 font-bold"> *</span>
             </div>
           </label>
         </div>
+   
 
         {/* Place Order Checkout Action Button */}
         <div className="pt-2">
           <button
             type="button"
-            // FIXED: Locked state disables the click route if submitting OR if terms are unchecked
-            disabled={isSubmitting || !hasAcceptedTerms}
+            // FIXED: Locked state disables clicks if submitting, terms are unchecked, cart is empty, or address is unselected
+            disabled={
+              isSubmitting || 
+              !hasAcceptedTerms || 
+              (validationErrors && validationErrors.length > 0) ||
+              Object.keys(cartItems || {}).length === 0 
+            }
             onClick={createOrder}
-            className={`w-full py-3.5 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold text-sm rounded-xl shadow-xs transition duration-150 text-center flex items-center justify-center gap-2 ${
-              isSubmitting || !hasAcceptedTerms 
-                ? "opacity-50 bg-gray-400 text-gray-200 cursor-not-allowed shadow-none" 
-                : "cursor-pointer"
+             className={`w-full py-3.5 text-white font-bold text-sm rounded-xl shadow-xs transition duration-150 text-center flex items-center justify-center gap-2 ${
+              isSubmitting || !hasAcceptedTerms || (validationErrors && validationErrors.length > 0) || Object.keys(cartItems || {}).length === 0
+                ? "bg-gray-600 text-gray-200 cursor-not-allowed opacity-40 blur-[1px] shadow-none pointer-events-none" 
+                : "bg-orange-600 hover:bg-orange-700 active:bg-orange-800 cursor-pointer opacity-100 blur-none"
             }`}
           >
             {isSubmitting ? (
@@ -585,8 +582,97 @@ const OrderSummary = () => {
             )}
           </button>
         </div>
+      
+                {/* Interactive Terms & Conditions Lightbox Modal Overlay */}
+            {isTermsModalOpen && (
+                <div 
+                    onClick={() => setIsTermsModalOpen(false)} // Click outside onto dark blur background to exit instantly
+                    className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 md:p-10 animate-fade-in"
+                >
+                    {/* The Inner Modal Content Board Box */}
+                    <div 
+                        onClick={(e) => e.stopPropagation()} // Stop propagation prevents closing panel if clicking content inside
+                        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto flex flex-col border border-gray-100 relative animate-scale-up text-xs font-semibold text-gray-600"
+                    >
+                        {/* Modal Header Controls flex bar row */}
+                        <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between sticky top-0 z-10">
+                            <div>
+                                <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span>📜</span> Terms & Conditions 
+                                </h3>
+                            </div>
+                            <button 
+                                type="button" 
+                                onClick={() => setIsTermsModalOpen(false)}
+                                className="w-8 h-8 rounded-full bg-gray-200/60 text-gray-500 font-bold flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer select-none text-lg"
+                                title="Close Preview Window"
+                            >
+                                &times;
+                            </button>
+                        </div>
 
+                        {/* Modal Body: Content contains all your exact legal rules matrices */}
+                        <div className="p-6 space-y-6 overflow-y-auto flex-grow bg-white text-left leading-relaxed">
+                            
+                            <section className="space-y-1.5">
+                                <h4 className="text-xs font-black uppercase text-gray-900 tracking-wider">1. Order Placement & Integrity</h4>
+                                <p className="text-gray-500 font-normal">
+                                    All cart configurations submitted reflect true purchasing intent. Cart quantities are validated reactively against true backend database stock levels to prevent inventory overselling [developer]. The server reserves the right to reject orders where technical data tampering or front-end modification attempts are detected [developer].
+                                </p>
+                            </section>
+
+                            <section className="space-y-1.5">
+                                <h4 className="text-xs font-black uppercase text-gray-900 tracking-wider">2. Payment Processing & Billing</h4>
+                                <p className="text-gray-500 font-normal">
+                                    Your grand total represents the combined sum of item subtotals (using live database `offerPrice` settings), dynamic shipping logistics, and multi-component tax allocations (such as State GST and General Tax), minus valid coupon deductions [developer]. Coupon codes must be applied successfully inside the designated promo cell box before submission [developer].
+                                </p>
+                            </section>
+
+                            <section className="space-y-1.5">
+                                <h4 className="text-xs font-black uppercase text-gray-900 tracking-wider">3. Shipping & Logistics Rules</h4>
+                                <p className="text-gray-500 font-normal">
+                                    Standard shipping triggers a automatic flat rate charge of ₹150 for orders below spending thresholds. Carts reaching or exceeding an aggregate subtotal of ${STORE_POLICIES.MINIMUM_ORDER_AMOUNT}, or checkouts registering an active 'FREESHIP' coupon, qualify for 100% Free Shipping. Shipping addresses are captured as unchangeable text block snapshots at placement. Product package physical shipment is strictly limited to addresses located inside <span className="text-orange-600 font-bold">${STORE_POLICIES.ALLOWED_STATES_DISPLAY}</span> only.
+                                </p>
+                            </section>
+
+                            <section className="space-y-1.5">
+                                <h4 className="text-xs font-black uppercase text-gray-900 tracking-wider">4. Cancellations, Returns & Refund Policies</h4>
+                                <p className="text-gray-500 font-normal">
+                                    Users may execute cancellation requests only while the tracking sequence displays "Order Placed" or "Payment Pending". Once a seller updates the status to "Shipped" or "Delivered", the logistics package enters locked fulfillment lines and cannot be altered or cancelled [developer]. All approved refunds are credited back via equivalent transaction parameters.
+                                </p>
+                            </section>
+
+                        </div>
+
+                        {/* Modal Action Footer flex row bar */}
+                        <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
+                            <span className="text-[10px] text-gray-400 font-medium hidden sm:inline mr-auto">
+                                💡 Click anywhere outside this white card container window frame to slide back down
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setIsTermsModalOpen(false)}
+                                className="px-4 py-2 border border-gray-300 hover:bg-gray-100 text-gray-500 font-normal text-xs rounded-xl transition-all cursor-pointer"
+                            >
+                                Close
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setHasAcceptedTerms(true);
+                                    setIsTermsModalOpen(false);
+                                }}
+                                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-normal text-xs rounded-xl shadow-xs transition-all cursor-pointer active:scale-95"
+                            >
+                                Accept Terms
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            )}
     </div>
+    
   );
 };
 

@@ -11,7 +11,10 @@ const productSchema = new mangooese.Schema({
     date: { type: Number, required: true },
     isActive: { type: Boolean, required: true, default: true },
     isPopular: { type: Boolean, required: true, default: false },
-    stock: { type: Number, required: true, min: 0, default: 0 } 
+    stock: { type: Number, required: true, min: 0, default: 0 } ,
+    brand: { type: String, required: false, default: "Generic" },
+    size: { type: String, required: false, default: "Free Size" }
+
 })
 
 const Product = mangooese.models.Product || mangooese.model('Product', productSchema)
