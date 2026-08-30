@@ -1,4 +1,4 @@
-import logo from  "./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
+import logo from  "./kansan_crackers_logo_multicolor_crackers_sz25.png" //"./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
 import brand_name from  "./Aurora_M.png" 
 import search_icon from "./search_icon.svg";
 import upi_img from "./ChatGPT.png"
@@ -36,12 +36,12 @@ import sony_airbuds_image from "./sony_airbuds_image.png";
 import asus_laptop_image from "./asus_laptop_image.png";
 import projector_image from "./projector_image.png";
 import playstation_image from "./playstation_image.png";
-import girl_with_headphone_image from "./girl_with_headphone_image.png";
-import girl_with_earphone_image from "./girl_with_earphone_image.png";
+import family_in_clebration_night from "./family_in_clebration_night.png";
+import SessionalNightLights from "./SessionalNightLights.png";
 import md_controller_image from "./md_controller_image.png";
 import sm_controller_image from "./sm_controller_image.png";
 import jbl_soundbox_image from "./jbl_soundbox_image.png";
-import boy_with_laptop_image from "./boy_with_laptop_image.png";
+import FamilyGiftboxes from "./FamilyGiftboxes_50p.png";
 import checkmark from "./checkmark.png";
 import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
 import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
@@ -87,12 +87,12 @@ export const assets = {
   asus_laptop_image,
   projector_image,
   playstation_image,
-  girl_with_headphone_image,
-  girl_with_earphone_image,
+  family_in_clebration_night,
   md_controller_image,
   sm_controller_image,
   jbl_soundbox_image,
-  boy_with_laptop_image,
+  FamilyGiftboxes,
+  SessionalNightLights,
   product_details_page_apple_earphone_image1,
   product_details_page_apple_earphone_image2,
   product_details_page_apple_earphone_image3,
@@ -154,6 +154,7 @@ export const PRODUCT_CATEGORIES = [
   "Aerial & Sky Shots"
 ];
 
+/*
  // Predefined Promotional Coupons Configuration Map
    export const PREDEFINED_COUPONS = {
         "WELCOME10": { type: "percentage", value: 10 }, // 10% off total item cost
@@ -164,5 +165,5 @@ export const PRODUCT_CATEGORIES = [
    export const PREDEFINED_TAX = {
         "TAX1": { type: "Tax-GST", value: 5 }, // STATE GST
         "TAX2": { type: "Tax-GEN", value: 2 }  // FEDERAL GST
-  
       };
+*/

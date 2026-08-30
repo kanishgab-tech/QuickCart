@@ -60,7 +60,7 @@ export async function POST(request) {
         await transporter.sendMail({
             from: `"QuickCart Updates" <${process.env.SMTP_USER}>`, 
             to: customerEmail.trim().toLowerCase(),
-            subject: `🔔 Latest Transaction Summary & Status: ${currentOrder.orderNumber}`,
+            subject: `Latest Transaction Summary & Status: ${currentOrder.orderNumber}`,
             html: `
                 <div style="font-family: sans-serif; padding: 24px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 12px; margin: 0 auto;">
                     <div style="text-align: center; margin-bottom: 20px;">

@@ -210,7 +210,7 @@ function generateInvoiceHTML(orderNumber, totalAmount, deliveryAddress, orderDat
                         <!-- FIXED CONDITION: Omit Tax row completely if it is zero, empty, or un-evaluated -->
                         ${tax && Number(tax) > 0 ? `
                         <tr>
-                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Tax Amount (3%):</td>
+                            <td style="font-size: 13px; color: #4a5568; font-weight: 500; padding: 4px 0;">Tax Amount:</td>
                             <td style="font-weight: 600; color: #242d3d; font-size: 15px; text-align: right; padding: 4px 0;">₹${Number(tax).toLocaleString('en-IN')}</td>
                         </tr>
                         ` : ''}

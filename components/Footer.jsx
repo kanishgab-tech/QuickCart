@@ -7,10 +7,10 @@ const Footer = () => {
     <footer>
       <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-48 gap-10 py-14 border-b border-gray-500/30 text-gray-500">
         <div className="w-4/5.5">
-          <Image className="w-28 md:w-28" src={assets.logo} alt="logo" />
+          <Image className="w-36 md:w-28" src={assets.logo} alt="logo" />
           <p className="mt-6 text-sm">
             We are <b>KanSan Crackers</b> wholesale dealer of fireworks and crackers owning a shop in Sivakasi, Tamilnadu.
-            we sell crackers for your special events and celebrations throughout the year.We are into this business from past few years and has been successfully running our company with selling fireworks in Sivakasi and crackers in Sivakasi. Since the day of our initiation, we have anticipated largely in making millions of lives happier and lightened up.
+            we sell crackers for your special events and celebrations throughout the year.We are into this business from past few years and has been successfully running our company with selling fireworks in Sivakasi. Since the day of our initiation, we have anticipated largely in making millions of lives happier and lightened up.
           </p>
         </div>
 

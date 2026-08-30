@@ -52,20 +52,21 @@ const Navbar = () => {
             onClick={() => router.push('/')}
             src={assets.logo}
             alt="logo"
-            width={320}
-            height={80}
+            width={220}
+            height={60}
             priority
           />
         </div>
       </div>
 
+ 
       {/* --- DESKTOP VIEWPORT HEADER LINKS (Hidden on Mobile) --- */}
-      <div className="flex items-center gap-4 lg:gap-10 max-md:hidden font-semibold text-sm">
-        <Link href="/" className="hover:text-gray-900 transition">Home</Link>
-        <Link href="/all-products" className="hover:text-gray-900 transition">Shop</Link>
-        <Link href="/quick-shop" className="hover:text-gray-900 transition">Quick Shop</Link>
-        <Link href="/" className="hover:text-gray-900 transition">About Us</Link>
-        <Link href="/contact-enquiry" className="hover:text-gray-900 transition">Contact</Link>
+      <div className="flex items-center gap-6 lg:gap-10 max-md:hidden font-semibold text-m">
+        <Link href="/" className="hover:text-gray-300 transition">Home</Link>
+        <Link href="/all-products" className="hover:text-blue-600 transition-colors">Shop</Link>
+        <Link href="/quick-shop" className="hover:text-gray-300 transition">Quick Shop</Link>
+        <Link href="/" className="hover:text-gray-600 transition">About Us</Link>
+        <Link href="/contact-enquiry" className="hover:text-gray-300 transition">Contact</Link>
         {isSeller && (
           <button 
             onClick={() => router.push('/seller')} 

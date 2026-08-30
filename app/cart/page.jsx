@@ -106,8 +106,8 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart,cu
                     </button>
                 </div>
             </td>
-            <td className="py-4 md:px-4 px-1 text-gray-600 font-mono font-semibold">
-                {currency}{(product.offerPrice * initialQty).toFixed(2)}
+            <td className="py-4 md:px-4 px-1 text-gray-600 font-semibold">
+                {currency}{(product.offerPrice * initialQty)}
             </td>
         </tr>
     );
@@ -115,7 +115,7 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart,cu
 
 // --- MAIN MASTER VIEW ---
 const Cart = () => {
-    const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount, currency,STORE_POLICIES} = useAppContext();
+    const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount, currency,subtotal} = useAppContext();
 
     return (
         <>
@@ -129,6 +129,7 @@ const Cart = () => {
                             Your <span className="font-medium text-orange-600">Cart</span>
                         </p>
                         <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+                        <p className="text-lg md:text-xl text-gray-500/80"> Total Amount {currency}{subtotal}</p>
                     </div>
 
                  
@@ -136,10 +137,10 @@ const Cart = () => {
                         <table className="min-w-full table-auto">
                             <thead className="text-left">
                                 <tr>
-                                    <th className="text-nowrap pb-6 md:px-4 px-1 text-gray-600 font-medium">Product Details</th>
-                                    <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">Price</th>
-                                    <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">Quantity</th>
-                                    <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">Subtotal</th>
+                                    <th className="text-nowrap pb-6 md:px-4 px-1 text-orange-600 font-medium">Product Details</th>
+                                    <th className="pb-6 md:px-4 px-1 text-orange-600 font-medium">Price</th>
+                                    <th className="pb-6 md:px-4 px-1 text-orange-600 font-medium">Quantity</th>
+                                    <th className="pb-6 md:px-4 px-1 text-orange-600 font-medium">Subtotal</th>
                                 </tr>
                             </thead>
                             <tbody>

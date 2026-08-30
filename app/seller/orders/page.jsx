@@ -9,6 +9,7 @@ import axios from "axios";
 import * as XLSX from 'xlsx';
 import autoTable from 'jspdf-autotable';
 import { jsPDF } from 'jspdf';
+import toast from "react-hot-toast";
 
 const Orders = () => {
     const { currency, getToken, user, showToast,products} = useAppContext();
@@ -49,9 +50,9 @@ const Orders = () => {
             });
 
             if (data.success) {
-                showToast(data.message || `Notification for ${orderNumber} resent successfully!`, "success");
+                toast.success(data.message || `Notification for ${orderNumber} resent successfully!`);
             } else {
-                showToast(data.message || "Failed to dispatch email details.", "error");
+                 toast.error(data.message || "Failed to dispatch email details.");
             }
         } catch (error) {
             showToast(error.response?.data?.message || "Failed to complete communication request.", "error");
@@ -210,51 +211,76 @@ useEffect(() => {
     };
 
     // Excel Export Logic
-    const handleExportExcel = () => {
-        if (filteredOrders.length === 0) {
-            showToast("No data rows available to export.", "error");
-            return;
-        }
-        const excelData = filteredOrders.map((order, idx) => ({
-            "S.No": idx + 1,
-            "Order Number": order.orderNumber,
-            "Order Date": new Date(order.date).toLocaleDateString(),
-            "Products Summary": order.items.map(i => `${typeof i.product === 'object' ? i.product.name : 'Product'} (x${i.quantity})`).join(", "),
-            "Shipping Cost": order.shippingCharges || 0,
-            "Coupon Code": order.couponCode || "NONE",
-            "Discount": order.discountAmount || 0,
-            "Grand Total": order.amount,
-            "Status": order.status,
-            "Shipping Address": order.address ? order.address.replace(/\n/g, ' ') : ""
-        }));
-        const worksheet = XLSX.utils.json_to_sheet(excelData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Orders Report");
-        XLSX.writeFile(workbook, `${activeMenuTab}_orders_report.xlsx`);
-    };
+    // 1. REFACTORED EXCEL EXPORT LOGIC
+const handleExportExcel = () => {
+    if (filteredOrders.length === 0) {
+        showToast("No data rows available to export.", "error");
+        return;
+    }
 
-    // PDF Export Logic
-    const handleExportPDF = () => {
-        if (filteredOrders.length === 0) {
-            showToast("No data rows available to export.", "error");
-            return;
-        }
-        const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-        doc.setFont("helvetica", "bold").setFontSize(14);
-        doc.text(`${activeMenuTab.toUpperCase()} ORDERS DETAILED REPORT`, 14, 15);
-        
-        const tableHeaders = [["#", "Order ID", "Date", "Items/Qty", "Shipping", "Coupon", "Discount", "Total", "Status"]];
-        const tableRows = filteredOrders.map((order, idx) => [
-            idx + 1,
-            order.orderNumber,
-            new Date(order.date).toLocaleDateString(),
-            order.items.map(i => `${typeof i.product === 'object' ? i.product.name : 'Product'} (x${i.quantity})`).join("\n"),
-            `${currency}${order.shippingCharges || 0}`,
-            order.couponCode || "NONE",
-            `${currency}${order.discountAmount || 0}`,
-            `${currency}${order.amount.toLocaleString('en-IN')}`,
-            order.status
-        ]);
+    const excelData = filteredOrders.map((order, idx) => ({
+        "S.No": idx + 1,
+        "Order Number": order.orderNumber,
+        "Order Date": new Date(order.date).toLocaleDateString(),
+        // FIXED: Multi-scenario naming tracker maps populated fields or scans app context caches
+        "Products Summary": order.items.map(i => {
+            let productName = "Product Item";
+            if (i.product && typeof i.product === 'object') {
+                productName = i.product.name;
+            } else if (typeof i.product === 'string' && products) {
+                const matchedProduct = products.find(p => (p._id === i.product || p.id === i.product));
+                if (matchedProduct) productName = matchedProduct.name;
+            }
+            return `${productName} (${i.quantity})`;
+        }).join(", "),
+        "Shipping Cost": order.shippingCharges || 0,
+        "Coupon Code": order.couponCode || "NONE",
+        "Discount": order.discountAmount || 0,
+        "Grand Total": order.amount,
+        "Status": order.status,
+        "Shipping Address": order.address ? order.address.replace(/\n/g, ' ') : ""
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders Report");
+    XLSX.writeFile(workbook, `${activeMenuTab}_orders_report.xlsx`);
+};
+
+// 2. REFACTORED PDF EXPORT LOGIC
+const handleExportPDF = () => {
+    if (filteredOrders.length === 0) {
+        showToast("No data rows available to export.", "error");
+        return;
+    }
+
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    doc.setFont("helvetica", "bold").setFontSize(14);
+    doc.text(`${activeMenuTab.toUpperCase()} ORDERS DETAILED REPORT`, 14, 15);
+
+    const tableHeaders = [["#", "Order ID", "Date", "Items/Qty", "Shipping", "Coupon", "Discount", "Total", "Status"]];
+    
+    const tableRows = filteredOrders.map((order, idx) => [
+        idx + 1,
+        order.orderNumber,
+        new Date(order.date).toLocaleDateString(),
+        // FIXED: Multi-scenario naming tracker maps populated fields or scans app context caches
+        order.items.map(i => {
+            let productName = "Product Item";
+            if (i.product && typeof i.product === 'object') {
+                productName = i.product.name;
+            } else if (typeof i.product === 'string' && products) {
+                const matchedProduct = products.find(p => (p._id === i.product || p.id === i.product));
+                if (matchedProduct) productName = matchedProduct.name;
+            }
+            return `${productName} (${i.quantity})`;
+        }).join("\n"),
+        `${currency}${order.shippingCharges || 0}`,
+        order.couponCode || "NONE",
+        `${currency}${order.discountAmount || 0}`,
+        `${currency}${order.amount.toLocaleString('en-IN')}`,
+        order.status
+    ]);
 
         autoTable(doc, {
             startY: 22,

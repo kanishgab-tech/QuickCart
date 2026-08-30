@@ -174,19 +174,42 @@ const ContactEnquiry = () => {
                                         <span>Closed</span>
                                     </li>
                                 </ul>
-                            </div>
-                            
-
+                            </div>                
                         </div>
+                        
+                        <div className="w-full space-y-6 mt-8">
+                            <div className="flex flex-col items-start border-b border-gray-200/60 pb-3">
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-orange-600 mb-2">
+                                    Office Location
+                                </h3>
+                                <p className="text-xs text-gray-400 font-medium mt-1">Visit us or route your logistics courier pickups directly using the synchronized map coordinates below.</p>
+                            </div>
+
+                            {/* FIXED: Using Google's explicit public search embed parameters to resolve connection refusal */}
+                                <div className="w-full h-80 md:h-[400px] rounded-2xl border border-gray-200 overflow-hidden shadow-2xs relative bg-gray-50 flex items-center justify-center">
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7870.71924506762!2d77.80582779140298!3d9.477415612411603!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06cfe23ad84191%3A0x2af1408f2f01ec5c!2sThiruthangal%20railway%20gate!5e0!3m2!1sen!2sus!4v1787875203412!5m2!1sen!2sus" 
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen=""
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title="KanSan Crackers"
+                                        className="w-full h-full relative z-10"
+                                    />
+                                    
+                                    {/* Underlay layout skeleton animation fallback block */}
+                                        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-gray-400 animate-pulse bg-gray-50 z-0">
+                                            ⏳ Syncing map coordinates with tracking servers...
+                                        </div>
+                                </div>
+                            </div>
+                        
                         </section>
 
-                        {/* Interactive UI Placeholder Area for Map Engine Integration */}
-                         Office Location Map
-                            
-                            <div className="w-full h-80 rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center relative group"> </div>
-                            <div className="absolute inset-0 bg-gray-200 animate-pulse hidden group-data-[loading=true]:block" /></div>
-                           
-                            {/*Corporate Office Location MapMap viewport interactive module mounted underneath tracking view.);*/}
+                     
+                        </div>              
                     </main>
                     <Footer />
             </div>

@@ -183,9 +183,17 @@ const OrderSummary = () => {
         if (!guestArea.trim()) return toast.error("Address Area details are required.");
         if (!guestCity.trim()) return toast.error("City is required.");
         if (!guestState.trim()) return toast.error("State is required.");
+        if (!/^[a-zA-Z\s]{2,}$/.test(guestState.trim())) {
+            return toast.error("Please enter a valid state.");
+        }
         if (!guestPincode.trim()) return toast.error("Pincode is required.");
+        if (!/^\d{6}$/.test(guestPincode.trim())) {
+          return toast.error("Please enter a valid postal pincode.");
+    }
         if (!guestPhone.trim()) return toast.error("Phone number is required.");
-        
+         if (!/^\d{10}$/.test(guestPhone.trim())) {
+        return toast.error("Please enter a valid 10-digit mobile phone number (numbers only).");
+    }
         finalAddressValue = `${guestFullName}
         ${guestArea.trim()}, ${guestCity.trim()}, ${guestState.trim()} - ${guestPincode.trim()}
         Phone: ${guestPhone.trim()}`;
@@ -490,9 +498,11 @@ const OrderSummary = () => {
           <span>Subtotal:</span>
           <span>{currency}{subtotal.toLocaleString('en-IN')}</span>
         </div>
-         <div className="flex justify-between">
-          <span>Discount Applied</span>
-          <span>{currency}-{appliedDiscount.toLocaleString('en-IN')}</span>
+        <div className="flex justify-between font-medium"> 
+          <span>Discount Applied</span> 
+          <span className={appliedDiscount > 0 ? "text-green-600 font-bold" : "text-gray-900"}>
+            {currency}{appliedDiscount > 0 ? `-${appliedDiscount.toLocaleString('en-IN')}` : '0'}
+          </span> 
         </div>
         <div className="flex items-center justify-between">
                     <span>Shipping Charges:</span>
@@ -505,16 +515,22 @@ const OrderSummary = () => {
                     </span>
          </div>
          
-             {/* Dynamic Multi-Component Tax Allocation Rows */}
-              {/* FIXED: Added defensive fallback short circuit (taxBreakdown || {}) to bypass Null Reference errors safely */}
-              {taxBreakdown && Object.entries(taxBreakdown || {}).map(([taxKey, tax]) => (
-                <div key={taxKey} className="flex items-center justify-between text-xs text-gray-500 font-medium">
-                  <span>{tax?.label} ({tax?.rate}%):</span>
-                  <span className="text-gray-800 font-semibold">
-                    {currency}{tax?.amount?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </span>
+        {/* Dynamic Multi-Component Tax Allocation Rows */}
+        {taxBreakdown && Object.entries(taxBreakdown || {}).map(([taxKey, tax]) => {
+            // FIXED: Skip rendering entirely if the tax amount is zero or negative
+            if (!tax || !tax.amount || tax.amount <= 0) {
+                return null;
+            }
+
+            return (
+                <div key={taxKey} className="flex items-center justify-between text-xs text-gray-500 font-medium animate-fade-in"> 
+                    <span>{tax.label} ({tax.rate}%):</span> 
+                    <span className="text-gray-800 font-semibold"> 
+                        {currency}{tax.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
+                    </span> 
                 </div>
-              ))}
+            );
+        })}
 
 
             <div className="flex justify-between border-t border-gray-100 pt-2.5 text-base font-black text-gray-900">

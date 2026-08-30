@@ -106,9 +106,9 @@ export async function POST(request) {
 
                 // 8. DIRECT SYNCHRONOUS MAIL TRANSMISSION DISPATCH
                 await transporter.sendMail({
-                    from: `"QuickCart Updates" <${process.env.SMTP_USER}>`, 
+                    from: `"KanSan Crackers" <${process.env.SMTP_USER}>`, 
                     to: customerEmail.trim().toLowerCase(),
-                    subject: `⚠️ Order Modified Notification: ${originalOrder.orderNumber}`,
+                    subject: `Order Modified Notification: ${originalOrder.orderNumber}`,
                     html: `
                         <div style="font-family: sans-serif; padding: 24px; color: #333; max-width: 600px; border: 1px solid #eee; border-radius: 12px; margin: 0 auto;">
                             <h2 style="color: #ea580c; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; margin-top: 0;">Your Order Has Been Updated</h2>

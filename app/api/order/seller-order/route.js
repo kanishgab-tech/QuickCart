@@ -33,7 +33,12 @@ export async function GET(request)
             // Only query finished items from the collection matching your schema status keys
             //statusQuery = { status: { $in: ["Delivered", "Cancelled","Completed"] } };
             statusQuery = { status: { $nin: ["Order Placed", "Payment Pending", "Shipped"] } };
-        } else {
+        } 
+        else if (tab === "order-progress") {
+            // all the orders
+            statusQuery = { status: { $nin: ["*"] } };
+        }
+        else {
             // Default: Fetch only unresolved ongoing fulfillment tasks
             statusQuery = { status: { $in: ["Order Placed", "Payment Pending", "Shipped"] } };
         }
