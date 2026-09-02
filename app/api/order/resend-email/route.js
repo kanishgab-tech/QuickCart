@@ -91,13 +91,13 @@ export async function POST(request) {
                     <ul style="list-style: none; padding-left: 0; font-size: 13px; color: #4b5563; margin-top: 8px;">
                         ${currentOrder.items.map(item => `
                             <li style="padding: 8px 0; border-bottom: 1px dashed #f3f4f6; display: flex; justify-content: space-between;">
-                                <span>${item.product?.name || "Product Item"}</span> 
+                                <span>${item.product?.productCode}-${item.product?.name || "Product Item"}</span> 
                                 <span style="color: #ea580c; font-weight: bold; margin-left: auto;">x ${item.quantity}</span>
                             </li>
                         `).join('')}
                     </ul>
 
-                   
+                                  
                     <div style="margin-top: 20px; text-align: right; border-top: 2px solid #f3f4f6; padding-top: 12px; font-size: 12px; color: #4b5563; line-height: 1.6;">
                         <div>Shipping Logistics charges: <strong>₹${currentOrder.shippingCharges || 0}</strong></div>
                         ${currentOrder.discountAmount > 0 ? `<div>Promo Deductions: <span style="color: #16a34a;">&minus;₹${currentOrder.discountAmount}</span></div>` : ''}

@@ -2,6 +2,7 @@ import mangooese from "mongoose";
 
 const productSchema = new mangooese.Schema({
     userId: { type: String, required: true , ref: 'User'},
+    productCode: {type: String, required: true, unique: true, uppercase: true, trim: true },
     name  : { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
@@ -14,8 +15,8 @@ const productSchema = new mangooese.Schema({
     stock: { type: Number, required: true, min: 0, default: 0 } ,
     brand: { type: String, required: false, default: "Generic" },
     size: { type: String, required: false, default: "Free Size" }
-
 })
+
 
 const Product = mangooese.models.Product || mangooese.model('Product', productSchema)
 

@@ -211,8 +211,10 @@ useEffect(() => {
     };
 
     // Excel Export Logic
-    // 1. REFACTORED EXCEL EXPORT LOGIC
 const handleExportExcel = () => {
+
+    
+
     if (filteredOrders.length === 0) {
         showToast("No data rows available to export.", "error");
         return;
@@ -225,13 +227,19 @@ const handleExportExcel = () => {
         // FIXED: Multi-scenario naming tracker maps populated fields or scans app context caches
         "Products Summary": order.items.map(i => {
             let productName = "Product Item";
+            let productCode = ""; 
+            
             if (i.product && typeof i.product === 'object') {
                 productName = i.product.name;
+                productCode = i.product.productCode || "";
             } else if (typeof i.product === 'string' && products) {
                 const matchedProduct = products.find(p => (p._id === i.product || p.id === i.product));
-                if (matchedProduct) productName = matchedProduct.name;
+                if (matchedProduct) {
+                    productName = matchedProduct.name;
+                    productCode = matchedProduct.productCode || "";
+                }
             }
-            return `${productName} (${i.quantity})`;
+            return `${productCode} ${productName} (${i.quantity})`;
         }).join(", "),
         "Shipping Cost": order.shippingCharges || 0,
         "Coupon Code": order.couponCode || "NONE",
@@ -247,7 +255,7 @@ const handleExportExcel = () => {
     XLSX.writeFile(workbook, `${activeMenuTab}_orders_report.xlsx`);
 };
 
-// 2. REFACTORED PDF EXPORT LOGIC
+// 2. REFACTORED PDF EXPORT LOGIC WITH PRODUCT CODE LOGS
 const handleExportPDF = () => {
     if (filteredOrders.length === 0) {
         showToast("No data rows available to export.", "error");
@@ -255,44 +263,79 @@ const handleExportPDF = () => {
     }
 
     const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    
     doc.setFont("helvetica", "bold").setFontSize(14);
     doc.text(`${activeMenuTab.toUpperCase()} ORDERS DETAILED REPORT`, 14, 15);
 
-    const tableHeaders = [["#", "Order ID", "Date", "Items/Qty", "Shipping", "Coupon", "Discount", "Total", "Status"]];
-    
+    const tableHeaders = [["#", "Order ID", "Date", "Items / Product Code / Qty", "Shipping Cost","Shipping Address", "Coupon", "Discount", "Total", "Status"]];
+
     const tableRows = filteredOrders.map((order, idx) => [
         idx + 1,
         order.orderNumber,
         new Date(order.date).toLocaleDateString(),
-        // FIXED: Multi-scenario naming tracker maps populated fields or scans app context caches
+        // FIXED: Multi-scenario naming tracker maps populated fields or scans app context caches to include productCode string
         order.items.map(i => {
             let productName = "Product Item";
+            let productCode = "";
+
+            // Scenario A: Handled via fully populated database object layers
             if (i.product && typeof i.product === 'object') {
-                productName = i.product.name;
-            } else if (typeof i.product === 'string' && products) {
+                productName = i.product.name || "Product Item";
+                productCode = i.product.productCode || "";
+            } 
+            // Scenario B: Handled via raw string ID cross-referencing against global catalog data arrays
+            else if (typeof i.product === 'string' && products) {
                 const matchedProduct = products.find(p => (p._id === i.product || p.id === i.product));
-                if (matchedProduct) productName = matchedProduct.name;
+                if (matchedProduct) {
+                    productName = matchedProduct.name || "Product Item";
+                    productCode = matchedProduct.productCode || "";
+                }
             }
-            return `${productName} (${i.quantity})`;
+
+            // Append code notation array brackets if present to look crisp inside document cells
+            const codeTag = productCode ? ` [${productCode.toUpperCase()}]` : "";
+            return `${productName}${codeTag} (${i.quantity})`;
         }).join("\n"),
         `${currency}${order.shippingCharges || 0}`,
+        order.address,
         order.couponCode || "NONE",
         `${currency}${order.discountAmount || 0}`,
         `${currency}${order.amount.toLocaleString('en-IN')}`,
-        order.status
+        order.status        
     ]);
 
-        autoTable(doc, {
-            startY: 22,
-            head: tableHeaders,
-            body: tableRows,
-            theme: 'grid',
-            headStyles: { fillColor:'#ea580c', textColor:'#000000', fontSize: 8, halign: 'center' },
-            bodyStyles: { fontSize: 8, valign: 'top' },
-            columnStyles: { 0: { cellWidth: 8 }, 1: { cellWidth: 32 }, 2: { cellWidth: 20 }, 3: { cellWidth: 60 }, 4: { cellWidth: 18 }, 5: { cellWidth: 22 }, 6: { cellWidth: 18 }, 7: { cellWidth: 24 }, 8: { cellWidth: 25 } }
-        });
-        doc.save(`${activeMenuTab}_orders_report.pdf`);
-    };
+    autoTable(doc, {
+        startY: 22,
+        head: tableHeaders,
+        body: tableRows,
+        theme: 'grid',
+        // FIXED Style override color parameters to look crisp on paper prints
+        headStyles: { 
+            fillColor: '#ea580c', 
+            textColor: '#ffffff', // Swapped text to pure white for better legibility against your signature orange header bg
+            fontSize: 8, 
+            halign: 'center' 
+        },
+        bodyStyles: { 
+            fontSize: 8, 
+            valign: 'top' 
+        },
+        columnStyles: {
+            0: { cellWidth: 8 },   // Index sequence #
+            1: { cellWidth: 32 },  // Order tracking identifier
+            2: { cellWidth: 20 },  // Generation Timestamp Date
+            3: { cellWidth: 60 },  // Product Name + Product Code + Ordered Count
+            4: { cellWidth: 18 },  // Shipping Logistics Fees
+            5: { cellWidth: 22 },  // Coupon Code Track token
+            6: { cellWidth: 18 },  // Discount Reduction Subtractions
+            7: { cellWidth: 24 },  // Financial Grand Total Amount
+            8: { cellWidth: 25 }   // Fulfillment Tracking Status
+        }
+    });
+
+    doc.save(`${activeMenuTab}_orders_report.pdf`);
+};
+
 
 
     const getStatusColor = (status) => {
@@ -372,7 +415,7 @@ const handleExportPDF = () => {
                     </div>
 
                     {/* Primary Dashboard Listings Viewport */}
-                    <div className="max-w-4xl rounded-xl bg-white border border-gray-200 divide-y divide-gray-100 shadow-sm overflow-hidden">
+                    <div className="max-w-6xl rounded-xl bg-white border border-gray-200 divide-y divide-gray-100 shadow-sm overflow-hidden">
                         {filteredOrders.length > 0 ? (
                             filteredOrders.map((order) => (
                                 <div key={order._id} className="flex flex-col p-5 gap-5 hover:bg-gray-50/30 transition-colors">
@@ -438,26 +481,52 @@ const handleExportPDF = () => {
                                     <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-3 w-full text-sm">
                                         
                                         {/* Block 1: Products Summary - Autogrows to fit long text strings */}
-                                        <div className="flex gap-4 min-w-[240px] max-w-full md:max-w-[30%] shrink-0">
-                                            <Image className="w-14 h-14 object-cover bg-gray-50 p-1 border border-gray-200 rounded self-start shrink-0" src={assets.box_icon} alt="box_icon" />
-                                            <div className="flex flex-col gap-1 min-w-0">
-                                                <p className="font-semibold text-gray-900 leading-snug break-words">
-                                                    {order.items.map((item) => {
-                                                        let pName = "Product Item";
-                                                        if (item.product && typeof item.product === 'object') {
-                                                            pName = item.product.name;
-                                                        } else if (typeof item.product === 'string' && products) {
-                                                            const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product));
-                                                            if (matchedProduct) pName = matchedProduct.name;
-                                                        }
-                                                        return `${pName} x ${item.quantity}`;
-                                                    }).join(", ")}
-                                                </p>
-                                                <span className="text-xs text-gray-400 font-medium mt-1">Unique Lines: {order.items.length}</span>
-                                                {order.isGuest && order.guestEmail && (
-                                                    <span className="text-xs text-gray-500 font-medium truncate mt-0.5">Email: {order.guestEmail}</span>
-                                                )}
-                                            </div>
+                                        <div className="flex gap-4 min-w-[240px] max-w-full md:max-w-[30%] shrink-0"> 
+                                        <Image 
+                                            className="w-14 h-14 object-cover bg-gray-50 p-1 border border-gray-200 rounded self-start shrink-0" 
+                                            src={assets.box_icon} 
+                                            alt="box_icon" 
+                                        /> 
+                                        <div className="flex flex-col gap-1 min-w-0"> 
+                                            <p className="font-semibold text-gray-900 leading-snug break-words"> 
+                                            {order.items.map((item, itemIdx) => { 
+                                                let pName = "Product Item";
+                                                let pCode = ""; // Track product code separately for distinct badge formatting
+
+                                                // Scenario A: Handled via fully populated database object layers
+                                                if (item.product && typeof item.product === 'object') { 
+                                                pName = item.product.name || "Product Item"; 
+                                                pCode = item.product.productCode || "";
+                                                } 
+                                                // Scenario B: Handled via raw string ID cross-referencing against global catalog data arrays
+                                                else if (typeof item.product === 'string' && products) { 
+                                                const matchedProduct = products.find(p => (p._id === item.product || p.id === item.product)); 
+                                                if (matchedProduct) {
+                                                    pName = matchedProduct.name || "Product Item";
+                                                    pCode = matchedProduct.productCode || "";
+                                                }
+                                                } 
+
+                                                return (
+                                                <span key={item._id || itemIdx} className="inline">
+                                                    {itemIdx > 0 && ", "}
+                                                    {pName}{" "}
+                                                    {pCode && (
+                                                    <span className="font-mono text-[10px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-1 rounded uppercase tracking-wide inline-block mx-0.5">
+                                                        {pCode}
+                                                    </span>
+                                                    )}
+                                                    <span className="text-gray-500 font-bold">x {item.quantity}</span>
+                                                </span>
+                                                );
+                                            })} 
+                                            </p> 
+                                            
+                                            <span className="text-xs text-gray-400 font-medium mt-1">Unique Lines: {order.items.length}</span> 
+                                            {order.isGuest && order.guestEmail && ( 
+                                            <span className="text-xs text-gray-500 font-medium truncate mt-0.5">Email: {order.guestEmail}</span> 
+                                            )} 
+                                        </div> 
                                         </div>
 
                                         {/* Block 2: Shipping Destination - Wider allocation prevents word congestion */}

@@ -31,6 +31,7 @@ export async function POST(request) {
 
     const formData = await request.formData();
     const name = formData.get('name');
+    const productCode = formData.get('productCode'); 
     const description = formData.get('description');
     const price = formData.get('price');
     const category = formData.get('category');
@@ -76,6 +77,7 @@ export async function POST(request) {
     const newProduct = await Product.create({
       userId,
       name,
+      productCode: productCode.trim().toUpperCase(),
       description,
       price: Number(price),
       offerPrice: Number(offerPrice),

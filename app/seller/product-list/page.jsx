@@ -249,11 +249,13 @@ const filteredProducts = products.filter((product) => {
           </div>
 
           {/* Table Container Matrix Viewport */}
-          <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-xl bg-white border border-gray-200 shadow-xs">
-            <table className="table-fixed w-full border-collapse">
-              <thead className="text-gray-700 bg-gray-100/70 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-left">
+          <div className="flex flex-col items-center max-w-7xl w-full overflow-x-auto rounded-xl bg-white border border-gray-200 shadow-xs"> 
+            {/* Changed table-auto to table-fixed so widths are respected, or keep table-auto but remove specific column widths */}
+            <table className="table-fixed w-full border-collapse min-w-[800px]"> 
+              <thead className="text-gray-700 bg-gray-100/70 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-left"> 
                 <tr>
                   <th className="w-2/5 px-6 py-4 font-semibold truncate">Product</th>
+                  <th className="py-3 px-6 w-36 text-left">Item Code</th>
                   <th className="px-6 py-4 font-semibold truncate max-sm:hidden">Category</th>
                   <th className="px-6 py-4 font-semibold truncate w-24 text-right">Price</th>
                   <th className="px-6 py-4 font-semibold truncate w-56 text-center">Actions</th>
@@ -291,6 +293,7 @@ const filteredProducts = products.filter((product) => {
                             )}
                           </div>
                         </td>
+                        <td className="px-6 py-4 max-sm:hidden font-medium text-gray-500 capitalize"> {product.productCode || "N/A"}</td>    
                         <td className="px-6 py-4 max-sm:hidden font-medium text-gray-500 capitalize">{product.category}</td>
                         <td className="px-6 py-4 text-right font-semibold text-gray-900">${product.offerPrice}</td>
                         <td className="px-6 py-4">

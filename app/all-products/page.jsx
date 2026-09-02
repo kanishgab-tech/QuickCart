@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Titlebar from "@/components/Titlebar";
 import { useAppContext } from "@/context/AppContext";
 import { PRODUCT_CATEGORIES } from "@/assets/assets";
+import FloatingCartButton from "@/components/FloatingCartButton";
 
 // 1. ISOLATE FILTER LIFECYCLE LOGIC INTO A NEW CHILD INNER CONTAINER WORKSPACE
 const AllProductsContent = () => {
@@ -71,9 +72,12 @@ const AllProductsContent = () => {
                         {filteredProducts.map((product) => (
                             <ProductCard key={product._id || product.id} product={product} />
                         ))}
+                      
                     </div>
+                    
                 )}
             </main>
+            
         </div>
     );
 };
@@ -96,11 +100,15 @@ const AllProducts = () => {
                     <div className="p-20 text-center text-xs font-semibold text-gray-400 animate-pulse">
                         Loading active storefront catalogs...
                     </div>
-                }>
+                }>  
+                    
                     <AllProductsContent />
+                    
                 </Suspense>
-
+                
             </div>
+              <FloatingCartButton/>
+            
             <Footer />
         </div>
     );

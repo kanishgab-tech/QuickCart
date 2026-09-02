@@ -1,9 +1,11 @@
-import React from 'react'
 import { assets } from '@/assets/assets'
 import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
+import React, { useState } from "react";
 
 const ProductCard = ({ product }) => {
+
+    const [imgError, setImgError] = useState(false);
 
     // 1. Destructure addToCart and showToast from global app context
     // (Ensure your context provider exports a toast handler like showToast)
@@ -36,6 +38,18 @@ const ProductCard = ({ product }) => {
         router.push('/cart');
     };
 
+    let rawImageSource = "";
+    if (product?.image) {
+        if (Array.isArray(product.image) && product.image.length > 0) {
+            rawImageSource = product.image[0];
+        } else if (typeof product.image === "string") {
+            rawImageSource = product.image;
+        }
+    }
+    const isUrlValid = !imgError && typeof rawImageSource === "string" && rawImageSource.trim() !== "";
+    const finalImageSrc = isUrlValid ? rawImageSource.trim() : assets.box_icon;
+
+   
     return (
         <div
             onClick={() => { router.push('/product/' + product._id); scrollTo(0, 0) }}
@@ -44,11 +58,18 @@ const ProductCard = ({ product }) => {
             {/* Image viewport element frame wrapper */}
             <div className="relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center overflow-hidden">
                 <Image
-                    src={Array.isArray(product.image) ? product.image[0] : product.image}
+                    src={finalImageSrc}
                     alt={product.name}
                     className="group-hover:scale-105 transition duration-300 object-cover w-4/5 h-4/5 md:w-full md:h-full"
                     width={800}
                     height={800}
+                    priority={false}
+                    // 4. CRITICAL ERROR HOOK INTERCEPT: Catches bad strings or domain refusal configurations instantly
+                   unoptimized={typeof finalImageSrc === 'string'} 
+                    onError={() => { 
+                        console.warn(`Product image load failure on SKU Code: [${product?.productCode || "N/A"}]`); 
+                        setImgError(true); 
+                    }} 
                 />
                 
                 {/* Wishlist Button Overlay Pin 

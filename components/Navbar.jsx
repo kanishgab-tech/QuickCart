@@ -52,8 +52,8 @@ const Navbar = () => {
             onClick={() => router.push('/')}
             src={assets.logo}
             alt="logo"
-            width={220}
-            height={60}
+            width={180}
+            height={50}
             priority
           />
         </div>
@@ -65,7 +65,7 @@ const Navbar = () => {
         <Link href="/" className="hover:text-gray-300 transition">Home</Link>
         <Link href="/all-products" className="hover:text-blue-600 transition-colors">Shop</Link>
         <Link href="/quick-shop" className="hover:text-gray-300 transition">Quick Shop</Link>
-        <Link href="/" className="hover:text-gray-600 transition">About Us</Link>
+        <Link href="/" className="hover:text-gray-600 transition">About</Link>
         <Link href="/contact-enquiry" className="hover:text-gray-300 transition">Contact</Link>
         {isSeller && (
           <button 

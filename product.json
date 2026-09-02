@@ -1,0 +1,2858 @@
+[
+  {
+    "name": "7CM ELECTRIC SPARKLERS",
+    "productCode": "S01",
+    "description": "Premium 7CM ELECTRIC SPARKLERS",
+    "price": 17.0,
+    "offerPrice": 8.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "7CM COLOUR SPARKLERS",
+    "productCode": "S02",
+    "description": "Premium 7CM COLOUR SPARKLERS",
+    "price": 23.5,
+    "offerPrice": 11.75,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "7CM GREEN SPARKLERS",
+    "productCode": "S03",
+    "description": "Premium 7CM GREEN SPARKLERS",
+    "price": 27.5,
+    "offerPrice": 13.75,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "7CM RED SPARKLERS",
+    "productCode": "S04",
+    "description": "Premium 7CM RED SPARKLERS",
+    "price": 32.0,
+    "offerPrice": 16.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10CM ELECTRIC SPARKLERS",
+    "productCode": "S05",
+    "description": "Premium 10CM ELECTRIC SPARKLERS",
+    "price": 34.0,
+    "offerPrice": 17.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10CM COLOUR SPARKLERS",
+    "productCode": "S06",
+    "description": "Premium 10CM COLOUR SPARKLERS",
+    "price": 39.0,
+    "offerPrice": 19.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10CM GREEN SPARKLERS",
+    "productCode": "S07",
+    "description": "Premium 10CM GREEN SPARKLERS",
+    "price": 41.5,
+    "offerPrice": 20.75,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10CM RED SPARKLERS",
+    "productCode": "S08",
+    "description": "Premium 10CM RED SPARKLERS",
+    "price": 52.0,
+    "offerPrice": 26.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM ELECTRIC SPARKLERS",
+    "productCode": "S09",
+    "description": "Premium 15CM ELECTRIC SPARKLERS",
+    "price": 74.0,
+    "offerPrice": 37.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM CRACKLING SPARKLERS",
+    "productCode": "S10",
+    "description": "Premium 15CM CRACKLING SPARKLERS",
+    "price": 79.5,
+    "offerPrice": 39.75,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM GREEN SPARKLERS",
+    "productCode": "S11",
+    "description": "Premium 15CM GREEN SPARKLERS",
+    "price": 86.0,
+    "offerPrice": 43.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM RED SPARKLERS",
+    "productCode": "S12",
+    "description": "Premium 15CM RED SPARKLERS",
+    "price": 97.0,
+    "offerPrice": 48.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM SPICE PINK(PINK COLOUR)",
+    "productCode": "S10",
+    "description": "Premium 15CM SPICE PINK(PINK COLOUR)",
+    "price": 150.0,
+    "offerPrice": 75.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM SPICE ORANGE COLOUR",
+    "productCode": "S20",
+    "description": "Premium 15CM SPICE ORANGE COLOUR",
+    "price": 150.0,
+    "offerPrice": 75.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM SPICE BLUE COLOUR",
+    "productCode": "S21",
+    "description": "Premium 15CM SPICE BLUE COLOUR",
+    "price": 150.0,
+    "offerPrice": 75.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15CM NANO TECH(SMOKELESS)",
+    "productCode": "S22",
+    "description": "Premium 15CM NANO TECH(SMOKELESS)",
+    "price": 95.0,
+    "offerPrice": 47.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30CM ELECTRIC SPARKLERS",
+    "productCode": "S13",
+    "description": "Premium 30CM ELECTRIC SPARKLERS",
+    "price": 74.0,
+    "offerPrice": 37.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30CM COLOUR SPARKLERS",
+    "productCode": "S14",
+    "description": "Premium 30CM COLOUR SPARKLERS",
+    "price": 79.5,
+    "offerPrice": 39.75,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30CM GREEN SPARKLERS",
+    "productCode": "S15",
+    "description": "Premium 30CM GREEN SPARKLERS",
+    "price": 86.0,
+    "offerPrice": 43.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30CM RED SPARKLERS",
+    "productCode": "S16",
+    "description": "Premium 30CM RED SPARKLERS",
+    "price": 97.0,
+    "offerPrice": 48.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30CM NANO TECH SPARKLERS(SMOKLESS)",
+    "productCode": "S23",
+    "description": "Premium 30CM NANO TECH SPARKLERS(SMOKLESS)",
+    "price": 95.0,
+    "offerPrice": 47.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "50CM ELECTRIC SPARKLERS",
+    "productCode": "S18",
+    "description": "Premium 50CM ELECTRIC SPARKLERS",
+    "price": 340.0,
+    "offerPrice": 170.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SPINNING SPARKLES(KIDS SPECIAL)",
+    "productCode": "S19",
+    "description": "Premium SPINNING SPARKLES(KIDS SPECIAL)",
+    "price": 390.0,
+    "offerPrice": 195.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SPARKLERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "RIDER COLOUR MATCH-11.5 cm",
+    "productCode": "CM01",
+    "description": "Premium RIDER COLOUR MATCH-11.5 cm",
+    "price": 285.0,
+    "offerPrice": 142.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "COLOUR MATCHES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "10 PCKTS/100STICKS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MAGIC COLOUR MATCH-18cm",
+    "productCode": "CM03",
+    "description": "Premium MAGIC COLOUR MATCH-18cm",
+    "price": 300.0,
+    "offerPrice": 150.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "COLOUR MATCHES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "5 PCKTS/50 STICKS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "CANDY POP COLOUR MATCH-18cm",
+    "productCode": "CM04",
+    "description": "Premium CANDY POP COLOUR MATCH-18cm",
+    "price": 415.0,
+    "offerPrice": 207.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "COLOUR MATCHES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "10 PCKTS/ 50 STICKS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BIJILI - 50PCS",
+    "productCode": "BJ01",
+    "description": "Premium BIJILI - 50PCS",
+    "price": 42.0,
+    "offerPrice": 21.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BIJILI CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/50 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BIJILI 100PCS",
+    "productCode": "BJ02",
+    "description": "Premium BIJILI 100PCS",
+    "price": 80.0,
+    "offerPrice": 40.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BIJILI CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/100 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 3/4' KURUVI (5PCS)",
+    "productCode": "141",
+    "description": "Premium 2 3/4' KURUVI (5PCS)",
+    "price": 20.0,
+    "offerPrice": 10.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "3 1/2\" CHOTTA BHEEM / LAKSHMI",
+    "productCode": "142",
+    "description": "Premium 3 1/2\" CHOTTA BHEEM / LAKSHMI",
+    "price": 31.0,
+    "offerPrice": 15.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4' GOLD LAKSHMI(10 PLY)",
+    "productCode": "146",
+    "description": "Premium 4' GOLD LAKSHMI(10 PLY)",
+    "price": 64.0,
+    "offerPrice": 32.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4' BEN10 SUPER DELUXE(12 PLY)",
+    "productCode": "147",
+    "description": "Premium 4' BEN10 SUPER DELUXE(12 PLY)",
+    "price": 66.0,
+    "offerPrice": 33.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2\" MEGA POWER HULK(15 PLY)",
+    "productCode": "148",
+    "description": "Premium 4 1/2\" MEGA POWER HULK(15 PLY)",
+    "price": 88.0,
+    "offerPrice": 44.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "5\" THUNDER",
+    "productCode": "148A",
+    "description": "Premium 5\" THUNDER",
+    "price": 100.0,
+    "offerPrice": 50.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "6\" BIG BANG",
+    "productCode": "OS10",
+    "description": "Premium 6\" BIG BANG",
+    "price": 122.0,
+    "offerPrice": 61.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ONE SOUND CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PACK/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR PAPER SHOWERS BOMB",
+    "productCode": "B10",
+    "description": "Premium COLOUR PAPER SHOWERS BOMB",
+    "price": 130.0,
+    "offerPrice": 65.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR SMOKE BOMB",
+    "productCode": "B06",
+    "description": "Premium COLOUR SMOKE BOMB",
+    "price": 148.0,
+    "offerPrice": 74.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MONEY IN THE BANK(MONEY BLAST)",
+    "productCode": "90",
+    "description": "Premium MONEY IN THE BANK(MONEY BLAST)",
+    "price": 205.0,
+    "offerPrice": 102.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/3 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "OLD IS GOLD(OLAI VEDI)",
+    "productCode": "90A",
+    "description": "Premium OLD IS GOLD(OLAI VEDI)",
+    "price": 284.0,
+    "offerPrice": 142.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1 BOX/25 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SHIN CHAN - DIGITAL WALA",
+    "productCode": "FDC001",
+    "description": "Premium SHIN CHAN - DIGITAL WALA",
+    "price": 300.0,
+    "offerPrice": 150.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "POM POM(Water Proof Bijili)",
+    "productCode": "89",
+    "description": "Premium POM POM(Water Proof Bijili)",
+    "price": 380.0,
+    "offerPrice": 190.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX30 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "CYLINDER BOMB(COLOUR SMOKE + BOMB)",
+    "productCode": "158",
+    "description": "Premium CYLINDER BOMB(COLOUR SMOKE + BOMB)",
+    "price": 490.0,
+    "offerPrice": 245.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BLACK MONEY(MONEY RAIN)",
+    "productCode": "90B",
+    "description": "Premium BLACK MONEY(MONEY RAIN)",
+    "price": 693.0,
+    "offerPrice": 346.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY DAY TIME CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MINI BULLET",
+    "productCode": "149A",
+    "description": "Premium MINI BULLET",
+    "price": 57.0,
+    "offerPrice": 28.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MEGA BULLET",
+    "productCode": "B03",
+    "description": "Premium MEGA BULLET",
+    "price": 85.0,
+    "offerPrice": 42.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ATOM BOMB",
+    "productCode": "150",
+    "description": "Premium ATOM BOMB",
+    "price": 105.0,
+    "offerPrice": 52.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "KING OF KING",
+    "productCode": "152",
+    "description": "Premium KING OF KING",
+    "price": 215.0,
+    "offerPrice": 107.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "CLASSIC BOMB",
+    "productCode": "151",
+    "description": "Premium CLASSIC BOMB",
+    "price": 240.0,
+    "offerPrice": 120.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "DIGITAL BOMB",
+    "productCode": "152B",
+    "description": "Premium DIGITAL BOMB",
+    "price": 440.0,
+    "offerPrice": 220.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "555 BOMB",
+    "productCode": "B11",
+    "description": "Premium 555 BOMB",
+    "price": 470.0,
+    "offerPrice": 235.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "DTS BOMB",
+    "productCode": "B12",
+    "description": "Premium DTS BOMB",
+    "price": 630.0,
+    "offerPrice": 315.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "BOMBS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "1 1/2' TWINKLING STAR",
+    "productCode": "TS01",
+    "description": "Premium 1 1/2' TWINKLING STAR",
+    "price": 75.0,
+    "offerPrice": 37.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "TWINKLING STARS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ZIL ZIL",
+    "productCode": "TS02",
+    "description": "Premium ZIL ZIL",
+    "price": 82.0,
+    "offerPrice": 41.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "TWINKLING STARS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4' TWINKLING STARS",
+    "productCode": "TS03",
+    "description": "Premium 4' TWINKLING STARS",
+    "price": 188.0,
+    "offerPrice": 94.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "TWINKLING STARS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR STRING",
+    "productCode": "T0001",
+    "description": "Premium COLOUR STRING",
+    "price": 216.0,
+    "offerPrice": 108.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "TWINKLING STARS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ROPE-PINK FIRE(20 MINTS TIMING)",
+    "productCode": "TS04",
+    "description": "Premium ROPE-PINK FIRE(20 MINTS TIMING)",
+    "price": 330.0,
+    "offerPrice": 165.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "TWINKLING STARS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/4 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "INSTA FLASH(SELFIE STICK)",
+    "productCode": "HL02",
+    "description": "Premium INSTA FLASH(SELFIE STICK)",
+    "price": 255.0,
+    "offerPrice": 127.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SWORD(LIGHT THROW)",
+    "productCode": "FV31",
+    "description": "Premium SWORD(LIGHT THROW)",
+    "price": 284.0,
+    "offerPrice": 142.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "LASER SHOW",
+    "productCode": "HL10",
+    "description": "Premium LASER SHOW",
+    "price": 300.0,
+    "offerPrice": 150.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "WIZARD'S WAND",
+    "productCode": "HL13",
+    "description": "Premium WIZARD'S WAND",
+    "price": 320.0,
+    "offerPrice": 160.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SIVAKASI SPECIAL",
+    "productCode": "HL03",
+    "description": "Premium SIVAKASI SPECIAL",
+    "price": 605.0,
+    "offerPrice": 302.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "POPCORN/WATERFALL PENCIL",
+    "productCode": "HL04",
+    "description": "Premium POPCORN/WATERFALL PENCIL",
+    "price": 610.0,
+    "offerPrice": 305.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "BOX/5 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "LOLLIPOP",
+    "productCode": "FV22",
+    "description": "Premium LOLLIPOP",
+    "price": 695.0,
+    "offerPrice": 347.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ICONE(TOUCH SAFE)",
+    "productCode": "HL10",
+    "description": "Premium ICONE(TOUCH SAFE)",
+    "price": 555.0,
+    "offerPrice": 277.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "HAND LIGHTERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FLOWER POT BIG",
+    "productCode": "FP01",
+    "description": "Premium FLOWER POT BIG",
+    "price": 138.0,
+    "offerPrice": 69.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FLOWER POT SPECIAL",
+    "productCode": "FP02",
+    "description": "Premium FLOWER POT SPECIAL",
+    "price": 182.0,
+    "offerPrice": 91.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FLOWER POT ASOKA",
+    "productCode": "FP03",
+    "description": "Premium FLOWER POT ASOKA",
+    "price": 245.0,
+    "offerPrice": 122.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "O-YOLO SUPER DELUXE",
+    "productCode": "FP08",
+    "description": "Premium O-YOLO SUPER DELUXE",
+    "price": 350.0,
+    "offerPrice": 175.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 MONSTER PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SCOOBY DOO TRICOLOUR FOUNTAIN",
+    "productCode": "FP06",
+    "description": "Premium SCOOBY DOO TRICOLOUR FOUNTAIN",
+    "price": 390.0,
+    "offerPrice": 195.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FLOWER POT COLOR KOTI",
+    "productCode": "FP04",
+    "description": "Premium FLOWER POT COLOR KOTI",
+    "price": 395.0,
+    "offerPrice": 197.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MAYAJAL(5 DIFFERENT COLOURS)",
+    "productCode": "FP12",
+    "description": "Premium MAYAJAL(5 DIFFERENT COLOURS)",
+    "price": 550.0,
+    "offerPrice": 275.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FP COLOUR KOTI DELUXE",
+    "productCode": "FP07",
+    "description": "Premium FP COLOUR KOTI DELUXE",
+    "price": 955.0,
+    "offerPrice": 477.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 MEGA PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR KOTI PINK",
+    "productCode": "FP10",
+    "description": "Premium COLOUR KOTI PINK",
+    "price": 1010.0,
+    "offerPrice": 505.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FLOWER POT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "GROUND CHAKKAR BIG",
+    "productCode": "GC01",
+    "description": "Premium GROUND CHAKKAR BIG",
+    "price": 84.0,
+    "offerPrice": 42.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SPINNER SPECIAL",
+    "productCode": "FG09",
+    "description": "Premium SPINNER SPECIAL",
+    "price": 200.0,
+    "offerPrice": 100.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SPINNER DELUXE",
+    "productCode": "N7",
+    "description": "Premium SPINNER DELUXE",
+    "price": 265.0,
+    "offerPrice": 132.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "DISCO WHEEL",
+    "productCode": "FG01",
+    "description": "Premium DISCO WHEEL",
+    "price": 160.0,
+    "offerPrice": 80.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "WHISTLING DIXIE",
+    "productCode": "FGC011",
+    "description": "Premium WHISTLING DIXIE",
+    "price": 230.0,
+    "offerPrice": 115.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "KRACK JACK CHAKKAR",
+    "productCode": "FGC015",
+    "description": "Premium KRACK JACK CHAKKAR",
+    "price": 230.0,
+    "offerPrice": 115.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "AVENGERS",
+    "productCode": "FGC16",
+    "description": "Premium AVENGERS",
+    "price": 230.0,
+    "offerPrice": 115.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SPINNER MIX(COLOUR SPINNERS)",
+    "productCode": "FGC02",
+    "description": "Premium SPINNER MIX(COLOUR SPINNERS)",
+    "price": 290.0,
+    "offerPrice": 145.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX(8PCS)",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "WIRE CHAKKAR DELUXE",
+    "productCode": "FGC16",
+    "description": "Premium WIRE CHAKKAR DELUXE",
+    "price": 442.0,
+    "offerPrice": 221.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "PLANET WHEELING SHOW(CRACKLING CHAKKAR)",
+    "productCode": "FG07",
+    "description": "Premium PLANET WHEELING SHOW(CRACKLING CHAKKAR)",
+    "price": 645.0,
+    "offerPrice": 322.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 MEGA PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "POPPET",
+    "productCode": "FGC17",
+    "description": "Premium POPPET",
+    "price": 1165.0,
+    "offerPrice": 582.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY GROUND CHAKKAR",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "GEMS MIX",
+    "productCode": "FV36",
+    "description": "Premium GEMS MIX",
+    "price": 362.0,
+    "offerPrice": 181.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "RED SUN",
+    "productCode": "FV11",
+    "description": "Premium RED SUN",
+    "price": 370.0,
+    "offerPrice": 185.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BLUE ICE",
+    "productCode": "FV12",
+    "description": "Premium BLUE ICE",
+    "price": 370.0,
+    "offerPrice": 185.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "GOLD FEAST",
+    "productCode": "FV13",
+    "description": "Premium GOLD FEAST",
+    "price": 370.0,
+    "offerPrice": 185.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MISS BUTTERFLY",
+    "productCode": "FV14",
+    "description": "Premium MISS BUTTERFLY",
+    "price": 370.0,
+    "offerPrice": 185.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "REEN GARDEN",
+    "productCode": "FV15",
+    "description": "Premium REEN GARDEN",
+    "price": 370.0,
+    "offerPrice": 185.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SIREN",
+    "productCode": "FP11",
+    "description": "Premium SIREN",
+    "price": 390.0,
+    "offerPrice": 195.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PKT/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ANGRY BIRD (5IN1)",
+    "productCode": "MSF02",
+    "description": "Premium ANGRY BIRD (5IN1)",
+    "price": 620.0,
+    "offerPrice": 310.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY FOUNTAIN",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PACK/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ELECTRIC STONE",
+    "productCode": "FV01",
+    "description": "Premium ELECTRIC STONE",
+    "price": 50.0,
+    "offerPrice": 25.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "KIT KAT",
+    "productCode": "FV02",
+    "description": "Premium KIT KAT",
+    "price": 52.0,
+    "offerPrice": 26.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "CARTOON",
+    "productCode": "FV03",
+    "description": "Premium CARTOON",
+    "price": 70.0,
+    "offerPrice": 35.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BIM BOM",
+    "productCode": "FV36",
+    "description": "Premium BIM BOM",
+    "price": 110.0,
+    "offerPrice": 55.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "HELICOPTER",
+    "productCode": "FV04",
+    "description": "Premium HELICOPTER",
+    "price": 180.0,
+    "offerPrice": 90.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "TIN BEER SINGLE",
+    "productCode": "FV08",
+    "description": "Premium TIN BEER SINGLE",
+    "price": 174.0,
+    "offerPrice": 87.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BUTTER CAFE(TRIPLE COLOUR CHANGING)",
+    "productCode": "FV05",
+    "description": "Premium BUTTER CAFE(TRIPLE COLOUR CHANGING)",
+    "price": 240.0,
+    "offerPrice": 120.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SIZZLING",
+    "productCode": "FV37",
+    "description": "Premium SIZZLING",
+    "price": 245.0,
+    "offerPrice": 122.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "POWERPUFF GIRLS",
+    "productCode": "FV39",
+    "description": "Premium POWERPUFF GIRLS",
+    "price": 290.0,
+    "offerPrice": 145.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MASHUP SPINNER( COLOUR CHANGING)/TWISTER",
+    "productCode": "FV06",
+    "description": "Premium MASHUP SPINNER( COLOUR CHANGING)/TWISTER",
+    "price": 256.0,
+    "offerPrice": 128.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ICE CREAM CART",
+    "productCode": "FV35",
+    "description": "Premium ICE CREAM CART",
+    "price": 345.0,
+    "offerPrice": 172.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "LEMON TREE",
+    "productCode": "FV32",
+    "description": "Premium LEMON TREE",
+    "price": 284.0,
+    "offerPrice": 142.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FIRE EGG(EGG LAYING HEN)",
+    "productCode": "FV10",
+    "description": "Premium FIRE EGG(EGG LAYING HEN)",
+    "price": 300.0,
+    "offerPrice": 150.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "HIGH VOLTAGE",
+    "productCode": "FV30",
+    "description": "Premium HIGH VOLTAGE",
+    "price": 344.0,
+    "offerPrice": 172.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR SMOKE(MULTI COLOUR)",
+    "productCode": "FV18",
+    "description": "Premium COLOUR SMOKE(MULTI COLOUR)",
+    "price": 350.0,
+    "offerPrice": 175.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/3 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "WATER QUEEN(TOUCH SAFE)",
+    "productCode": "FV16",
+    "description": "Premium WATER QUEEN(TOUCH SAFE)",
+    "price": 590.0,
+    "offerPrice": 295.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MIN MINI",
+    "productCode": "FV53",
+    "description": "Premium MIN MINI",
+    "price": 365.0,
+    "offerPrice": 182.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/3 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "DORA SINGER",
+    "productCode": "FV07",
+    "description": "Premium DORA SINGER",
+    "price": 415.0,
+    "offerPrice": 207.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FANTASY ELEPHANT",
+    "productCode": "FV31",
+    "description": "Premium FANTASY ELEPHANT",
+    "price": 410.0,
+    "offerPrice": 205.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "FANTASY LION",
+    "productCode": "FV31",
+    "description": "Premium FANTASY LION",
+    "price": 410.0,
+    "offerPrice": 205.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "RAINY &SHINY(SHOWER WITH SHOT)",
+    "productCode": "FV35",
+    "description": "Premium RAINY &SHINY(SHOWER WITH SHOT)",
+    "price": 380.0,
+    "offerPrice": 190.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "GANGA JAMUNA(SHOWER BOMB)",
+    "productCode": "FV40",
+    "description": "Premium GANGA JAMUNA(SHOWER BOMB)",
+    "price": 315.0,
+    "offerPrice": 157.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "DOUBLE DUCKER FOUNTAIN",
+    "productCode": "FV20",
+    "description": "Premium DOUBLE DUCKER FOUNTAIN",
+    "price": 350.0,
+    "offerPrice": 175.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "GOLI SODA FOUNTAIN",
+    "productCode": "FV32",
+    "description": "Premium GOLI SODA FOUNTAIN",
+    "price": 415.0,
+    "offerPrice": 207.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "COLOUR SMOKE(COLOUR +PERFUME SMELL)",
+    "productCode": "FV31",
+    "description": "Premium COLOUR SMOKE(COLOUR +PERFUME SMELL)",
+    "price": 450.0,
+    "offerPrice": 225.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MOTTU PATLU",
+    "productCode": "FV51",
+    "description": "Premium MOTTU PATLU",
+    "price": 795.0,
+    "offerPrice": 397.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "TANK",
+    "productCode": "FV36",
+    "description": "Premium TANK",
+    "price": 1280.0,
+    "offerPrice": 640.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "RACING CAR",
+    "productCode": "FV41",
+    "description": "Premium RACING CAR",
+    "price": 1300.0,
+    "offerPrice": 650.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "FANCY VARIETIES",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "SMALL PEACOCK(3 WINGS)",
+    "productCode": "P01",
+    "description": "Premium SMALL PEACOCK(3 WINGS)",
+    "price": 268.0,
+    "offerPrice": 134.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "PEACOCK",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BADA PEACOCK(5 WINGS)",
+    "productCode": "P02",
+    "description": "Premium BADA PEACOCK(5 WINGS)",
+    "price": 880.0,
+    "offerPrice": 440.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "PEACOCK",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2IN1 BADA PEACOCK",
+    "productCode": "P03",
+    "description": "Premium 2IN1 BADA PEACOCK",
+    "price": 990.0,
+    "offerPrice": 495.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "PEACOCK",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "PINK BADA PEACOCK",
+    "productCode": "RSS20",
+    "description": "Premium PINK BADA PEACOCK",
+    "price": 1020.0,
+    "offerPrice": 510.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "PEACOCK",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1 BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "1/4 KG PAPER BOMB",
+    "productCode": "PB01",
+    "description": "Premium 1/4 KG PAPER BOMB",
+    "price": 90.0,
+    "offerPrice": 45.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ADIYAL",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "1/2 KG PAPER BOMB",
+    "productCode": "PB02",
+    "description": "Premium 1/2 KG PAPER BOMB",
+    "price": 180.0,
+    "offerPrice": 90.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ADIYAL",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "1KG PAPER BOMB",
+    "productCode": "PB03",
+    "description": "Premium 1KG PAPER BOMB",
+    "price": 360.0,
+    "offerPrice": 180.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ADIYAL",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "3.5' GUN OUT(THUNDER EFFECT)",
+    "productCode": "99",
+    "description": "Premium 3.5' GUN OUT(THUNDER EFFECT)",
+    "price": 550.0,
+    "offerPrice": 275.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ADIYAL",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "CHOTTA FANCY",
+    "productCode": "SS04",
+    "description": "Premium CHOTTA FANCY",
+    "price": 95.0,
+    "offerPrice": 47.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "7 SHOT",
+    "productCode": "SS02",
+    "description": "Premium 7 SHOT",
+    "price": 175.0,
+    "offerPrice": 87.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 INCH FANCY OUT",
+    "productCode": "SS06",
+    "description": "Premium 2 INCH FANCY OUT",
+    "price": 175.0,
+    "offerPrice": 87.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "3 UPS",
+    "productCode": "SK21",
+    "description": "Premium 3 UPS",
+    "price": 315.0,
+    "offerPrice": 157.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "PENTA SKY SHOT",
+    "productCode": "SS01",
+    "description": "Premium PENTA SKY SHOT",
+    "price": 331.0,
+    "offerPrice": 165.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "ASTRO BOY",
+    "productCode": "SS06",
+    "description": "Premium ASTRO BOY",
+    "price": 250.0,
+    "offerPrice": 125.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 INCH FANCY OUT (3 PCS)",
+    "productCode": "SS08",
+    "description": "Premium 2 INCH FANCY OUT (3 PCS)",
+    "price": 440.0,
+    "offerPrice": 220.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/3 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 1/2\" MINE SHOT",
+    "productCode": "SH01",
+    "description": "Premium 2 1/2\" MINE SHOT",
+    "price": 475.0,
+    "offerPrice": 237.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 INCH TIN FANCY OUT",
+    "productCode": "SS10",
+    "description": "Premium 4 INCH TIN FANCY OUT",
+    "price": 740.0,
+    "offerPrice": 370.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "3 1/2 INCH FANCY OUT SINGLE BALL",
+    "productCode": "SS11",
+    "description": "Premium 3 1/2 INCH FANCY OUT SINGLE BALL",
+    "price": 510.0,
+    "offerPrice": 255.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4\" SEVEN STEP FANCY OUT",
+    "productCode": "SS14",
+    "description": "Premium 4\" SEVEN STEP FANCY OUT",
+    "price": 900.0,
+    "offerPrice": 450.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4\" NIAGARA FALLS FANCY OUT",
+    "productCode": "SS15",
+    "description": "Premium 4\" NIAGARA FALLS FANCY OUT",
+    "price": 715.0,
+    "offerPrice": 357.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2\" NIAGARA SPECIAL EFFECT",
+    "productCode": "SS19",
+    "description": "Premium 4 1/2\" NIAGARA SPECIAL EFFECT",
+    "price": 1200.0,
+    "offerPrice": 600.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2\" WOW PINK FANCY OUT",
+    "productCode": "SS16",
+    "description": "Premium 4 1/2\" WOW PINK FANCY OUT",
+    "price": 1090.0,
+    "offerPrice": 545.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2\" WOW PURPLE / BLUE FANCY OUT",
+    "productCode": "SS16",
+    "description": "Premium 4 1/2\" WOW PURPLE / BLUE FANCY OUT",
+    "price": 1090.0,
+    "offerPrice": 545.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2\" WOW ORANGE FANCY OUT.",
+    "productCode": "SS18",
+    "description": "Premium 4 1/2\" WOW ORANGE FANCY OUT.",
+    "price": 1090.0,
+    "offerPrice": 545.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 1/2 INCH TRIPLE BALL(2PCS)",
+    "productCode": "SS15",
+    "description": "Premium 2 1/2 INCH TRIPLE BALL(2PCS)",
+    "price": 880.0,
+    "offerPrice": 440.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/2 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "4 1/2 INCH DOUBLE BALL",
+    "productCode": "SS20",
+    "description": "Premium 4 1/2 INCH DOUBLE BALL",
+    "price": 900.0,
+    "offerPrice": 450.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2 INCH 3 STEP(3PCS)",
+    "productCode": "SS17",
+    "description": "Premium 2 INCH 3 STEP(3PCS)",
+    "price": 700.0,
+    "offerPrice": 350.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "SKY SHOT",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/3 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "12 SHOT RAIDER",
+    "productCode": "RS01",
+    "description": "Premium 12 SHOT RAIDER",
+    "price": 270.0,
+    "offerPrice": 135.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "12 SHOT MULTICOLOUR",
+    "productCode": "RS02",
+    "description": "Premium 12 SHOT MULTICOLOUR",
+    "price": 440.0,
+    "offerPrice": 220.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "LOVE DOSE(6 DIFFERENT PEACOCK SHOT)",
+    "productCode": "FDC10",
+    "description": "Premium LOVE DOSE(6 DIFFERENT PEACOCK SHOT)",
+    "price": 300.0,
+    "offerPrice": 150.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15 SHOT MULTICOLOUR & CRACKLING.",
+    "productCode": "RS03",
+    "description": "Premium 15 SHOT MULTICOLOUR & CRACKLING.",
+    "price": 520.0,
+    "offerPrice": 260.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "15 COLOUR SMOKE SHOT(DAY TIME CRACKERS)",
+    "productCode": "RSS13",
+    "description": "Premium 15 COLOUR SMOKE SHOT(DAY TIME CRACKERS)",
+    "price": 900.0,
+    "offerPrice": 450.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "20-20 FULL CRACKLING PEACOCK SHOT",
+    "productCode": "RSS14",
+    "description": "Premium 20-20 FULL CRACKLING PEACOCK SHOT",
+    "price": 900.0,
+    "offerPrice": 450.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "25 SHOT RIDER",
+    "productCode": "RS011",
+    "description": "Premium 25 SHOT RIDER",
+    "price": 410.0,
+    "offerPrice": 205.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "30 SHOT MULTICOLOUR & CRACKLING.",
+    "productCode": "RS06",
+    "description": "Premium 30 SHOT MULTICOLOUR & CRACKLING.",
+    "price": 960.0,
+    "offerPrice": 480.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "60 SHOT MULTICOLOUR & CRACKLING.",
+    "productCode": "RS07",
+    "description": "Premium 60 SHOT MULTICOLOUR & CRACKLING.",
+    "price": 1920.0,
+    "offerPrice": 960.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10*10 FAN CAKE(100 SHOT)",
+    "productCode": "24A",
+    "description": "Premium 10*10 FAN CAKE(100 SHOT)",
+    "price": 9355.0,
+    "offerPrice": 4677.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "120 SHOT MULTICOLOUR & CRACKLING.",
+    "productCode": "RS08",
+    "description": "Premium 120 SHOT MULTICOLOUR & CRACKLING.",
+    "price": 3840.0,
+    "offerPrice": 1920.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PIECE",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "240 SHOT MULTICOLOUR & CRACKLING.",
+    "productCode": "RS09",
+    "description": "Premium 240 SHOT MULTICOLOUR & CRACKLING.",
+    "price": 7680.0,
+    "offerPrice": 3840.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "REPEATING SKY SHOTS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "BABY ROCKET",
+    "productCode": "R01",
+    "description": "Premium BABY ROCKET",
+    "price": 85.0,
+    "offerPrice": 42.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ROCKETS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "MUSICAL ROCKET",
+    "productCode": "R02",
+    "description": "Premium MUSICAL ROCKET",
+    "price": 285.0,
+    "offerPrice": 142.5,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ROCKETS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/5 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "TWO SOUND ROCKET",
+    "productCode": "R04",
+    "description": "Premium TWO SOUND ROCKET",
+    "price": 262.0,
+    "offerPrice": 131.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "ROCKETS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/10 PCS",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "28 CRACKERS",
+    "productCode": "K05",
+    "description": "Premium 28 CRACKERS",
+    "price": 40.0,
+    "offerPrice": 20.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1PCKT/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "100 CRACKERS",
+    "productCode": "K06",
+    "description": "Premium 100 CRACKERS",
+    "price": 92.0,
+    "offerPrice": 46.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "1K",
+    "productCode": "155",
+    "description": "Premium 1K",
+    "price": 400.0,
+    "offerPrice": 200.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "2K",
+    "productCode": "156",
+    "description": "Premium 2K",
+    "price": 800.0,
+    "offerPrice": 400.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "5K",
+    "productCode": "159",
+    "description": "Premium 5K",
+    "price": 2000.0,
+    "offerPrice": 1000.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  },
+  {
+    "name": "10 K",
+    "productCode": "K04",
+    "description": "Premium 10 K",
+    "price": 4000.0,
+    "offerPrice": 2000.0,
+    "imageUrl": [
+      "\"https://unsplash.com\""
+    ],
+    "category": "K SERIES CRACKERS",
+    "stock": 10,
+    "brand": "KanSan",
+    "size": "1BOX/1 PC",
+    "isActive": true,
+    "isPopular": false,
+    "date": 1788134400000
+  }
+]

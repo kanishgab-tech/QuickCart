@@ -4,11 +4,13 @@
     import Footer from "@/components/Footer";
     import Titlebar from "@/components/Titlebar";
     import { useAppContext } from "@/context/AppContext";
+    import { assets } from "@/assets/assets";
     import { useUser } from "@clerk/nextjs";
     import ProductPreviewBlock from "@/components/ProductPreviewBlock";
+    import FloatingCartButton from "@/components/FloatingCartButton";
 
     const QuickShop = () => {
-        const { products, setCartItems, cartItems, showToast,router} = useAppContext();
+        const { products, setCartItems, cartItems, showToast,subtotal,router} = useAppContext();
 
         // Store row quantities in an object: { [productId]: quantity }
         const [quantities, setQuantities] = useState({});
@@ -80,14 +82,17 @@
         };
 
         // Calculate total order amount across all items
-        const calculateTotalAmount = () => {
+        const SubTotalAmount = () => {
             return products ? products.reduce((acc, product) => {
                 const id = product.id || product._id;
                 const qty = quantities[id] || 0;
-                return acc + (product.offerPrice * qty);
+                return (acc + (product.offerPrice * qty));
             }, 0) : 0;
         };
 
+        const calculateTotalAmount = () => {
+            return subtotal;
+        }
         
         // Process submission and merge selected counts into global cart state
         const handleAddToBag = async (e) => {
@@ -167,7 +172,7 @@
             <form onSubmit={handleAddToBag} className="flex-grow px-6 md:px-16 lg:px-32 py-12 space-y-8">
                 <main>
                     {/* Header & Actions Section (Top Side Alignment) */}
-                    <div className="sticky top-0 z-20 bg-gray-50/90 backdrop-blur-md flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 pt-4 border-b border-gray-200 transition-all duration-200">
+                    <div className="sticky top-0 z-40 bg-gray-50/90 backdrop-blur-md flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 pt-4 border-b border-gray-200 transition-all duration-200">
                         <div className="flex flex-col items-start">
                             <h1 className="text-3xl font-bold tracking-tight">Quick Shop</h1>
                             <div className="w-16 h-0.5 bg-orange-600 rounded-full mt-2"></div>
@@ -202,123 +207,193 @@
                                     "Add to Cart"
                                 )}
                             </button>
+
+                            {/* ACTION 2: Fixed Async Guarded Checkout Button 
+                            <button 
+                                type="button" 
+                                disabled={isSubmitting}
+                                onClick={async (e) => {router.push('/cart');
+                                }}
+                                className={`flex items-center justify-center gap-1.5 bg-white-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold text-xs px-5 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-150 text-center whitespace-nowrap ${
+                                isSubmitting ? 'opacity-50 cursor-not-allowed bg-orange-700' : 'cursor-pointer'
+                                }`}
+                            >
+                                {isSubmitting ? (
+                                <span className="animate-pulse">Processing...</span>
+                                ) : (
+                                <span>Checkout 💳</span>
+                                )}
+                            </button>*/}
+
                         </div>
                     </div>
 
-                    {/* Responsive Grid Table Display Viewport */}
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden overflow-x-auto mt-8">
-                        <table className="w-full min-w-[750px] text-left border-collapse">
-                            <thead>
-                                <tr className="bg-gray-100/70 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                    <th className="py-4 px-6 w-24">Product</th>
-                                    <th className="py-4 px-4">Details</th>
-                                    <th className="py-4 px-4 text-left w-32">Category</th>
-                                    <th className="py-4 px-4 text-right w-32">Unit Price</th>
-                                    <th className="py-4 px-4 text-center w-44">Quantity</th>
-                                    <th className="py-4 px-6 text-right w-36">Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100 text-sm">
-                                {products && products.length > 0 ? (
-                                    products.map((product) => {
-                                        const id = product.id || product._id;
-                                        const qty = quantities?.[id] || 0;
-                                        const rowSubtotal = (product.offerPrice || 0) * qty;
+                {/* Responsive Grid Table Display Viewport */}
+                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden overflow-x-auto mt-8">
+                <table className="w-full min-w-[850px] text-left border-collapse table-fixed">
+                    {/* FIXED: Introduced table-fixed layout strategy with exact, well-balanced master column column definitions */}
+                    <colgroup>
+                    <col className="w-24"/>  {/* Product Graphic Thumbnail */}
+                    <col className="w-24"/>  {/* Item Code Badge Pin */}
+                    <col className="w-44"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
+                    <col className="w-32"/>  {/* Category Labels */}
+                    <col className="w-36"/>  {/* Unit Price Metrics */}
+                    <col className="w-44"/>  {/* Quantity Numeric Stepper Controls */}
+                    <col className="w-36"/>  {/* Row Subtotals */}
+                    </colgroup>
+                    <thead>
+                    <tr className="bg-gray-100/70 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        <th className="py-4 px-6">Product</th>
+                        <th className="py-4 px-6">Item Code</th>
+                        <th className="py-4 px-6">Details</th>
+                        <th className="py-4 px-6 text-left">Category</th>
+                        <th className="py-4 px-6 text-right">Unit Price</th>
+                        <th className="py-4 px-6 text-center">Quantity</th>
+                        <th className="py-4 px-6 text-right">Subtotal</th>
+                    </tr>
+                    <tr className="bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
+                        {/* Use colSpan to span across the first 6 columns */}
+                            <th colSpan="6" className="py-3 px-6 text-right uppercase tracking-wider">
+                            Subtotal:
+                            </th>
+                        {/* Display your dynamic Node.js / React subtotal variable here */}
+                        <th className="py-3 px-6 text-right text-amber-700 font-bold">
+                        ₹{(SubTotalAmount()||0).toLocaleString('en-IN')}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 text-sm">
+                    {products && products.length > 0 ? (
+                        products.map((product) => {
+                        const id = product.id || product._id;
+                        const qty = quantities?.[id] || 0;
+                        const rowSubtotal = (product.offerPrice || 0) * qty;
+                        return (
+                            <tr key={id} className="hover:bg-gray-50/50 transition-colors">
+                            {/* Image cell */}
+                                                  {/* Image cell - FIXED: Added error intercept mapping parameters to handle broken URL links */}
+                      <td className="py-4 px-6 relative z-0 overflow-hidden">
+                        <div 
+                          onClick={() => setActivePreviewProduct(product)}
+                          className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
+                          title={`Click to view full interactive specifications for ${product.name}`}
+                        >
+                          <img 
+                            // 1. SAFE RESOLUTION: Safely extract string URL data elements out of array structures first
+                            src={
+                              Array.isArray(product.image) && product.image.length > 0 
+                                ? product.image[0] 
+                                : (typeof product.image === 'string' && product.image.trim() !== "" 
+                                    ? product.image 
+                                    : (typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '')))
+                            } 
+                            alt={product.name || 'Product'} 
+                            className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200" 
+                            
+                            // 2. FIXED CRITICAL OVERRIDE: Listens for broken links and replaces the source with a local asset object
+                            onError={(e) => {
+                              console.warn(`QuickShop image failed to load for Code Badge: [${product?.productCode || "N/A"}]`);
+                              // Prevent infinite loop if fallback image also fails to resolve
+                              e.target.onerror = null; 
+                              // Replace broken source string directly with your clean local default asset pointer path
+                              e.target.src = typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '');
+                            }}
+                          />
+                          
+                          {/* Hover overlay hint indicator wrapper mask */}
+                          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
+                            👁️ Info
+                          </div>
+                        </div>
+                      </td>
 
-                                        return (
-                                            <tr key={id} className="hover:bg-gray-50/50 transition-colors">
-                                                                                                {/* Image cell - Upgraded to roll open the Product Details Workspace Modal */}
-                                                <td className="py-4 px-6">
-                                                    <div 
-                                                        onClick={() => setActivePreviewProduct(product)}
-                                                        className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
-                                                        title={`Click to view full interactive specifications for ${product.name}`}
-                                                    >
-                                                        <img 
-                                                            src={Array.isArray(product.image) ? product.image[0] : (product.image || '')} 
-                                                            alt={product.name || 'Product'}
-                                                            className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200"
-                                                        />
-                                                        
-                                                        {/* Hover overlay hint indicator overlay mask */}
-                                                        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
-                                                            👁️ Info
-                                                        </div>
-                                                    </div>
-                                                </td>
+                            {/* FIXED ITEM CODE COLUMN CELL: Uses absolute whitespace locking to avoid split line breaks */}
+                            <td className="py-4 px-6 whitespace-nowrap">
+                                <span className="font-mono text-xs font-bold text-gray-900 bg-gray-100">
+                                {product.productCode || "N/A"}
+                                </span>
+                            </td>
 
+                            {/* FIXED DETAILS TEXT CELL: Reallocated with fluid growth rules to absorb the right side blank spaces */}
+                            <td className="py-4 px-4 pr-6">
+                                <p className="font-medium text-gray-950 truncate first-letter:uppercase" title={product.name}>
+                                    {product.name || 'Unnamed Item'}
+                                </p>
+                                <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed first-letter:uppercase">
+                                {product.description || "No description provided."}
+                                </p>
+                            </td>
 
-                                                {/* Details text cells */}
-                                                <td className="py-4 px-4 max-w-xs">
-                                                    <p className="font-semibold text-gray-900 truncate">{product.name || 'Unnamed Item'}</p>
-                                                    <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
-                                                        {product.description || "No description provided."}
-                                                    </p>
-                                                </td>
-                                                {/* Category cell - Added safety fallback if category is an object */}
-                                                <td className="py-4 px-4 text-left text-gray-600">
-                                                    {typeof product.category === 'object' ? product.category?.name : (product.category || "Uncategorized")}  
-                                                </td>
+                            {/* FIXED CATEGORY COLUMN CELL: Locked via whitespace rules to block text splitting */}
+                            <td className="py-4 px-4 text-left text-gray-600 font-medium whitespace-nowrap" title={typeof product.category === 'object' ? product.category?.name : product.category}>
+                                {typeof product.category === 'object' ? product.category?.name : (product.category || "Uncategorized")}
+                            </td>
 
-                                                {/* Unit price dynamic block rendering - Highlights discount difference */}
-                                                <td className="py-4 px-4 text-right font-medium">
-                                                    {/* Changed to flex-row, items-baseline to align text bottoms, and justify-end to keep right-alignment */}
-                                                    <div className="flex flex-row items-baseline justify-end gap-1.5">
-                                                        {/* Prominent Current Offer Price */}
-                                                        <span className="text-gray-950 font-bold text-sm">
-                                                            ₹{(product.offerPrice || 0).toLocaleString('en-IN')}
-                                                        </span>
-                                                        
-                                                        {/* Strikethrough Original Base Price */}
-                                                        {product.price > product.offerPrice && (
-                                                            <span className="text-gray-400 line-through text-[11px] font-semibold tracking-wide">
-                                                                ₹{(product.price || 0).toLocaleString('en-IN')}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </td>
-
-
-                                                {/* Quantity Field with Modifier Controls */}
-                                                <td className="py-4 px-4">
-                                                    <div className="flex items-center justify-center border border-gray-300 rounded-md w-36 mx-auto overflow-hidden bg-white">
-                                                        <button type="button" onClick={() => decrementQty(id)}
-                                                            className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-r border-gray-300 flex items-center justify-center cursor-pointer select-none">
-                                                            &minus;
-                                                        </button>
-                                                        <input 
-                                                            type="number"  min="0" max = "999" value={qty === 0 ? "" : qty}
-                                                            onChange={(e) => handleQuantityChange(id, e.target.value)}
-                                                            placeholder="0"
-                                                            className="w-16 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
-                                                        <button  type="button"  onClick={() => incrementQty(id)}
-                                                            className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none">
-                                                            +
-                                                        </button>   
-                                                    </div>
-                                                </td>
-                                                {/* Subtotal Calculation Cell */}
-                                                <td className="py-4 px-6 text-right font-semibold text-gray-900">
-                                                    ₹{rowSubtotal.toLocaleString('en-IN')}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td colSpan="6" className="py-8 text-center text-gray-400">
-                                            No products available.
-                                        </td>
-                                    </tr>
+                            {/* Unit price rendering */}
+                            <td className="py-4 px-4 text-right font-medium whitespace-nowrap">
+                                <div className="flex flex-row items-baseline justify-end gap-1.5">
+                                <span className="text-gray-950 font-bold text-sm">
+                                    ₹{(product.offerPrice || 0).toLocaleString('en-IN')}
+                                </span>
+                                {product.price > product.offerPrice && (
+                                    <span className="text-gray-400 line-through text-[11px] font-semibold tracking-wide">
+                                    ₹{(product.price || 0).toLocaleString('en-IN')}
+                                    </span>
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
-                </main>
+                                </div>
+                            </td>
+
+                            {/* Quantity Field */}
+                            <td className="py-4 px-4">
+                                <div className="flex items-center justify-center border border-gray-300 rounded-md w-36 mx-auto overflow-hidden bg-white">
+                                <button 
+                                    type="button" 
+                                    onClick={() => decrementQty(id)} 
+                                    className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-r border-gray-300 flex items-center justify-center cursor-pointer select-none"
+                                >
+                                    &minus;
+                                </button>
+                                <input 
+                                    type="number" min="0" max="999" 
+                                    value={qty === 0 ? "" : qty} 
+                                    onChange={(e) => handleQuantityChange(id, e.target.value)} 
+                                    placeholder="0" 
+                                    className="w-16 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={() => incrementQty(id)} 
+                                    className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none"
+                                >
+                                    +
+                                </button>
+                                </div>
+                            </td>
+
+                            {/* Subtotal Calculation Cell */}
+                            <td className="py-4 px-6 text-right font-bold text-gray-900 whitespace-nowrap">
+                                ₹{rowSubtotal.toLocaleString('en-IN')}
+                            </td>
+                            </tr>
+                        );
+                        })
+                    ) : (
+                        <tr>
+                        {/* FIXED: Corrected layout spanning map footprint count index matching your 7 standard table columns */}
+                        <td colSpan="7" className="py-12 text-center text-xs font-semibold text-gray-400 tracking-wide bg-gray-50/50">
+                            No products matching search parameters are available inside the store catalog.
+                        </td>
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
+                
+                </div>
+    </main>
                 
             </form>
             <Footer />
-                        {/* FIXED: Changed ProductPreviewBlock condition to check your local activePreviewProduct state instead */}
+            {/* FIXED: Changed ProductPreviewBlock condition to check your local activePreviewProduct state instead */}
             {activePreviewProduct && (
                 <div 
                     onClick={() => setActivePreviewProduct(null)} // Click outside onto dark blur to exit instantly
@@ -373,7 +448,7 @@
                 </div>
             )}
 
-
+            <FloatingCartButton />
         </div>
     );
     }

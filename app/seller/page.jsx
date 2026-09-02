@@ -16,7 +16,8 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
-  
+  const [productCode, setProductCode] = useState('');
+
   // New States: Initialized to business logic rules
   const [isActive, setIsActive] = useState(true);
   const [isPopular, setIsPopular] = useState(false);
@@ -37,6 +38,7 @@ const AddProduct = () => {
 
     const formData = new FormData();
     formData.append('name', name);
+    formData.append('productCode', productCode.trim().toUpperCase());
     formData.append('description', description);
     formData.append('category', category);
     formData.append('price', price);
@@ -72,6 +74,7 @@ const AddProduct = () => {
         toast.success(data.message);
         setFiles([]);
         setName('');
+        setProductCode('');
         setDescription('');
         setCategory('Earphone');
         setPrice('');
@@ -126,7 +129,7 @@ const AddProduct = () => {
         {/* Product Name Input */}
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-name">
-            Product Name
+            Product Name<span className="text-red-500">*</span>
           </label>
           <input
             id="product-name"
@@ -138,6 +141,22 @@ const AddProduct = () => {
             required
           />
         </div>
+
+        <div className="flex flex-col gap-1.5 w-full">
+          <label className="text-gray-500 font-semibold text-xs uppercase tracking-wider block" htmlFor="productCode">
+              Product Code <span className="text-red-500">*</span>
+          </label>
+          <input
+              id="productCode"
+              type="text"
+              required
+              placeholder="e.g. CHAK-01, SPARK-05"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-xs font-medium text-gray-800 focus:outline-none focus:border-orange-500"
+              onChange={(e) => setProductCode(e.target.value)}
+              value={productCode}
+          />
+      </div>
+
         <div className="flex flex-col sm:flex-row gap-4 w-full text-xs font-semibold text-gray-500">
         {/* Optional Brand Input Box */}
         <div className="flex flex-col gap-1.5 flex-1">
@@ -166,7 +185,7 @@ const AddProduct = () => {
         <div className="flex flex-col gap-1 max-w-md">
           <div className="flex items-center justify-between">
             <label className="text-base font-medium" htmlFor="product-description">
-              Product Description
+              Product Description<span className="text-red-500">*</span>
             </label>
             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
               description.length >= 450 ? "bg-red-50 text-red-600 border-red-200" : "bg-gray-50 text-gray-400 border-gray-200"
@@ -190,7 +209,7 @@ const AddProduct = () => {
         <div className="flex items-center gap-5 flex-wrap">
         <div className="flex flex-col gap-1 w-32">
           <label className="text-base font-medium" htmlFor="category">
-            Category
+            Category<span className="text-red-500">*</span>
           </label>
           <select
             id="category"
@@ -208,7 +227,7 @@ const AddProduct = () => {
           
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-price">
-              Product Price
+              Product Price<span className="text-red-500">*</span>
             </label>
             <input
               id="product-price"
@@ -226,7 +245,7 @@ const AddProduct = () => {
           
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="offer-price">
-              Offer Price
+              Offer Price<span className="text-red-500">*</span>
             </label>
             <input
               id="offer-price"

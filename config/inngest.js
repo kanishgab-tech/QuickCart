@@ -66,6 +66,7 @@ export const createUserOrder = inngest.createFunction(
                     itemsSubtotal += (itemPrice * item.quantity);
 
                     enrichedItems.push({
+                        productCode: productDoc ? (productDoc.productCode || "N/A") : "N/A",
                         name: productDoc ? productDoc.name : "Purchased Item",
                         description: productDoc ? productDoc.description : "No description available.",
                         quantity: item.quantity,

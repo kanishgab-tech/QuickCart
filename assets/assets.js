@@ -1,4 +1,4 @@
-import logo from  "./kansan_crackers_logo_multicolor_crackers_sz25.png" //"./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
+import logo from  "./KanSan_RaisingSun_25pc.png" //"./kansan_crackers_logo_multicolor_crackers_sz25.png" //"./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
 import brand_name from  "./Aurora_M.png" 
 import search_icon from "./search_icon.svg";
 import upi_img from "./ChatGPT.png"
@@ -48,6 +48,7 @@ import product_details_page_apple_earphone_image2 from "./product_details_page_a
 import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
 import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
 import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
+import checkout_icon from "./checkout_icon.png"
 
 export const assets = {
   logo,
@@ -99,7 +100,8 @@ export const assets = {
   product_details_page_apple_earphone_image4,
   product_details_page_apple_earphone_image5,
   checkmark,
-  brand_name
+  brand_name,
+  checkout_icon,
 };
 
 export const BagIcon = () => {

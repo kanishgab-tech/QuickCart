@@ -11,8 +11,9 @@ import CheckoutNotice from "@/components/CheckOutNoticebar";
 const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart,currency}) => {
     // Store the local string value so the user can wipe the text box completely blank without breaking
     const [localQty, setLocalQty] = useState(initialQty.toString());
+    const [imgError, setImgError] = useState(false);
 
-    // Keep local view synced if global context changes via +/- click controls
+   // Keep local view synced if global context changes via +/- click controls
     useEffect(() => {
         if (initialQty <= 999) {
             setLocalQty(initialQty.toString());
@@ -50,17 +51,38 @@ const CartRow = ({ itemId, initialQty, product, updateCartQuantity, addToCart,cu
         }
     };
 
+     // 2. FIXED: Type-safe image check handles arrays, strings, or missing values safely
+    let rawImageSource = "";
+    if (product?.image) {
+        if (Array.isArray(product.image) && product.image.length > 0) {
+            rawImageSource = product.image[0];
+        } else if (typeof product.image === "string") {
+            rawImageSource = product.image;
+        }
+    }
+
+    const isUrlValid = !imgError && typeof rawImageSource === "string" && rawImageSource.trim() !== "";
+    const finalImageSrc = isUrlValid ? rawImageSource.trim() : assets.box_icon;
+
+
     return (
         <tr>
             <td className="flex items-center gap-4 py-4 md:px-4 px-1">
                 <div>
                     <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
                         <Image 
-                            src={product.image[0]} 
-                            alt={product.name} 
+                            src={finalImageSrc} 
+                            alt={product.name}
                             className="w-16 h-auto object-cover mix-blend-multiply" 
                             width={1280} 
-                            height={720} 
+                            height={720}
+                            priority={false} 
+                            // 3. FIXED OPTIMIZATION: Only use unoptimized mode if it's an external URL link string
+                            unoptimized={typeof finalImageSrc === 'string'} 
+                            onError={() => { 
+                                console.warn(`Product image load failure on SKU Code: [${product?.productCode || "N/A"}]`); 
+                                setImgError(true); 
+                            }}  
                         />
                     </div>
                     <button 
