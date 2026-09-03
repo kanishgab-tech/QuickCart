@@ -12,7 +12,7 @@ const HeaderSlider = () => {
       offer: "Limited Time Offer 30% Off",
       buttonText1: "Buy now",
       buttonText2: "Find more",
-      imgSrc: assets.header_headphone_image,
+      imgSrc: assets.crackers_basket_image,
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ const HeaderSlider = () => {
       offer: "Hurry up only few lefts!",
       buttonText1: "Shop Now",
       buttonText2: "Explore Deals",
-      imgSrc: assets.header_playstation_image,
+      imgSrc: assets.crackers_with_lights_image,
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const HeaderSlider = () => {
       offer: "Exclusive Deal 40% Off",
       buttonText1: "Order Now",
       buttonText2: "Learn More",
-      imgSrc: assets.header_macbook_image,
+      imgSrc: assets.green_crackers_image,
     },
   ];
 
@@ -75,7 +75,7 @@ const HeaderSlider = () => {
             </div>
             <div className="flex items-center flex-1 justify-center">
               <Image
-                className="md:w-1/3 w-52"
+                className="md:w-1/2 w-64"
                 src={slide.imgSrc}
                 alt={`Slide ${index + 1}`}
               />

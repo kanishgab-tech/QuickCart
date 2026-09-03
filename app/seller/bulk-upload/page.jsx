@@ -10,16 +10,18 @@ const BulkUploadPanel = () => {
 
     const { getToken } = useAppContext();
 
-    const handleFileChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            if (file.type !== "application/json" && !file.name.endsWith(".json")) {
-                showToast("Invalid file formatting layout. Please provide a standard .json file extension document.", "error");
-                return;
-            }
-            setSelectedFile(file);
+   const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        
+        // FIXED TYPE VALIDATION: Expects a text/csv content layout or extension suffix
+        if (file.type !== "text/csv" && !file.name.endsWith(".csv")) {
+            showToast("Invalid file formatting. Please upload a standard spreadsheet .csv file document.", "error");
+            return;
         }
-    };
+        setSelectedFile(file);
+    }
+};
 
     const handleImportSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +65,7 @@ const BulkUploadPanel = () => {
                 <h2 className="text-gray-900 font-bold text-base tracking-tight flex items-center gap-1.5">
                     <span>📦</span> Bulk Product Catalog Import Workspace
                 </h2>
-                <p className="text-gray-400 font-medium mt-0.5">Upload a structured `products.json` file dataset to inject dozens of new inventory lines instantly.</p>
+                <p className="text-gray-400 font-medium mt-0.5">Upload a structured `products.csv` file dataset to inject dozens of new inventory lines instantly.</p>
             </div>
 
             <form onSubmit={handleImportSubmit} className="space-y-5">
@@ -72,15 +74,15 @@ const BulkUploadPanel = () => {
                     <span className="text-3xl select-none">📄</span>
                     <div className="space-y-0.5 text-center">
                         <p className="text-gray-900 font-bold text-xs">
-                            {selectedFile ? selectedFile.name : "Select your application dataset JSON file"}
+                            {selectedFile ? selectedFile.name : "Select your application dataset CSV file"}
                         </p>
                         <p className="text-gray-400 font-medium">
-                            {selectedFile ? `${(selectedFile.size / 1024).toFixed(2)} KB` : "File bounds strictly limited to .json extension format tags only"}
+                            {selectedFile ? `${(selectedFile.size / 1024).toFixed(2)} KB` : "File bounds strictly limited to .csv extension format tags only"}
                         </p>
                     </div>
                     <input 
                         type="file" 
-                        accept=".json"
+                        accept=".csv"
                         onChange={handleFileChange}
                         disabled={isUploading}
                         className="absolute inset-0 opacity-0 cursor-pointer w-full h-full disabled:cursor-not-allowed" 

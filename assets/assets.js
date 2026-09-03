@@ -22,9 +22,9 @@ import heart_icon from "./heart_icon.svg";
 import star_icon from "./star_icon.svg";
 import redirect_icon from "./redirect_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
-import header_headphone_image from "./banner3.png";
-import header_playstation_image from "./banner1.png";
-import header_macbook_image from "./banner2.png";
+import crackers_basket_image from "./crackers_basket.png";
+import crackers_with_lights_image from "./crackers_with_lights.png";
+import green_crackers_image from "./green_crackers.png";
 import macbook_image from "./macbook_image.png";
 import bose_headphone_image from "./bose_headphone_image.png";
 import apple_earphone_image from "./apple_earphone_image.png";
@@ -49,6 +49,15 @@ import product_details_page_apple_earphone_image3 from "./product_details_page_a
 import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
 import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
 import checkout_icon from "./checkout_icon.png"
+import ayyan_brand_logo from "./brands/ayyan.png"
+import asok_fireworks_logo from "./brands/asok.png"
+import standard_logo from "./brands/standard.png"
+import wowstar_logo from "./brands/wowstar.png"
+import elephant_logo from "./brands/elephant.png"
+import safety_banner from "./safety_banner_trasparentbg_50.png"
+import quality_banner from "./quality_banner_700c.png"
+import price_banner from "./price_banner_700pxk.png"
+import support_banner from "./customercare_700px.png"
 
 export const assets = {
   logo,
@@ -74,9 +83,9 @@ export const assets = {
   star_icon,
   redirect_icon,
   star_dull_icon,
-  header_headphone_image,
-  header_playstation_image,
-  header_macbook_image,
+  crackers_basket_image,
+  crackers_with_lights_image,
+  green_crackers_image,
   macbook_image,
   bose_headphone_image,
   apple_earphone_image,
@@ -102,6 +111,15 @@ export const assets = {
   checkmark,
   brand_name,
   checkout_icon,
+  ayyan_brand_logo,
+  asok_fireworks_logo,
+  standard_logo,
+  wowstar_logo,
+  elephant_logo,
+  safety_banner,
+  quality_banner,
+  price_banner,
+  support_banner
 };
 
 export const BagIcon = () => {

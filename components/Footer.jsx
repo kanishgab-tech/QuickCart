@@ -22,13 +22,13 @@ const Footer = () => {
                 <a className="hover:underline transition" href="/">Home</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">About us</a>
+                <a className="hover:underline transition" href="#">About</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="/contact-enquiry">Contact us</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Blog</a>
+                <a className="hover:underline transition" href="#">Explore</a>
               </li>
               
               <li>
@@ -43,10 +43,7 @@ const Footer = () => {
             <h2 className="font-medium text-gray-900 mb-5">Customer Service</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:underline transition" href="./terms-conditions">Term and Conditions</a>
-              </li>
-              <li>
-                <a className="hover:underline transition" href="#">Return policy</a>
+                <a className="hover:underline transition" href="./terms-conditions">Terms</a>
               </li>
               <li>
                 <a className="hover:underline transition" href="./faq">FAQ</a>
@@ -56,6 +53,9 @@ const Footer = () => {
               </li>
               <li>
                 <a className="hover:underline transition" href="#">Disclaimer</a>
+              </li>
+              <li>
+                <a className="hover:underline transition" href="#">Return policy</a>
               </li>
             </ul>
           </div>

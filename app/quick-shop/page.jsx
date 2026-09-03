@@ -272,6 +272,7 @@
                             <tr key={id} className="hover:bg-gray-50/50 transition-colors">
                             {/* Image cell */}
                                                   {/* Image cell - FIXED: Added error intercept mapping parameters to handle broken URL links */}
+                                            {/* Image cell - FIXED: Integrated inline error flag to display a modern warning ribbon overlay */}
                       <td className="py-4 px-6 relative z-0 overflow-hidden">
                         <div 
                           onClick={() => setActivePreviewProduct(product)}
@@ -279,10 +280,9 @@
                           title={`Click to view full interactive specifications for ${product.name}`}
                         >
                           <img 
-                            // 1. SAFE RESOLUTION: Safely extract string URL data elements out of array structures first
                             src={
                               Array.isArray(product.image) && product.image.length > 0 
-                                ? product.image[0] 
+                                ? product.image 
                                 : (typeof product.image === 'string' && product.image.trim() !== "" 
                                     ? product.image 
                                     : (typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '')))
@@ -290,22 +290,33 @@
                             alt={product.name || 'Product'} 
                             className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200" 
                             
-                            // 2. FIXED CRITICAL OVERRIDE: Listens for broken links and replaces the source with a local asset object
+                            // FIXED ERROR HOOK: Marks an attribute directly onto the image tag node upon failure to trigger the overlay ribbon
                             onError={(e) => {
-                              console.warn(`QuickShop image failed to load for Code Badge: [${product?.productCode || "N/A"}]`);
-                              // Prevent infinite loop if fallback image also fails to resolve
+                              console.warn(`QuickShop image failed to load for SKU: [${product?.productCode || "N/A"}]`);
                               e.target.onerror = null; 
-                              // Replace broken source string directly with your clean local default asset pointer path
                               e.target.src = typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '');
+                              
+                              // Native DOM fallback trick: Add a descriptive dataset token to the element container wrapper parent node
+                              const ribbonNode = document.getElementById(`ribbon-${product._id || product.id}`);
+                              if (ribbonNode) ribbonNode.classList.remove('hidden');
                             }}
                           />
                           
-                          {/* Hover overlay hint indicator wrapper mask */}
+                          {/* FIXED NEW ADDITION: Translucent horizontal overlay warning ribbon banner */}
+                          <div 
+                            id={`ribbon-${product._id || product.id}`}
+                            className="hidden absolute bottom-0 left-0 right-0 bg-red-600/80 backdrop-blur-[1px] text-[9px] font-black text-white text-center py-0.5 select-none pointer-events-none uppercase tracking-wider"
+                          >
+                            No Preview
+                          </div>
+
+                          {/* Hover overlay hint indicator wrapper mask (Only visible when ribbon is hidden) */}
                           <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
                             👁️ Info
                           </div>
                         </div>
                       </td>
+
 
                             {/* FIXED ITEM CODE COLUMN CELL: Uses absolute whitespace locking to avoid split line breaks */}
                             <td className="py-4 px-6 whitespace-nowrap">
