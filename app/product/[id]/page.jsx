@@ -43,10 +43,10 @@ const Product = () => {
                     </div>
                     
                     <button onClick={() => { router.push('/all-products') }} 
-                     className="px-8 py-2.5 mt-8 mb-16 border border-gray-300 bg-orange-600 rounded-xl text-xs font-normal text-white hover:bg-gray-50 transition cursor-pointer">
+                     className="px-8 py-2.5 mt-8 mb-16 border border-gray-300 bg-orange-600 rounded-xl text-xs font-normal text-white hover:bg-gray-400 transition cursor-pointer">
                         
                         See More Products
-                    </button>
+                        </button>
                 </div>
             </main>
 

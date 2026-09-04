@@ -32,9 +32,9 @@ const HomeProducts = () => {
       {/* Redirect Button to Shop Page */}
       <button 
         onClick={() => { router.push('/all-products') }} 
-        className="px-12 py-2.5 border rounded text-gray-500/70 hover:bg-slate-50/90 transition cursor-pointer font-medium text-sm"
-      >
-        See more Products
+        className="px-10 py-2.5 mt-8 mb-16 border border-gray-300 bg-orange-600 rounded-xl text-normal font-normal text-white hover:bg-gray-400 transition cursor-pointer">
+         See more Products 
+         
       </button>
     </div>
   );
