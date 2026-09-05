@@ -52,8 +52,8 @@ const Navbar = () => {
             onClick={() => router.push('/')}
             src={assets.logo}
             alt="logo"
-            width={180}
-            height={50}
+            width={160}
+            height={40}
             priority
           />
         </div>
@@ -61,12 +61,12 @@ const Navbar = () => {
 
  
       {/* --- DESKTOP VIEWPORT HEADER LINKS (Hidden on Mobile) --- */}
-      <div className="flex items-center gap-6 lg:gap-10 max-md:hidden font-semibold text-m">
-        <Link href="/" className="hover:text-gray-300 transition">Home</Link>
-        <Link href="/all-products" className="hover:text-blue-600 transition-colors">Shop</Link>
-        <Link href="/quick-shop" className="hover:text-gray-300 transition">Quick Shop</Link>
-        <Link href="/" className="hover:text-gray-600 transition">About</Link>
-        <Link href="/contact-enquiry" className="hover:text-gray-300 transition">Contact</Link>
+      <div className="flex items-center gap-6 lg:gap-10 max-md:hidden font-sans text-md font-semibold text-gray-700">
+        <Link href="/" className="hover:text-orange-600 hover:underline transition">Home</Link>
+        <Link href="/all-products" className="hover:text-orange-600 hover:underline transition-colors">Shop</Link>
+        <Link href="/quick-shop" className="hover:text-orange-600 hover:underline transition">Quick Shop</Link>
+        <Link href="/" className="hover:text-orange-600 hover:underline transition">About</Link>
+        <Link href="/contact-enquiry" className="hover:text-orange-600 hover:underline transition">Contact</Link>
         {isSeller && (
           <button 
             onClick={() => router.push('/seller')} 
@@ -188,7 +188,7 @@ const Navbar = () => {
         <div className="space-y-6">
           {/* Drawer Top Branding Header Row */}
           <div className="flex items-center justify-between border-b pb-4">
-            <span className="text-base font-bold text-gray-900 tracking-tight">Navigation Menu</span>
+            <span className="text-base font-sans text-gray-900 tracking-tight">Navigation Menu</span>
             <button 
               type="button" 
               onClick={() => { setIsMobileMenuOpen(false); setIsCategoryAccordionOpen(false); }}
@@ -201,17 +201,19 @@ const Navbar = () => {
           {/* Links Collection Navigation Stack */}
           <ul className="space-y-4 font-semibold text-gray-800 text-sm">
             <li>
-              <button onClick={() => handleMobileNavClick('/')} className="w-full text-left py-2 hover:text-orange-600 transition block cursor-pointer">Home</button>
+              <button onClick={() => handleMobileNavClick('/')} className="w-full font-sans text-gray-700 text-left py-2  hover:text-orange-600 hover:underline transition block cursor-pointer">Home</button>
             </li>
+
+            
             
             {/* Dynamic Accordion Dropdown Trigger for Shop Categories */}
             <li className="flex flex-col">
               <div className="flex items-center justify-between w-full py-2 border-b border-transparent">
-                <button onClick={() => handleMobileNavClick('/all-products')} className="text-left font-semibold hover:text-orange-600 transition cursor-pointer">Shop</button>
+                <button onClick={() => handleMobileNavClick('/all-products')} className="text-left font-sans text-gray-700 hover:underline  hover:text-orange-600 transition cursor-pointer">Shop</button>
                 <button 
                   type="button" 
                   onClick={() => setIsCategoryAccordionOpen(!isCategoryAccordionOpen)}
-                  className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[11px] font-bold text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[11px] font-sans text-gray-700 text-gray-500 hover:text-orange-600 hover:bg-orange-50 transition flex items-center gap-1 cursor-pointer"
                 >
                   <span>{isCategoryAccordionOpen ? "▲" : "▼"}</span> Categories
                 </button>
@@ -229,7 +231,7 @@ const Navbar = () => {
                         setIsCategoryAccordionOpen(false);
                         router.push(`/all-products?category=${encodeURIComponent(cat)}`);
                       }}
-                      className="w-full text-left py-2 px-3 hover:bg-white text-gray-600 hover:text-orange-600 text-xs font-semibold rounded-lg transition-colors capitalize cursor-pointer"
+                      className="w-full text-left py-2 font-sans px-3 hover:bg-white text-gray-600 hover:text-orange-600 text-xs rounded-lg transition-colors capitalize cursor-pointer"
                     >
                       {cat === "All" ? "✨ All Categories" : cat}
                     </button>
@@ -242,19 +244,19 @@ const Navbar = () => {
               <button 
                 type="button" 
                 onClick={() => handleMobileNavClick('/my-wishlist')} 
-                className="w-full text-left py-2 hover:text-orange-600 transition flex items-center gap-2 cursor-pointer select-none text-red-500/90 font-bold"
+                className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition flex items-center gap-2 cursor-pointer select-none"
               >
-                <span>❤️</span> My Wishlist
+                Wishlist
               </button>
             </li>
             <li>
-              <button onClick={() => handleMobileNavClick('/quick-shop')} className="w-full text-left py-2 hover:text-orange-600 transition block cursor-pointer">Quick Shop</button>
+              <button onClick={() => handleMobileNavClick('/quick-shop')} className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition block cursor-pointer">Quick Shop</button>
             </li>
             <li>
-              <button onClick={() => handleMobileNavClick('/')} className="w-full text-left py-2 hover:text-orange-600 transition block cursor-pointer">About Us</button>
+              <button onClick={() => handleMobileNavClick('/')} className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition block cursor-pointer">About Us</button>
             </li>
             <li>
-              <button onClick={() => handleMobileNavClick('/contact-enquiry')} className="w-full text-left py-2 hover:text-orange-600 transition block cursor-pointer">Contact</button>
+              <button onClick={() => handleMobileNavClick('/contact-enquiry')} className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition block cursor-pointer">Contact</button>
             </li>
           </ul>
         </div>

@@ -49,8 +49,8 @@ const MyWishlistPage = () => {
             <main className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-16 lg:px-32 py-10 flex flex-col items-start">
                 {/* Heading Area Banner */}
                 <div className="flex flex-col items-start border-b border-gray-200/60 w-full pb-4">
-                    <h2 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
-                        <span>❤️</span> Your Wishlist
+                    <h2 className="text-xl md:text-2xl d text-gray-700 tracking-tight flex items-center gap-2">
+                        Wishlist
                     </h2>
                     <div className="w-12 h-0.5 bg-orange-600 rounded-full mt-1.5"></div>
                 </div>

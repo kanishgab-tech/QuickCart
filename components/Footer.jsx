@@ -19,20 +19,20 @@ const Footer = () => {
             <h2 className="font-medium text-gray-900 mb-5">Company</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:underline transition" href="/">Home</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="/">Home</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">About</a>
+                <a className="hover:underline hover:text-orange-600  transition" href="#">About</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="/contact-enquiry">Contact us</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="/contact-enquiry">Contact us</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Explore</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="#">Explore</a>
               </li>
               
               <li>
-                <a className="hover:underline transition" href="#">Bank Detail</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="#">Bank Detail</a>
               </li>
             </ul>
           </div>
@@ -43,19 +43,19 @@ const Footer = () => {
             <h2 className="font-medium text-gray-900 mb-5">Customer Service</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:underline transition" href="./terms-conditions">Terms</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="./terms-conditions">Terms</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="./faq">FAQ</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="./faq">FAQ</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="./privacy-policy">Privacy policy</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="./privacy-policy">Privacy policy</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Disclaimer</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="#">Disclaimer</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">Return policy</a>
+                <a className="hover:underline hover:text-orange-600 transition" href="#">Return policy</a>
               </li>
             </ul>
           </div>

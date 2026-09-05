@@ -65,7 +65,7 @@ const AllProductsContent = () => {
                     type="button"
                     onClick={() => setIsMobileFilterOpen(true)}
                     className="flex flex-col items-center gap-.5 bg-orange-600 hover:bg-orange-700 text-white font-black rounded-r-2xl shadow-lg pl-3 pr-2 py-4 active:scale-95 transition-all cursor-pointer border border-l-0 border-orange-500/20 select-none group vertical-text"
-                    title="Expand controls drawer"
+                    title="Show Filters"
                 >
                    {/* <span className="text-[10px] tracking-widest uppercase writing-mode-vertical">Filters</span>*/}
                     {/* Fixed Right Arrow indicator asset element */}
@@ -92,17 +92,17 @@ const AllProductsContent = () => {
             >
                 {/* Mobile Close Button Header Row panel */}
                 <div className="flex md:hidden items-center justify-between border-b border-gray-100 pb-3 mb-5">
-                    <p className="font-black text-gray-900 uppercase tracking-tight text-xs">Adjustment Controls</p>
+                    <p className="font-black text-gray-750  tracking-tight text-xl">Our Products</p>
                     <button 
                         type="button" 
                         onClick={() => setIsMobileFilterOpen(false)}
-                        className="text-gray-400 hover:text-gray-600 text-sm font-bold p-1 cursor-pointer"
+                        className="text-gray-500 hover:text-gray-700 text-sm font-bold p-1 cursor-pointer"
                     >
                         ✕ Close
                     </button>
                 </div>
 
-                {/* Clear Filter Action Button */}
+                {/* Clear Filter Action Button
                 {(selectedCategory !== "All" || selectedBrand !== "All") && (
                     <button
                         type="button"
@@ -111,7 +111,7 @@ const AllProductsContent = () => {
                     >
                         ❌ Clear Active Filters
                     </button>
-                )}
+                )} */}
 
                 {/* Section A: Category List */}
                 <div className="mb-6">
@@ -178,21 +178,24 @@ const AllProductsContent = () => {
                 <div className="mb-5 text-xs font-semibold text-gray-600 flex flex-wrap items-center justify-between gap-3 bg-white border border-gray-200/60 rounded-xl p-3 shadow-3xs">
                     <div className="flex flex-wrap items-center gap-1.5">
                         <span> {filteredProducts.length} items</span>
-                        <span className="text-gray-800 bg-white border border-gray-200 px-2 py-0.5 rounded-md font-semibold capitalize">Category: {selectedCategory}</span>
+                        <span className="text-gray-800 bg-white border border-gray-200 px-3 py-0.5 rounded-md font-semibold capitalize">Category: {selectedCategory}</span>
                         <span className="text-gray-300 font-normal">&times;</span>
-                        <span className="text-gray-800 bg-white border border-gray-200 px-2 py-0.5 rounded-md font-semibold capitalize">Brand: {selectedBrand}</span>
-                    </div>
-
-                    {/* Inline Clear Trigger Button: Reveals itself dynamically next to indicators */}
+                        <span className="text-gray-800 bg-white border border-gray-200 px-3 py-0.5 rounded-md font-semibold capitalize">Brand: {selectedBrand}</span>
+                        {/* Inline Clear Trigger Button: Reveals itself dynamically next to indicators */}
                     {(selectedCategory !== "All" || selectedBrand !== "All") && (
                         <button
                             type="button"
                             onClick={handleClearFilters}
-                            className="text-[11px] font-black text-gray-600 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg transition-all cursor-pointer active:scale-95 shrink-0 flex items-center gap-1 select-none"
+                            className="text-[11px] font-black text-gray-600 bg-yellow-50 hover:bg-red-100 border border-red-200 px-2.5 py-1 rounded-lg transition-all cursor-pointer active:scale-95 shrink-0 flex items-center gap-1 select-none"
                         >
-                            <span>❌</span> Clear
+                            <span>✖️</span> Clear Filters
+   
+
                         </button>
                     )}
+                    </div>
+
+                
                 </div>
 
                 {filteredProducts.length === 0 ? (

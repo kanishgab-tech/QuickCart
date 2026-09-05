@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
+import Tittlebar from "@/components/Titlebar";
 import Footer from "@/components/Footer";
 import { useParams } from "next/navigation";
 import Loading from "@/components/Loading";
@@ -22,7 +23,7 @@ const Product = () => {
     return productData ? (
         <div className="flex flex-col min-h-screen bg-white">
             <Navbar />
-            
+            <Tittlebar />
             <main className="px-6 md:px-16 lg:px-32 pt-14 space-y-16 flex-grow">
                 {/* FIXED: Reusing the layout template passing hideCheckoutButtons=false for the full page view */}
                 <ProductPreviewBlock productData={productData} hideCheckoutButtons={false} />

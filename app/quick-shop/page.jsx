@@ -19,7 +19,7 @@
         const [activePreviewProduct, setActivePreviewProduct] = useState(null);
         const { user } = useUser(); 
         const userId = user?.id;
-    
+        
         // Initialize quantities to 0 for all products when loaded
         useEffect(() => {
             if (products && products.length > 0) {
@@ -162,6 +162,35 @@
             setIsSubmitting(false);
         }
         };
+        // 1. FIXED DATA PROCESSING: Group products by category and sort them alphabetically
+        const groupedProducts = {};
+
+        if (products && products.length > 0) {
+            // Group products into their respective category baskets
+            products.forEach((product) => {
+                const categoryName = typeof product.category === 'object' 
+                    ? product.category?.name 
+                    : (product.category || "Uncategorized");
+                    
+                if (!groupedProducts[categoryName]) {
+                    groupedProducts[categoryName] = [];
+                }
+                groupedProducts[categoryName].push(product);
+            });
+
+            // Alphabetically sort products by name within each category basket
+            Object.keys(groupedProducts).forEach((category) => {
+                groupedProducts[category].sort((a, b) => {
+                    const nameA = (a.name || "").toLowerCase();
+                    const nameB = (b.name || "").toLowerCase();
+                    return nameA.localeCompare(nameB);
+                });
+            });
+        }
+
+        // Extract sorted list of unique category names for sequential rendering loops
+        const sortedCategories = Object.keys(groupedProducts).sort((a, b) => a.localeCompare(b));
+
 
         return (
         <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800">
@@ -229,174 +258,188 @@
                     </div>
 
                 {/* Responsive Grid Table Display Viewport */}
-                <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden overflow-x-auto mt-8">
-                <table className="w-full min-w-[850px] text-left border-collapse table-fixed">
+                 <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden overflow-x-auto mt-8 
+            /* Webkit mobile swipe acceleration touch parameters configuration handles scrolling beautifully */
+            -webkit-overflow-scrolling: touch;">
+                    <table className="w-full min-w-full md:min-w-[850px] text-left border-collapse table-fixed">
                     {/* FIXED: Introduced table-fixed layout strategy with exact, well-balanced master column column definitions */}
                     <colgroup>
                     <col className="w-24"/>  {/* Product Graphic Thumbnail */}
-                    <col className="w-24"/>  {/* Item Code Badge Pin */}
-                    <col className="w-44"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
-                    <col className="w-32"/>  {/* Category Labels */}
-                    <col className="w-36"/>  {/* Unit Price Metrics */}
+                    <col className="hidden md:table-column w-24"/>  {/* Item Code Badge Pin */}
+                    <col className="w-52"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
+                    <col className="hidden md:table-column w-32"/>  {/* Brand Labels */}
+                    <col className="w-24"/>  {/* Unit Price Metrics */}
                     <col className="w-44"/>  {/* Quantity Numeric Stepper Controls */}
-                    <col className="w-36"/>  {/* Row Subtotals */}
+                    <col className="w-36"/>  {/* Row Amount */}
                     </colgroup>
                     <thead>
-                    <tr className="bg-gray-100/70 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                    <tr className="bg-gray-200 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
                         <th className="py-4 px-6">Product</th>
-                        <th className="py-4 px-6">Item Code</th>
+                        <th className="py-4 px-6 hidden md:table-cell">Code</th>
                         <th className="py-4 px-6">Details</th>
-                        <th className="py-4 px-6 text-left">Category</th>
-                        <th className="py-4 px-6 text-right">Unit Price</th>
+                        <th className="py-4 px-6 text-left hidden md:table-cell">Brand</th>
+                        <th className="py-4 px-6 text-right">Price</th>
                         <th className="py-4 px-6 text-center">Quantity</th>
-                        <th className="py-4 px-6 text-right">Subtotal</th>
+                        <th className="py-4 px-6 text-right">Amount</th>
                     </tr>
-                    <tr className="bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
-                        {/* Use colSpan to span across the first 6 columns */}
-                            <th colSpan="6" className="py-3 px-6 text-right uppercase tracking-wider">
+                       {/* DESKTOP EXCLUSIVE VIEWPORT ROW (Visible only on screens 768px and up) */}
+                        <tr className="hidden md:table-row bg-amber-80 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
+                            <th colSpan="6" className="py-3 px-6 text-right uppercase tracking-wider font-bold">
                             Subtotal:
                             </th>
-                        {/* Display your dynamic Node.js / React subtotal variable here */}
-                        <th className="py-3 px-6 text-right text-amber-700 font-bold">
-                        ₹{(SubTotalAmount()||0).toLocaleString('en-IN')}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 text-sm">
-                    {products && products.length > 0 ? (
-                        products.map((product) => {
-                        const id = product.id || product._id;
-                        const qty = quantities?.[id] || 0;
-                        const rowSubtotal = (product.offerPrice || 0) * qty;
-                        return (
-                            <tr key={id} className="hover:bg-gray-50/50 transition-colors">
-                            {/* Image cell */}
-                                                  {/* Image cell - FIXED: Added error intercept mapping parameters to handle broken URL links */}
-                                            {/* Image cell - FIXED: Integrated inline error flag to display a modern warning ribbon overlay */}
-                      <td className="py-4 px-6 relative z-0 overflow-hidden">
-                        <div 
-                          onClick={() => setActivePreviewProduct(product)}
-                          className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
-                          title={`Click to view full interactive specifications for ${product.name}`}
-                        >
-                          <img 
-                            src={
-                              Array.isArray(product.image) && product.image.length > 0 
-                                ? product.image 
-                                : (typeof product.image === 'string' && product.image.trim() !== "" 
-                                    ? product.image 
-                                    : (typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '')))
-                            } 
-                            alt={product.name || 'Product'} 
-                            className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200" 
-                            
-                            // FIXED ERROR HOOK: Marks an attribute directly onto the image tag node upon failure to trigger the overlay ribbon
-                            onError={(e) => {
-                              console.warn(`QuickShop image failed to load for SKU: [${product?.productCode || "N/A"}]`);
-                              e.target.onerror = null; 
-                              e.target.src = typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '');
-                              
-                              // Native DOM fallback trick: Add a descriptive dataset token to the element container wrapper parent node
-                              const ribbonNode = document.getElementById(`ribbon-${product._id || product.id}`);
-                              if (ribbonNode) ribbonNode.classList.remove('hidden');
-                            }}
-                          />
-                          
-                          {/* FIXED NEW ADDITION: Translucent horizontal overlay warning ribbon banner */}
-                          <div 
-                            id={`ribbon-${product._id || product.id}`}
-                            className="hidden absolute bottom-0 left-0 right-0 bg-red-600/80 backdrop-blur-[1px] text-[9px] font-black text-white text-center py-0.5 select-none pointer-events-none uppercase tracking-wider"
-                          >
-                            No Preview
-                          </div>
-
-                          {/* Hover overlay hint indicator wrapper mask (Only visible when ribbon is hidden) */}
-                          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
-                            👁️ Info
-                          </div>
-                        </div>
-                      </td>
-
-
-                            {/* FIXED ITEM CODE COLUMN CELL: Uses absolute whitespace locking to avoid split line breaks */}
-                            <td className="py-4 px-6 whitespace-nowrap">
-                                <span className="font-mono text-xs font-bold text-gray-900 bg-gray-100">
-                                {product.productCode || "N/A"}
-                                </span>
-                            </td>
-
-                            {/* FIXED DETAILS TEXT CELL: Reallocated with fluid growth rules to absorb the right side blank spaces */}
-                            <td className="py-4 px-4 pr-6">
-                                <p className="font-medium text-gray-950 truncate first-letter:uppercase" title={product.name}>
-                                    {product.name || 'Unnamed Item'}
-                                </p>
-                                <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed first-letter:uppercase">
-                                {product.description || "No description provided."}
-                                </p>
-                            </td>
-
-                            {/* FIXED CATEGORY COLUMN CELL: Locked via whitespace rules to block text splitting */}
-                            <td className="py-4 px-4 text-left text-gray-600 font-medium whitespace-nowrap" title={typeof product.category === 'object' ? product.category?.name : product.category}>
-                                {typeof product.category === 'object' ? product.category?.name : (product.category || "Uncategorized")}
-                            </td>
-
-                            {/* Unit price rendering */}
-                            <td className="py-4 px-4 text-right font-medium whitespace-nowrap">
-                                <div className="flex flex-row items-baseline justify-end gap-1.5">
-                                <span className="text-gray-950 font-bold text-sm">
-                                    ₹{(product.offerPrice || 0).toLocaleString('en-IN')}
-                                </span>
-                                {product.price > product.offerPrice && (
-                                    <span className="text-gray-400 line-through text-[11px] font-semibold tracking-wide">
-                                    ₹{(product.price || 0).toLocaleString('en-IN')}
-                                    </span>
-                                )}
-                                </div>
-                            </td>
-
-                            {/* Quantity Field */}
-                            <td className="py-4 px-4">
-                                <div className="flex items-center justify-center border border-gray-300 rounded-md w-36 mx-auto overflow-hidden bg-white">
-                                <button 
-                                    type="button" 
-                                    onClick={() => decrementQty(id)} 
-                                    className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-r border-gray-300 flex items-center justify-center cursor-pointer select-none"
-                                >
-                                    &minus;
-                                </button>
-                                <input 
-                                    type="number" min="0" max="999" 
-                                    value={qty === 0 ? "" : qty} 
-                                    onChange={(e) => handleQuantityChange(id, e.target.value)} 
-                                    placeholder="0" 
-                                    className="w-16 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                />
-                                <button 
-                                    type="button" 
-                                    onClick={() => incrementQty(id)} 
-                                    className="w-10 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none"
-                                >
-                                    +
-                                </button>
-                                </div>
-                            </td>
-
-                            {/* Subtotal Calculation Cell */}
-                            <td className="py-4 px-6 text-right font-bold text-gray-900 whitespace-nowrap">
-                                ₹{rowSubtotal.toLocaleString('en-IN')}
-                            </td>
-                            </tr>
-                        );
-                        })
-                    ) : (
-                        <tr>
-                        {/* FIXED: Corrected layout spanning map footprint count index matching your 7 standard table columns */}
-                        <td colSpan="7" className="py-12 text-center text-xs font-semibold text-gray-400 tracking-wide bg-gray-50/50">
-                            No products matching search parameters are available inside the store catalog.
-                        </td>
+                            <th className="py-3 px-6 text-right text-amber-700 font-extrabold text-sm">
+                            ₹{(SubTotalAmount() || 0).toLocaleString('en-IN')}
+                            </th>
                         </tr>
-                    )}
-                    </tbody>
+
+                        {/* MOBILE EXCLUSIVE VIEWPORT ROW (Visible only on small touch screen views) */}
+                        <tr className="md:hidden bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
+                            <th colSpan="4" className="py-3 px-4 text-right uppercase tracking-wider font-bold">
+                            Subtotal:
+                            </th>
+                            <th className="py-3 px-4 text-right text-amber-700 font-extrabold text-sm">
+                            ₹{(SubTotalAmount() || 0).toLocaleString('en-IN')}
+                            </th>
+                        </tr>
+                    </thead>
+                                <tbody className="divide-y divide-gray-100 text-sm">
+              {sortedCategories.length > 0 ? (
+                sortedCategories.map((categoryName) => (
+                  <React.Fragment key={categoryName}>
+                    
+                    {/* FIXED: Dynamic Category Subtitle Splitter Row Header */}
+                    <tr className="bg-orange-50 border-y border-gray-200/60 select-none">
+                      <td colSpan="7" className="py-.7 px-6 text-xs font-semibold text-orange-600 tracking-widest bg-orange-50/20">
+                        <span className="text-gray-900 font-extrabold">{categoryName}</span> ({groupedProducts[categoryName].length} Items)
+                      </td>
+                    </tr>
+
+                    {/* Render the sorted items belonging strictly to this single category bundle */}
+                    {groupedProducts[categoryName].map((product) => {
+                      const id = product.id || product._id;
+                      const qty = quantities?.[id] || 0;
+                      const rowSubtotal = (product.offerPrice || 0) * qty;
+                      
+                      return (
+                        <tr key={id} className="border-b border-gray-400 bg-white hover:bg-gray-100/70 hover:shadow-2xs hover:scale-[1.002] transition-all duration-200 ease-in-out cursor-pointer">
+
+                          {/* Image thumbnail cell */}
+                          <td className="py-4 px-6 relative z-0 overflow-hidden">
+                            <div 
+                              onClick={() => setActivePreviewProduct(product)}
+                              className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
+                              title={`Click to view full specifications for ${product.name}`}
+                            >
+                              <img 
+                                src={Array.isArray(product.image) ? product.image[0] : (product.image || '')} 
+                                alt={product.name || 'Product'} 
+                                className="w-full h-full object-contain group-hover:scale-108 transition-transform duration-200" 
+                                onError={(e) => {
+                                  e.target.onerror = null; 
+                                  e.target.src = typeof assets?.box_icon === 'object' ? assets.box_icon.src : (assets?.box_icon || '');
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-gray-700 bg-white/20 backdrop-blur-[0.5px]">
+                                👁️ Info
+                              </div>
+                            </div>
+                          </td>
+
+                           <td className="py-4 px-6 whitespace-nowrap hidden md:table-cell">
+                            <span className="font-mono text-xs font-semibold text-gray-900 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded inline-block tracking-wide">
+                              {product.productCode || "N/A"}
+                            </span>
+                          </td>
+
+                          {/* Details Text Cell (Now concatenated inline with item identifier code tags) */}
+                          <td className="py-4 px-4 pr-6">
+                            <p className="font-semibold text-gray-900" title={product.name}>
+                              {product.name || 'Unnamed Item'}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+                              {product.description || "No description provided."}
+                            </p>
+                          </td>
+                        
+                         <td className="py-4 px-4 text-left text-gray-600 font-medium whitespace-nowrap truncate hidden md:table-cell">
+                            {product.brand || "NA"}
+                          </td>
+
+                        {/* Unit Price Metrics Cell - FIXED: Stacked original price vertically underneath the offer price */}
+                                                    {/* Unit price dynamic block rendering - FIXED: Inlined a smart "Save %" badge */}
+                          <td className="py-4 px-4 text-right font-medium whitespace-nowrap">
+                            <div className="flex flex-col items-end gap-1 justify-center">
+                              
+                              {/* Row 1: Pricing Text Elements */}
+                              <div className="flex flex-row items-baseline justify-end gap-1.5">
+                                {/* Prominent Current Offer Price */}
+                                <span className="text-gray-950 font-black text-sm">
+                                  ₹{(product.offerPrice || 0).toLocaleString('en-IN')}
+                                </span>
+                                
+                                {/* Strikethrough Original Base Price */}
+                                {product.price > product.offerPrice && (
+                                  <span className="text-gray-400 line-through text-[11px] font-semibold tracking-wide">
+                                    ₹{(product.price || 0).toLocaleString('en-IN')}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Row 2: Dynamic Discount Percentage Badge Token */}
+                              {product.price > product.offerPrice && (
+                                <span className="font-sans text-[9px] font-black text-green-700 bg-green-50 border border-green-200/60 px-1.5 py-0.5 rounded-md uppercase tracking-wider select-none animate-pulse">
+                                  Save {Math.round(((product.price - product.offerPrice) / product.price) * 100)}%
+                                </span>
+                              )}
+
+                            </div>
+                          </td>
+
+                          {/* Quantity Selector Stepper Element */}
+                          <td className="py-4 px-4">
+                            <div className="flex items-center justify-center border border-gray-300 rounded-md w-28 mx-auto overflow-hidden bg-white">
+                              <button 
+                                type="button" 
+                                onClick={() => decrementQty(id)} 
+                                className="w-8 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-r border-gray-300 flex items-center justify-center cursor-pointer select-none"
+                              >
+                                &minus;
+                              </button>
+                              <input 
+                                type="number" min="0" max="999" 
+                                value={qty === 0 ? "" : qty} 
+                                onChange={(e) => handleQuantityChange(id, e.target.value)} 
+                                placeholder="0" 
+                                className="w-12 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield]"
+                              />
+                              <button 
+                                type="button" 
+                                onClick={() => incrementQty(id)} 
+                                className="w-8 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none"
+                              >
+                                +
+                              </button>
+                        </div>
+                          </td>
+
+                          {/* Subtotal Calculation Column */}
+                          <td className="py-4 px-6 text-right font-bold text-gray-900 whitespace-nowrap">
+                            ₹{rowSubtotal.toLocaleString('en-IN')}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </React.Fragment>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="py-12 text-center text-xs font-semibold text-gray-400 tracking-wide bg-gray-50/50">
+                    No products matching search parameters are available inside the store catalog.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+
                 </table>
                 
                 </div>
