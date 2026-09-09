@@ -4,10 +4,11 @@
     import Footer from "@/components/Footer";
     import Titlebar from "@/components/Titlebar";
     import { useAppContext } from "@/context/AppContext";
-    import { assets } from "@/assets/assets";
+    import { assets,PRODUCT_CATEGORIES } from "@/assets/assets";
     import { useUser } from "@clerk/nextjs";
     import ProductPreviewBlock from "@/components/ProductPreviewBlock";
     import FloatingCartButton from "@/components/FloatingCartButton";
+    
 
     const QuickShop = () => {
         const { products, setCartItems, cartItems, showToast,subtotal,router} = useAppContext();
@@ -15,7 +16,10 @@
         // Store row quantities in an object: { [productId]: quantity }
         const [quantities, setQuantities] = useState({});
         const [isSubmitting, setIsSubmitting] = useState(false);
+        const [filterCategory, setFilterCategory] = useState("All");
+
        
+
         const [activePreviewProduct, setActivePreviewProduct] = useState(null);
         const { user } = useUser(); 
         const userId = user?.id;
@@ -164,32 +168,33 @@
         };
         // 1. FIXED DATA PROCESSING: Group products by category and sort them alphabetically
         const groupedProducts = {};
+if (products && products.length > 0) {
+        products.forEach((product) => {
+            // Respect active filter selection flag parameters
+            if (product.isActive === false) return; // Skip inactive products
+            
+            const categoryName = typeof product.category === 'object' 
+                ? product.category?.name 
+                : (product.category || "Uncategorized");
 
-        if (products && products.length > 0) {
-            // Group products into their respective category baskets
-            products.forEach((product) => {
-                const categoryName = typeof product.category === 'object' 
-                    ? product.category?.name 
-                    : (product.category || "Uncategorized");
-                    
-                if (!groupedProducts[categoryName]) {
-                    groupedProducts[categoryName] = [];
-                }
-                groupedProducts[categoryName].push(product);
-            });
+            // FIXED FILTER CHECK: Skip this product if a specific category is chosen and it doesn't match
+            if (filterCategory !== "All" && categoryName.toLowerCase() !== filterCategory.toLowerCase()) {
+                return;
+            }
+                
+            if (!groupedProducts[categoryName]) {
+                groupedProducts[categoryName] = [];
+            }
+            groupedProducts[categoryName].push(product);
+        });
 
-            // Alphabetically sort products by name within each category basket
-            Object.keys(groupedProducts).forEach((category) => {
-                groupedProducts[category].sort((a, b) => {
-                    const nameA = (a.name || "").toLowerCase();
-                    const nameB = (b.name || "").toLowerCase();
-                    return nameA.localeCompare(nameB);
-                });
-            });
-        }
+        // Sort items inside baskets ascending by offerPrice
+        Object.keys(groupedProducts).forEach((category) => {
+            groupedProducts[category].sort((a, b) => Number(a.offerPrice || 0) - Number(b.offerPrice || 0));
+        });
+    }
 
-        // Extract sorted list of unique category names for sequential rendering loops
-        const sortedCategories = Object.keys(groupedProducts).sort((a, b) => a.localeCompare(b));
+    const sortedCategories = Object.keys(groupedProducts);
 
 
         return (
@@ -207,7 +212,25 @@
                             <div className="w-16 h-0.5 bg-orange-500 rounded-full mt-2"></div>
                             <p className="text-gray-500 mt-2 text-sm">Enter quantities next to items and append selections to your cart simultaneously.</p>
                         </div>
-                        
+                    </div>
+                {/* Top-Right Side Extended Action Panel */}
+                 <div className="flex flex-wrap items-center gap-4 bg-white border border-gray-200 p-4 rounded-xl shadow-sm self-start lg:self-auto min-w-[280px] md:min-w-0 justify-between">
+                
+                {/* FIXED NEW ADDITION: Category Filter Dropdown Menu Input */}
+                <div className="flex flex-col items-start text-left min-w-[140px] sm:min-w-[160px]">
+                  <span className="text-[13px] font-extrabold text-gray-600 uppercase tracking-wider block mb-1">View Products by Category</span>
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-lg p-2 text-xs font-semibold focus:outline-none focus:border-orange-500 cursor-pointer select-none capitalize transition-colors"
+                  >
+                    <option value="All">All Categories</option>
+                    {/* Maps your existing asset global categories array dynamically */}
+                    {PRODUCT_CATEGORIES && PRODUCT_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>📁 {cat}</option>
+                    ))}
+                  </select>
+                </div>
                         {/* Top-Right Side Action Panel */}
                         <div className="flex items-center gap-6 bg-white border border-gray-200 p-4 rounded-xl shadow-sm self-start md:self-auto min-w-[280px] md:min-w-0 justify-between md:justify-start">
                             <div className="text-left">
@@ -262,7 +285,7 @@
                  <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden overflow-x-auto mt-8 
             /* Webkit mobile swipe acceleration touch parameters configuration handles scrolling beautifully */
             -webkit-overflow-scrolling: touch;">
-                    <table className="w-full min-w-full md:min-w-[850px] text-left border-collapse table-fixed">
+                    <table className="w-full min-w-full md:min-w-[700px] text-left border-collapse table-fixed">
                     {/* FIXED: Introduced table-fixed layout strategy with exact, well-balanced master column column definitions */}
                     <colgroup>
                     <col className="w-24"/>  {/* Product Graphic Thumbnail */}
@@ -270,8 +293,8 @@
                     <col className="w-56"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
                     <col className="hidden md:table-column w-28"/>  {/* Brand Labels */}
                     <col className="w-24"/>  {/* Unit Price Metrics */}
-                    <col className="w-40"/>  {/* Quantity Numeric Stepper Controls */}
-                    <col className="w-32"/>  {/* Row Amount */}
+                    <col className="w-32 md:w-44"/>  {/* Quantity Numeric Stepper Controls */}
+                    <col className="w-24 md:w-28"/>  {/* Row Amount */}
                     </colgroup>
                     <thead>
                     <tr className="bg-orange-500 border-b border-gray-200 text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
@@ -407,39 +430,43 @@
 
                             </div>
                                 </td>
-                                {/* Quantity Selector Stepper Element */}
-                                <td className="py-4 px-4">
-                                {/* Flex column on mobile places elements vertically; snaps back to a horizontal row on sm screens */}
-                                <div className="flex flex-col sm:flex-row items-center justify-center border border-gray-300 sm:border border-gray-300 rounded-md w-14 sm:w-24 mx-auto overflow-hidden bg-white">
-                                    
-                                    {/* Plus Button - Placed on top on mobile, on the right side on desktop */}
-                                    <button 
-                                    type="button" 
-                                    onClick={() => incrementQty(id)} 
-                                    className="w-full sm:w-8 h-7 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-b sm:border-b-0 sm:border-l border-gray-300 flex items-center justify-center cursor-pointer select-none order-1 sm:order-3"
-                                    >
-                                    +
-                                    </button>
+                                 <td className="py-4 px-4">
+                                  {/* 
+                                     FIXED CONTAINER:
+                                     1. Changed 'flex-col' to a permanent 'flex-row' to force horizontal alignment.
+                                     2. Standardized widths across screens (w-24 on mobile, w-28 on desktop) to fit columns beautifully.
+                                  */}
+                                  <div className="flex flex-row items-center justify-center border border-gray-300 rounded-lg w-24 sm:w-28 mx-auto overflow-hidden bg-white shadow-3xs">
+                                      
+                                      {/* 1. MINUS BUTTON: Positioned firmly on the far left side */}
+                                      <button 
+                                        type="button" 
+                                        onClick={() => decrementQty(id)} 
+                                        className="w-8 sm:w-9 h-8 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors flex items-center justify-center cursor-pointer select-none border-r border-gray-300 shrink-0 text-sm"
+                                      >
+                                        &minus;
+                                      </button>
 
-                                    {/* Input Quantity Box - Stacked in the middle */}
-                                    <input 
-                                    type="number" min="0" max="999" 
-                                    value={qty === 0 ? "" : qty} 
-                                    onChange={(e) => handleQuantityChange(id, e.target.value)} 
-                                    placeholder="0" 
-                                    className="w-full sm:w-10 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield] order-2 py-1 sm:py-0 border-b sm:border-b-0 border-gray-300"
-                                    />
+                                      {/* 2. INPUT QUANTITY BOX: Centered in the middle slots */}
+                                      <input 
+                                        type="number" 
+                                        min="0" 
+                                        max="999" 
+                                        value={qty === 0 ? "" : qty} 
+                                        onChange={(e) => handleQuantityChange(id, e.target.value)} 
+                                        placeholder="0" 
+                                        className="w-full text-center text-xs sm:text-sm font-bold focus:outline-none bg-transparent [appearance:textfield] min-w-0 py-1"
+                                      />
 
-                                    {/* Minus Button - Placed at the bottom on mobile, on the left side on desktop */}
-                                    <button 
-                                    type="button" 
-                                    onClick={() => decrementQty(id)} 
-                                    className="w-full sm:w-8 h-7 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors flex items-center justify-center cursor-pointer select-none order-3 sm:order-1 border-r-0 sm:border-r border-gray-300"
-                                    >
-                                    &minus;
-                                    </button>
-
-                                </div>
+                                      {/* 3. PLUS BUTTON: Positioned firmly on the far right side */}
+                                      <button 
+                                        type="button" 
+                                        onClick={() => incrementQty(id)} 
+                                        className="w-8 sm:w-9 h-8 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none shrink-0 text-sm"
+                                      >
+                                        +
+                                      </button>
+                                  </div>
                                 </td>
                           {/* Subtotal Calculation Column */}
                           <td className="py-4 px-6 text-right font-bold text-gray-900 whitespace-nowrap">
