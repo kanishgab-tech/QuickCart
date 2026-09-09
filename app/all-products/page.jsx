@@ -88,30 +88,17 @@ const AllProductsContent = () => {
                 className={`w-[280px] md:w-64 shrink-0 pb-6 md:pb-0 
                     fixed md:sticky top-[112px] md:top-4 bottom-0 left-0 bg-white md:bg-transparent z-40 md:z-10 p-6 md:p-0 shadow-2xl md:shadow-none border-r border-gray-200 h-[calc(100vh-112px)] md:h-auto overflow-y-auto transition-all duration-300 ease-out transform
                     ${isMobileFilterOpen ? "translate-x-0 opacity-100" : "max-md:-translate-x-full max-md:opacity-0 md:block"}
-                    [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-orange-50/50 [&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-thumb]:rounded-full`}
-            >
+                    [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-orange-50/50 [&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-thumb]:rounded-full`}>
                 {/* Mobile Close Button Header Row panel */}
                 <div className="flex md:hidden items-center justify-between border-b border-gray-100 pb-3 mb-5">
                     <p className="font-black text-gray-750  tracking-tight text-xl">Our Products</p>
                     <button 
                         type="button" 
                         onClick={() => setIsMobileFilterOpen(false)}
-                        className="text-gray-500 hover:text-gray-700 text-sm font-bold p-1 cursor-pointer"
-                    >
+                        className="text-gray-500 hover:text-gray-700 text-sm font-bold p-1 cursor-pointer">
                         ✕ Close
                     </button>
                 </div>
-
-                {/* Clear Filter Action Button
-                {(selectedCategory !== "All" || selectedBrand !== "All") && (
-                    <button
-                        type="button"
-                        onClick={handleClearFilters}
-                        className="w-full mb-5 text-center text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 hover:bg-red-100 transition cursor-pointer"
-                    >
-                        ❌ Clear Active Filters
-                    </button>
-                )} */}
 
                 {/* Section A: Category List */}
                 <div className="mb-6">

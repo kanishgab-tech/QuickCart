@@ -65,7 +65,7 @@ const Navbar = () => {
         <Link href="/" className="hover:text-orange-600 hover:underline transition">Home</Link>
         <Link href="/all-products" className="hover:text-orange-600 hover:underline transition-colors">Shop</Link>
         <Link href="/quick-shop" className="hover:text-orange-600 hover:underline transition">Quick Shop</Link>
-        <Link href="/" className="hover:text-orange-600 hover:underline transition">About</Link>
+        <Link href="/about" className="hover:text-orange-600 hover:underline transition">About</Link>
         <Link href="/contact-enquiry" className="hover:text-orange-600 hover:underline transition">Contact</Link>
         {isSeller && (
           <button 
@@ -132,9 +132,9 @@ const Navbar = () => {
             </UserButton.MenuItems>
           </UserButton>
         ) : (
-          <button onClick={openSignIn} className="flex items-center gap-2 hover:text-gray-900 transition font-medium text-sm cursor-pointer" suppressHydrationWarning>
+          <button onClick={openSignIn} className="flex items-center font-sans gap-2 hover:text-orange-600 hover:underline transition font-semibold text-sm cursor-pointer" suppressHydrationWarning>
             <Image src={assets.user_icon} alt="user icon" />
-            Account
+            Login / Sign Up
           </button>
         )}
       </ul>

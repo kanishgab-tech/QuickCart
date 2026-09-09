@@ -58,6 +58,7 @@ import safety_banner from "./safety_banner_trasparentbg_50.png"
 import quality_banner from "./quality_banner_700c.png"
 import price_banner from "./price_banner_700pxk.png"
 import support_banner from "./customercare_700px.png"
+import navpar_background from "./navpar_pannel.png"
 
 export const assets = {
   logo,
@@ -119,7 +120,8 @@ export const assets = {
   safety_banner,
   quality_banner,
   price_banner,
-  support_banner
+  support_banner,
+  navpar_background
 };
 
 export const BagIcon = () => {

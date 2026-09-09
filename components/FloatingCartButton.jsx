@@ -4,8 +4,10 @@ import { useAppContext } from "@/context/AppContext";
 import { assets } from "@/assets/assets";
 
 const FloatingCartButton = () => {
-    const { router, cartItems, products } = useAppContext();
+    const { router, cartItems, showToast  } = useAppContext();
     const [totalQty, setTotalQty] = useState(0);
+    const [isAtFooter, setIsAtFooter] = useState(false);
+
 
     // Dynamic calculator loop updates item quantity bubbles in real-time
     useEffect(() => {
@@ -30,10 +32,20 @@ const FloatingCartButton = () => {
     return (
         <div 
             onClick={() => {
+                 if (totalQty <= 0) {
+                    
+                    if (typeof showToast === 'function') {
+                        showToast("Your cart is empty. please add items to your cart.", "error");
+                    } else {
+                        alert("Your cart is empty. please add items to your cart.");
+                    }
+                    return; // Halt navigation routing execution instantly
+                }
+
                 router.push('/cart');
                 if (typeof window !== "undefined") window.scrollTo(0, 0);
             }}
-            className="fixed right-5 top-1/2 -translate-y-1/2 z-50 group cursor-pointer flex flex-col items-center justify-center bg-white hover:bg-gray-200 active:bg-yellow-500 text-gray-900 w-14 h-14 rounded-full shadow-lg border border-orange-500/20 hover:scale-110 active:scale-95 transition-all duration-200 select-none" 
+            className="fixed right-5 top-1/3 -translate-y-1/2 z-50 group cursor-pointer flex flex-col items-center justify-center bg-white hover:bg-gray-200 active:bg-yellow-500 text-gray-900 w-14 h-14 rounded-full shadow-lg border border-orange-500/20 hover:scale-110 active:scale-95 transition-all duration-200 select-none" 
            // className="fixed right-5 top-1/2 -translate-y-1/2 z-50 group cursor-pointer flex flex-col items-center justify-center bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white w-14 h-14 rounded-full shadow-lg border border-orange-500/20 hover:scale-110 active:scale-95 transition-all duration-200 select-none"
             title="Checkout"
         >
@@ -44,8 +56,7 @@ const FloatingCartButton = () => {
                     alt="Floating Checkout Icon" 
                     className="w-full h-full object-contain brightness-100 invert group-hover:rotate-12 transition-transform duration-200" 
                 />
-            </div>
-            
+                 </div>           
         </div>
     );
 };

@@ -204,22 +204,23 @@
                     <div className="sticky top-0 z-40 bg-gray-50/90 backdrop-blur-md flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 pt-4 border-b border-gray-200 transition-all duration-200">
                         <div className="flex flex-col items-start">
                             <h1 className="text-3xl font-bold tracking-tight">Quick Shop</h1>
-                            <div className="w-16 h-0.5 bg-orange-600 rounded-full mt-2"></div>
+                            <div className="w-16 h-0.5 bg-orange-500 rounded-full mt-2"></div>
                             <p className="text-gray-500 mt-2 text-sm">Enter quantities next to items and append selections to your cart simultaneously.</p>
                         </div>
                         
                         {/* Top-Right Side Action Panel */}
                         <div className="flex items-center gap-6 bg-white border border-gray-200 p-4 rounded-xl shadow-sm self-start md:self-auto min-w-[280px] md:min-w-0 justify-between md:justify-start">
                             <div className="text-left">
-                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Grand Total</span>
-                                <span className="text-xl font-black text-gray-900">
+                                <span className="text-[13px] font-bold text-gray-700  uppercase tracking-wider block">Grand Total</span>
+                                <span className="text-[14px] font-bold text-right text-gray-700 tracking-wider block">
                                     ₹{(calculateTotalAmount() || 0).toLocaleString('en-IN')}
                                 </span>
                             </div>
+                          
                             <button 
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={`flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-5 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-150 text-center whitespace-nowrap min-w-[110px] ${
+                                className={`flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs px-5 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-150 text-center whitespace-nowrap min-w-[110px] ${
                                     isSubmitting ? 'opacity-75 cursor-not-allowed bg-orange-700' : 'cursor-pointer'
                                 }`}
                             >
@@ -265,51 +266,63 @@
                     {/* FIXED: Introduced table-fixed layout strategy with exact, well-balanced master column column definitions */}
                     <colgroup>
                     <col className="w-24"/>  {/* Product Graphic Thumbnail */}
-                    <col className="hidden md:table-column w-24"/>  {/* Item Code Badge Pin */}
-                    <col className="w-52"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
-                    <col className="hidden md:table-column w-32"/>  {/* Brand Labels */}
+                  {/*  <col className="hidden md:table-column w-24"/>  {/* Item Code Badge Pin */}
+                    <col className="w-56"/> {/* Dynamic Details Text (Absorbs the remaining main layout row space) */}
+                    <col className="hidden md:table-column w-28"/>  {/* Brand Labels */}
                     <col className="w-24"/>  {/* Unit Price Metrics */}
-                    <col className="w-44"/>  {/* Quantity Numeric Stepper Controls */}
-                    <col className="w-36"/>  {/* Row Amount */}
+                    <col className="w-40"/>  {/* Quantity Numeric Stepper Controls */}
+                    <col className="w-32"/>  {/* Row Amount */}
                     </colgroup>
                     <thead>
-                    <tr className="bg-gray-200 border-b border-gray-200 text-xs font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                    <tr className="bg-orange-500 border-b border-gray-200 text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                         <th className="py-4 px-6">Product</th>
-                        <th className="py-4 px-6 hidden md:table-cell">Code</th>
+                        {/*<th className="py-4 px-6 hidden md:table-cell">Code</th>*/}
                         <th className="py-4 px-6">Details</th>
                         <th className="py-4 px-6 text-left hidden md:table-cell">Brand</th>
                         <th className="py-4 px-6 text-right">Price</th>
                         <th className="py-4 px-6 text-center">Quantity</th>
                         <th className="py-4 px-6 text-right">Amount</th>
                     </tr>
-                       {/* DESKTOP EXCLUSIVE VIEWPORT ROW (Visible only on screens 768px and up) */}
-                        <tr className="hidden md:table-row bg-amber-80 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
-                            <th colSpan="6" className="py-3 px-6 text-right uppercase tracking-wider font-bold">
-                            Subtotal:
-                            </th>
-                            <th className="py-3 px-6 text-right text-amber-700 font-extrabold text-sm">
-                            ₹{(SubTotalAmount() || 0).toLocaleString('en-IN')}
-                            </th>
-                        </tr>
+                                     {/* FIXED SUBTOTAL SECTION: Displays dynamic total items count before the calculated subtotal amount */}
+              
+              {/* DESKTOP EXCLUSIVE VIEWPORT ROW (Visible only on screens 768px and up) */}
+              <tr className="hidden md:table-row bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
+                <th colSpan="6" className="py-3 px-6 text-md text-left uppercase tracking-wider font-bold">
+                  {/* Dynamic Item Counter Logic */}
+                  <span className="py-3 px-6 text-md  uppercase tracking-wider font-bold">
+                    Items Selected: <strong className="py-3 px-6 text-left text-amber-700 font-extrabold text-sm">
+                      {Object.values(quantities || {}).filter(qty => qty > 0).length}
+                    </strong>
+                  </span>
+                  Subtotal: <strong className="py-3 px-6  text-amber-700 font-extrabold text-sm">
+                    ₹ {(SubTotalAmount() || 0).toLocaleString('en-IN')}
+                  </strong>
+                </th>
 
-                        {/* MOBILE EXCLUSIVE VIEWPORT ROW (Visible only on small touch screen views) */}
-                        <tr className="md:hidden bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
-                            <th colSpan="4" className="py-3 px-4 text-right uppercase tracking-wider font-bold">
-                            Subtotal:
-                            </th>
-                            <th className="py-3 px-4 text-right text-amber-700 font-extrabold text-sm">
-                            ₹{(SubTotalAmount() || 0).toLocaleString('en-IN')}
-                            </th>
-                        </tr>
+              </tr>
+
+              {/* MOBILE EXCLUSIVE VIEWPORT ROW (Visible only on small touch screen views) */}
+              <tr className="md:hidden bg-amber-50 border-b border-gray-200 text-xs font-normal text-gray-700 tracking-wide whitespace-nowrap">
+                <th colSpan="5" className="py-3 px-4 text-left uppercase tracking-wider font-bold">
+                  <span className="text-gray-900 font-bold font-sans">
+                    Items: <strong className="text-gray-900 font-bold font-sans">
+                      {Object.values(quantities || {}).filter(qty => qty > 0).length}
+                    </strong>
+                  </span> <span>, </span>
+                 Subtotal: ₹{(SubTotalAmount() || 0).toLocaleString('en-IN')}
+                </th>
+               
+              </tr>
+
                     </thead>
-                                <tbody className="divide-y divide-gray-100 text-sm">
+            <tbody className="divide-y divide-gray-100 text-sm">
               {sortedCategories.length > 0 ? (
                 sortedCategories.map((categoryName) => (
                   <React.Fragment key={categoryName}>
                     
                     {/* FIXED: Dynamic Category Subtitle Splitter Row Header */}
                     <tr className="bg-orange-50 border-y border-gray-200/60 select-none">
-                      <td colSpan="7" className="py-.7 px-6 text-xs font-semibold text-orange-600 tracking-widest bg-orange-50/20">
+                      <td colSpan="6" className="py-.7 px-6 text-xs font-semibold text-orange-600 tracking-widest bg-orange-50/20">
                         <span className="text-gray-900 font-extrabold">{categoryName}</span> ({groupedProducts[categoryName].length} Items)
                       </td>
                     </tr>
@@ -321,13 +334,13 @@
                       const rowSubtotal = (product.offerPrice || 0) * qty;
                       
                       return (
-                        <tr key={id} className="border-b border-gray-400 bg-white hover:bg-gray-100/70 hover:shadow-2xs hover:scale-[1.002] transition-all duration-200 ease-in-out cursor-pointer">
+                        <tr key={id} className="border-b border-gray-400 bg-white hover:bg-orange-100/70 hover:shadow-2xs hover:scale-[1.002] transition-all duration-200 ease-in-out cursor-pointer">
 
                           {/* Image thumbnail cell */}
-                          <td className="py-4 px-6 relative z-0 overflow-hidden">
+                          <td className="py-4 px-3 sm:px-6 relative z-0 overflow-hidden">
                             <div 
                               onClick={() => setActivePreviewProduct(product)}
-                              className="w-16 h-16 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
+                              className="w-22 h-22 sm:w-18 sm:h-18 rounded-xl border border-gray-200 bg-white overflow-hidden relative shrink-0 cursor-zoom-in group shadow-2xs active:scale-95 transition-all select-none"
                               title={`Click to view full specifications for ${product.name}`}
                             >
                               <img 
@@ -344,12 +357,12 @@
                               </div>
                             </div>
                           </td>
-
+                                {/*
                            <td className="py-4 px-6 whitespace-nowrap hidden md:table-cell">
                             <span className="font-mono text-xs font-semibold text-gray-900 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded inline-block tracking-wide">
                               {product.productCode || "N/A"}
                             </span>
-                          </td>
+                          </td>*/}
 
                           {/* Details Text Cell (Now concatenated inline with item identifier code tags) */}
                           <td className="py-4 px-4 pr-6">
@@ -393,35 +406,41 @@
                               )}
 
                             </div>
-                          </td>
+                                </td>
+                                {/* Quantity Selector Stepper Element */}
+                                <td className="py-4 px-4">
+                                {/* Flex column on mobile places elements vertically; snaps back to a horizontal row on sm screens */}
+                                <div className="flex flex-col sm:flex-row items-center justify-center border border-gray-300 sm:border border-gray-300 rounded-md w-14 sm:w-24 mx-auto overflow-hidden bg-white">
+                                    
+                                    {/* Plus Button - Placed on top on mobile, on the right side on desktop */}
+                                    <button 
+                                    type="button" 
+                                    onClick={() => incrementQty(id)} 
+                                    className="w-full sm:w-8 h-7 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-b sm:border-b-0 sm:border-l border-gray-300 flex items-center justify-center cursor-pointer select-none order-1 sm:order-3"
+                                    >
+                                    +
+                                    </button>
 
-                          {/* Quantity Selector Stepper Element */}
-                          <td className="py-4 px-4">
-                            <div className="flex items-center justify-center border border-gray-300 rounded-md w-28 mx-auto overflow-hidden bg-white">
-                              <button 
-                                type="button" 
-                                onClick={() => decrementQty(id)} 
-                                className="w-8 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-r border-gray-300 flex items-center justify-center cursor-pointer select-none"
-                              >
-                                &minus;
-                              </button>
-                              <input 
-                                type="number" min="0" max="999" 
-                                value={qty === 0 ? "" : qty} 
-                                onChange={(e) => handleQuantityChange(id, e.target.value)} 
-                                placeholder="0" 
-                                className="w-12 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield]"
-                              />
-                              <button 
-                                type="button" 
-                                onClick={() => incrementQty(id)} 
-                                className="w-8 h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors border-l border-gray-300 flex items-center justify-center cursor-pointer select-none"
-                              >
-                                +
-                              </button>
-                        </div>
-                          </td>
+                                    {/* Input Quantity Box - Stacked in the middle */}
+                                    <input 
+                                    type="number" min="0" max="999" 
+                                    value={qty === 0 ? "" : qty} 
+                                    onChange={(e) => handleQuantityChange(id, e.target.value)} 
+                                    placeholder="0" 
+                                    className="w-full sm:w-10 text-center text-sm font-semibold focus:outline-none bg-transparent [appearance:textfield] order-2 py-1 sm:py-0 border-b sm:border-b-0 border-gray-300"
+                                    />
 
+                                    {/* Minus Button - Placed at the bottom on mobile, on the left side on desktop */}
+                                    <button 
+                                    type="button" 
+                                    onClick={() => decrementQty(id)} 
+                                    className="w-full sm:w-8 h-7 sm:h-9 font-semibold text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors flex items-center justify-center cursor-pointer select-none order-3 sm:order-1 border-r-0 sm:border-r border-gray-300"
+                                    >
+                                    &minus;
+                                    </button>
+
+                                </div>
+                                </td>
                           {/* Subtotal Calculation Column */}
                           <td className="py-4 px-6 text-right font-bold text-gray-900 whitespace-nowrap">
                             ₹{rowSubtotal.toLocaleString('en-IN')}
