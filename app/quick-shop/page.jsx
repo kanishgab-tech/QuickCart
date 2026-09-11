@@ -210,7 +210,7 @@ if (products && products.length > 0) {
                         <div className="flex flex-col items-start">
                             <h1 className="text-3xl font-bold tracking-tight">Quick Shop</h1>
                             <div className="w-16 h-0.5 bg-orange-500 rounded-full mt-2"></div>
-                            <p className="text-gray-500 mt-2 text-sm">Enter quantities next to items and append selections to your cart simultaneously.</p>
+                            <p className="text-gray-500 mt-2 text-sm">Choose from the wide range of products and add to your cart.</p>
                         </div>
                     </div>
                 {/* Top-Right Side Extended Action Panel */}

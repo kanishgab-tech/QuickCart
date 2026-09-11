@@ -1,7 +1,6 @@
 import logo from  "./KanSan_RaisingSun_25pc.png" //"./kansan_crackers_logo_multicolor_crackers_sz25.png" //"./Orange5.png"; //"./ChatGPT.png"; ".//KanSanRectangle.png"
-import brand_name from  "./Aurora_M.png" 
 import search_icon from "./search_icon.svg";
-import upi_img from "./ChatGPT.png"
+import upi_img from "./upi.png"
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
 import add_icon from "./add_icon.svg";
@@ -25,29 +24,11 @@ import star_dull_icon from "./star_dull_icon.svg";
 import crackers_basket_image from "./crackers_basket.png";
 import crackers_with_lights_image from "./crackers_with_lights.png";
 import green_crackers_image from "./green_crackers.png";
-import macbook_image from "./macbook_image.png";
-import bose_headphone_image from "./bose_headphone_image.png";
-import apple_earphone_image from "./apple_earphone_image.png";
-import samsung_s23phone_image from "./samsung_s23phone_image.png";
-import venu_watch_image from "./venu_watch_image.png";
 import upload_area from "./upload_area.png";
-import cannon_camera_image from "./cannon_camera_image.png";
-import sony_airbuds_image from "./sony_airbuds_image.png";
-import asus_laptop_image from "./asus_laptop_image.png";
-import projector_image from "./projector_image.png";
-import playstation_image from "./playstation_image.png";
 import family_in_clebration_night from "./family_in_clebration_night.png";
 import SessionalNightLights from "./SessionalNightLights.png";
-import md_controller_image from "./md_controller_image.png";
-import sm_controller_image from "./sm_controller_image.png";
-import jbl_soundbox_image from "./jbl_soundbox_image.png";
 import FamilyGiftboxes from "./FamilyGiftboxes_50p.png";
 import checkmark from "./checkmark.png";
-import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
-import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
-import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
-import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
-import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
 import checkout_icon from "./checkout_icon.png"
 import ayyan_brand_logo from "./brands/ayyan.png"
 import asok_fireworks_logo from "./brands/asok.png"
@@ -61,67 +42,48 @@ import support_banner from "./customercare_700px.png"
 import navpar_background from "./navpar_pannel.png"
 
 export const assets = {
-  logo,
-  search_icon,
-  upi_img,
-  user_icon,
-  cart_icon,
-  add_icon,
-  order_icon,
-  instagram_icon,
-  facebook_icon,
-  twitter_icon,
-  box_icon,
-  product_list_icon,
-  menu_icon,
-  arrow_icon,
-  increase_arrow,
-  decrease_arrow,
-  arrow_right_icon_colored,
-  my_location_image,
-  arrow_icon_white,
-  heart_icon,
-  star_icon,
-  redirect_icon,
-  star_dull_icon,
-  crackers_basket_image,
-  crackers_with_lights_image,
-  green_crackers_image,
-  macbook_image,
-  bose_headphone_image,
-  apple_earphone_image,
-  samsung_s23phone_image,
-  venu_watch_image,
-  upload_area,
-  cannon_camera_image,
-  sony_airbuds_image,
-  asus_laptop_image,
-  projector_image,
-  playstation_image,
-  family_in_clebration_night,
-  md_controller_image,
-  sm_controller_image,
-  jbl_soundbox_image,
-  FamilyGiftboxes,
-  SessionalNightLights,
-  product_details_page_apple_earphone_image1,
-  product_details_page_apple_earphone_image2,
-  product_details_page_apple_earphone_image3,
-  product_details_page_apple_earphone_image4,
-  product_details_page_apple_earphone_image5,
-  checkmark,
-  brand_name,
-  checkout_icon,
-  ayyan_brand_logo,
-  asok_fireworks_logo,
-  standard_logo,
-  wowstar_logo,
-  elephant_logo,
-  safety_banner,
-  quality_banner,
-  price_banner,
-  support_banner,
-  navpar_background
+logo ,
+search_icon ,
+upi_img ,
+user_icon ,
+cart_icon ,
+add_icon,
+order_icon,
+instagram_icon ,
+facebook_icon,
+twitter_icon ,
+box_icon ,
+product_list_icon,
+menu_icon ,
+arrow_icon ,
+increase_arrow,
+decrease_arrow ,
+arrow_right_icon_colored ,
+my_location_image ,
+arrow_icon_white ,
+heart_icon ,
+star_icon ,
+redirect_icon,
+star_dull_icon,
+crackers_basket_image ,
+crackers_with_lights_image ,
+green_crackers_image,
+upload_area ,
+family_in_clebration_night,
+SessionalNightLights ,
+FamilyGiftboxes ,
+checkmark,
+checkout_icon ,
+ayyan_brand_logo,
+asok_fireworks_logo,
+standard_logo ,
+wowstar_logo ,
+elephant_logo ,
+safety_banner ,
+quality_banner ,
+price_banner ,
+support_banner ,
+navpar_background 
 };
 
 export const BagIcon = () => {

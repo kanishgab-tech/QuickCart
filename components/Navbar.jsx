@@ -139,8 +139,34 @@ const Navbar = () => {
         )}
       </ul>
 
-      {/* --- MOBILE VIEWPORT CONTROLS BAR (Right Side Actions) --- */}
-      <div className="flex items-center md:hidden gap-2">
+{/* Mobile Wishlist Shortcut Button - Upgraded to Orange Theme */}
+ <div className="flex items-center md:hidden gap-2">
+        <button 
+          onClick={() => router.push('/my-wishlist')}
+          className="relative flex flex-col items-center  p-2 group cursor-pointer"
+          title="View Wishlist"
+         
+        >
+          {/* FIXED: Transition properties now fade smoothly into orange parameters */}
+          <svg 
+            className="w-6 h-6 text-gray-700 transition-colors group-hover:text-orange-600 group-hover:fill-orange-600 fill-none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.318 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+
+          {wishlist && wishlist.length > 0 && (
+            <span className="absolute top-1.5 right-1.5 bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-xs border border-white whitespace-nowrap z-10 animate-fade-in">
+              {wishlist.length}
+            </span>
+          )}
+        </button>
+
+
+      {/* --- MOBILE VIEWPORT CONTROLS BAR (Right Side Actions) --- 
+      <div className="flex items-center md:hidden gap-2">*/}
         {/* Mobile Cart Button Shortcut */}
         <button 
           onClick={() => router.push('/cart')}
@@ -239,16 +265,7 @@ const Navbar = () => {
                 </div>
               )}
             </li>
-             {/* FIXED NEW ADDITION: High-Utility Favorites Wishlist Page Mobile Link Shortcut */}
-            <li>
-              <button 
-                type="button" 
-                onClick={() => handleMobileNavClick('/my-wishlist')} 
-                className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition flex items-center gap-2 cursor-pointer select-none"
-              >
-                Wishlist
-              </button>
-            </li>
+             
             <li>
               <button onClick={() => handleMobileNavClick('/quick-shop')} className="w-full text-left py-2 font-sans text-gray-700 hover:underline hover:text-orange-600 transition block cursor-pointer">Quick Shop</button>
             </li>
