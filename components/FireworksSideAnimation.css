@@ -1,0 +1,38 @@
+.fireworks-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.fireworks-canvas {
+  position: absolute;
+  top: 0;
+  width: clamp(100px, 12vw, 190px);
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.fireworks-left {
+  left: 0;
+}
+
+.fireworks-right {
+  right: 0;
+}
+
+/* Keep fireworks away from the main shopping area. */
+@media (max-width: 1279px) {
+  .fireworks-overlay {
+    display: none;
+  }
+}
+
+/* Allow storefront content to remain interactive. */
+.fireworks-overlay,
+.fireworks-overlay * {
+  pointer-events: none;
+}

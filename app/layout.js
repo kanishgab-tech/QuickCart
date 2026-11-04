@@ -2,10 +2,11 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { AppContextProvider } from "@/context/AppContext";
 import { Toaster } from "react-hot-toast";
-
 import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import SideBanners from "@/components/SideBanners";
+import FireworksSideAnimation from "@/components/FireworksSideAnimation";
 
 const outfit = Outfit({ subsets: ['latin'], weight: ["300", "400", "500"] })
 
@@ -23,6 +24,8 @@ export default function RootLayout({ children }) {
           <AppContextProvider>
             {children}
           </AppContextProvider>
+        
+          <FireworksSideAnimation />
         </body>
       </html>
       </ClerkProvider>

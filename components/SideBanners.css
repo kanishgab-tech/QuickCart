@@ -1,0 +1,666 @@
+/* =========================================
+   FIREWORKS VIEWPORT
+   ========================================= */
+
+.firework-viewport {
+    overflow: hidden;
+    isolation: isolate;
+    --gold: #ffd166;
+    --orange: #ff8c32;
+    --blue: #38d9ff;
+    --crimson: #ff315b;
+}
+
+.firework-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 28px 0;
+    overflow: hidden;
+}
+
+.firework-left {
+    left: 0;
+    border-right: 1px solid rgba(255, 190, 70, 0.2);
+    background: linear-gradient(
+        90deg,
+        rgba(12, 17, 39, 0.45),
+        rgba(12, 17, 39, 0.08),
+        transparent
+    );
+}
+
+.firework-right {
+    right: 0;
+    border-left: 1px solid rgba(255, 190, 70, 0.2);
+    background: linear-gradient(
+        270deg,
+        rgba(12, 17, 39, 0.45),
+        rgba(12, 17, 39, 0.08),
+        transparent
+    );
+}
+
+/* =========================================
+   ROCKET LAUNCH ANIMATIONS
+   ========================================= */
+
+.launch-zone {
+    position: relative;
+    width: 60px;
+    height: 155px;
+    flex-shrink: 0;
+}
+
+.rocket {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: 2;
+    width: 8px;
+    height: 22px;
+    transform: translateX(-50%);
+    animation: rocket-launch 4.5s ease-in infinite;
+}
+
+.rocket-head {
+    position: absolute;
+    top: 0;
+    left: 1px;
+    width: 6px;
+    height: 10px;
+    border-radius: 50% 50% 25% 25%;
+    background: #fff8cf;
+    box-shadow:
+        0 0 5px #fff,
+        0 0 12px var(--gold),
+        0 0 24px var(--orange);
+}
+
+.rocket-flame {
+    position: absolute;
+    top: 9px;
+    left: 2px;
+    width: 4px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(
+        to bottom,
+        #fff9c4,
+        #ffb22e,
+        rgba(255, 85, 20, 0)
+    );
+    filter: blur(1px);
+    transform-origin: top;
+    animation: flame-flicker 0.12s ease-in-out infinite alternate;
+}
+
+.launch-gold {
+    animation: launch-appear 4.5s ease-in infinite;
+}
+
+.launch-small {
+    transform: scale(0.75);
+    animation: launch-appear 5.8s ease-in 1.5s infinite;
+}
+
+.launch-small .rocket {
+    animation-duration: 5.8s;
+    animation-delay: 1.5s;
+}
+
+.rocket-trail {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 3px;
+    height: 105px;
+    background: linear-gradient(
+        to top,
+        rgba(255, 100, 15, 0),
+        rgba(255, 155, 40, 0.45) 35%,
+        rgba(255, 218, 115, 0.9) 80%,
+        #fff5c4
+    );
+    filter: blur(1px);
+    transform: translateX(-50%);
+    transform-origin: bottom;
+    animation: trail-shrink 4.5s ease-in infinite;
+}
+
+.launch-small .rocket-trail {
+    animation-duration: 5.8s;
+    animation-delay: 1.5s;
+}
+
+.rocket-sparks {
+    position: absolute;
+    inset: 0;
+}
+
+.rocket-sparks span {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffe9a1;
+    box-shadow: 0 0 7px var(--gold);
+    opacity: 0;
+    animation: rocket-ember 1.4s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.17s);
+}
+
+/* =========================================
+   LONG CRACKLING SPARK LINE
+   ========================================= */
+
+.crackling-tail {
+    width: 40px;
+    height: 125px;
+}
+
+.tail-core {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        #ffda76,
+        #ff9d30,
+        transparent
+    );
+    box-shadow: 0 0 8px rgba(255, 194, 72, 0.6);
+    animation: crackle-line 1.5s ease-in-out infinite;
+}
+
+.tail-spark {
+    position: absolute;
+    top: calc(var(--i) * 8%);
+    left: 50%;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff2bb;
+    box-shadow: 0 0 7px #ffb52e;
+    animation: crackle-spark 0.9s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.11s);
+}
+
+/* =========================================
+   MULTI-POINT GOLD SPARKLER STAR
+   ========================================= */
+
+.firework-star {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.gold-star span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    height: 17px;
+    border-radius: 100%;
+    background: linear-gradient(
+        to top,
+        transparent,
+        #ffb52e,
+        #fffbe0
+    );
+    transform-origin: center center;
+    animation: star-ray 2.8s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.08s);
+}
+
+.gold-star i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    transform: translate(-50%, -50%);
+    box-shadow:
+        0 0 6px white,
+        0 0 14px var(--gold),
+        0 0 25px var(--orange);
+    animation: star-core 1.8s ease-in-out infinite;
+}
+
+/* =========================================
+   AMBIENT GOLD EMBERS AND STARS
+   ========================================= */
+
+.ambient-embers,
+.ambient-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.ambient-embers span,
+.ambient-stars span {
+    position: absolute;
+    left: calc(12% + var(--i) * 10%);
+    top: calc(7% + (var(--i) % 5) * 19%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffe7a0;
+    box-shadow: 0 0 8px var(--gold);
+    animation: ambient-twinkle 2s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.31s);
+}
+
+.ambient-embers span:nth-child(even),
+.ambient-stars span:nth-child(even) {
+    width: 2px;
+    height: 2px;
+}
+
+/* =========================================
+   RADIAL FIREWORK BURSTS
+   ========================================= */
+
+.burst-zone {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+}
+
+.burst-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: burst-flash 3.6s ease-out infinite;
+}
+
+.burst-zone span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 10px;
+    border-radius: 50%;
+    transform-origin: center center;
+    animation: burst-particle 3.6s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.025s);
+}
+
+/* Electric blue burst */
+
+.blue-burst .burst-core {
+    background: #fff;
+    box-shadow:
+        0 0 10px #fff,
+        0 0 22px var(--blue),
+        0 0 36px #087bff;
+}
+
+.blue-burst span {
+    background: linear-gradient(
+        to top,
+        transparent,
+        #1388ff,
+        #c7f9ff
+    );
+    box-shadow: 0 0 6px var(--blue);
+}
+
+/* Neon crimson burst */
+
+.crimson-burst .burst-core {
+    box-shadow:
+        0 0 10px #fff,
+        0 0 20px var(--crimson),
+        0 0 32px #ff1744;
+    background: #fff4f4;
+    animation-delay: 1.4s;
+}
+
+.crimson-burst span {
+    background: linear-gradient(
+        to top,
+        transparent,
+        #ff1744,
+        #ffc3ce
+    );
+    box-shadow: 0 0 6px var(--crimson);
+    animation-delay: calc(1.4s + var(--i) * 0.025s);
+}
+
+/* =========================================
+   FLOWER POT / FOUNTAIN FIREWORK
+   ========================================= */
+
+.fountain-zone {
+    position: relative;
+    width: 65px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.fountain-base {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 22px;
+    height: 12px;
+    border: 1px solid rgba(255, 197, 91, 0.8);
+    border-radius: 3px 3px 5px 5px;
+    background: linear-gradient(
+        90deg,
+        #6b3316,
+        #f6a33c,
+        #713311
+    );
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px rgba(255, 157, 45, 0.35);
+}
+
+.fountain-glow {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 35px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 157, 45, 0.15);
+    filter: blur(12px);
+    transform: translateX(-50%);
+    animation: fountain-glow 1.2s ease-in-out infinite alternate;
+}
+
+.fountain-zone span {
+    position: absolute;
+    left: 50%;
+    bottom: 9px;
+    width: 3px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff1b3;
+    box-shadow:
+        0 0 5px #fff,
+        0 0 10px #ffb22e,
+        0 0 15px #ff6a1a;
+    animation: fountain-spark 1.3s ease-out infinite;
+    animation-delay: calc(var(--i) * 0.085s);
+}
+
+/* =========================================
+   KEYFRAMES
+   ========================================= */
+
+@keyframes rocket-launch {
+    0%, 8% {
+        transform: translate(-50%, 0);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    78% {
+        transform: translate(-50%, -112px);
+        opacity: 1;
+    }
+
+    88%, 100% {
+        transform: translate(-50%, -135px);
+        opacity: 0;
+    }
+}
+
+@keyframes trail-shrink {
+    0%, 8% {
+        transform: translateX(-50%) scaleY(0);
+        opacity: 0;
+    }
+
+    18% {
+        transform: translateX(-50%) scaleY(0.45);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateX(-50%) scaleY(1);
+        opacity: 0.85;
+    }
+
+    90%, 100% {
+        transform: translateX(-50%) scaleY(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes flame-flicker {
+    from {
+        transform: scaleY(0.7);
+        opacity: 0.7;
+    }
+
+    to {
+        transform: scaleY(1.3);
+        opacity: 1;
+    }
+}
+
+@keyframes launch-appear {
+    0%, 100% {
+        filter: brightness(0.8);
+    }
+
+    40% {
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes rocket-ember {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(
+                calc((var(--i) - 3.5) * 3px),
+                -35px
+            )
+            scale(0.2);
+        opacity: 0;
+    }
+}
+
+@keyframes crackle-line {
+    0%, 100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+        filter: brightness(1.8);
+    }
+}
+
+@keyframes crackle-spark {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(
+            calc((var(--i) % 2 - 0.5) * 18px),
+            10px
+        ) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes star-ray {
+    0%, 100% {
+        opacity: 0.2;
+        transform:
+            rotate(calc(var(--i) * 30deg))
+            scaleY(0.4);
+    }
+
+    45% {
+        opacity: 1;
+        transform:
+            rotate(calc(var(--i) * 30deg))
+            scaleY(1.1);
+    }
+}
+
+@keyframes star-core {
+    0%, 100% {
+        opacity: 0.6;
+        scale: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+        scale: 1.4;
+    }
+}
+
+@keyframes ambient-twinkle {
+    0%, 100% {
+        opacity: 0.15;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes burst-particle {
+    0% {
+        transform:
+            rotate(calc(var(--i) * 20deg))
+            translateY(0)
+            scaleY(0.2);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    65% {
+        transform:
+            rotate(calc(var(--i) * 20deg))
+            translateY(-25px)
+            scaleY(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            rotate(calc(var(--i) * 20deg))
+            translateY(-32px)
+            scaleY(0.2);
+        opacity: 0;
+    }
+}
+
+@keyframes burst-flash {
+    0%, 100% {
+        opacity: 0;
+        scale: 0.4;
+    }
+
+    10% {
+        opacity: 1;
+        scale: 1.8;
+    }
+
+    30% {
+        opacity: 0.5;
+        scale: 0.7;
+    }
+}
+
+@keyframes fountain-spark {
+    0% {
+        transform: translate(-50%, 0) scale(0.6);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            translate(
+                calc(-50% + (var(--i) - 7) * 2px),
+                calc(-65px - (var(--i) % 5) * 12px)
+            )
+            scale(0.15);
+        opacity: 0;
+    }
+}
+
+@keyframes fountain-glow {
+    from {
+        opacity: 0.35;
+        transform: translateX(-50%) scale(0.8);
+    }
+
+    to {
+        opacity: 0.85;
+        transform: translateX(-50%) scale(1.2);
+    }
+}
+
+/* =========================================
+   ACCESSIBILITY
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .firework-viewport *,
+    .firework-viewport *::before,
+    .firework-viewport *::after {
+        animation: none !important;
+    }
+
+    .rocket,
+    .rocket-trail,
+    .burst-zone span,
+    .fountain-zone span {
+        opacity: 0.55;
+    }
+}
