@@ -26,7 +26,7 @@ const Home = () => {
         {/*<NewsLetter />*/}
       </div>
        <Footer />
-      {/*<Media />*/}
+    
     </>
   );
 };

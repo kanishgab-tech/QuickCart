@@ -7,6 +7,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import SideBanners from "@/components/SideBanners";
 import FireworksSideAnimation from "@/components/FireworksSideAnimation";
+import Media from "@/components/Media";
 
 const outfit = Outfit({ subsets: ['latin'], weight: ["300", "400", "500"] })
 
@@ -24,7 +25,7 @@ export default function RootLayout({ children }) {
           <AppContextProvider>
             {children}
           </AppContextProvider>
-        
+          <Media />
           <FireworksSideAnimation />
         </body>
       </html>
